@@ -1,6 +1,6 @@
 # Challenge submission notes
 
-**Challenge:** NASA Space Apps Challenge 2026 — Challenge 03: Build a Junior Astronaut Mission Trainer
+**Challenge:** NASA Space Apps Challenge 2026, Challenge 03: Build a Junior Astronaut Mission Trainer
 **Project:** Luna Crew: Moon Base Mission
 **Team:** Maja Madi
 **Languages:** English, Japanese
