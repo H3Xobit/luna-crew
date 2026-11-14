@@ -1,0 +1,55 @@
+{
+  "source": "NASA Open Science Data Repository (OSDR)",
+  "endpoint": "https://osdr.nasa.gov/osdr/data/search",
+  "status": "ok",
+  "fetchedAt": "2026-11-14T03:00:03.216Z",
+  "searchTerms": [
+    "lunar regolith plants",
+    "Apollo regolith",
+    "bone loss spaceflight",
+    "muscle spaceflight"
+  ],
+  "regolithStudyFound": true,
+  "studies": [
+    {
+      "accession": "OSD-476",
+      "title": "Plants grown in Apollo lunar regolith present stress-associated transcriptomes that inform prospects for lunar exploration",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-476",
+      "summary": "The extent to which plants can enhance human life support on other worlds depends on the ability of plants to thrive in extraterrestrial environments using in situ resources. Using samples from Apollo 11, 12 and 17, we show that the terrestrial plant Arabidopsis thaliana germinates and grows in diverse lunar regoliths. However, our results show that growth is challenging; the lunar regolith plants were slow to develop, expressed genes indicative of ionic stresses, and many showed severe stress morphologies. Therefore, although in situ lunar regolith can be useful for plant production in lunar habitats, they are not benign substrates.",
+      "searchTerm": "lunar regolith plants",
+      "organism": "Arabidopsis thaliana"
+    },
+    {
+      "accession": "OSD-310",
+      "title": "Spaceflight-induced (STS-62) vertebral bone loss in ovariectomized rats is associated with increased bone marrow adiposity and no change in bone formation",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-310",
+      "summary": "There is often a reciprocal relationship between bone marrow adipocytes and osteoblasts, suggesting that marrow adipose tissue (MAT) antagonizes osteoblast differentiation. MAT is increased in rodents during spaceflight but a causal relationship between MAT and bone loss remains unclear. In the present study, we evaluated the effects of a 14-day spaceflight on bone mass, bone resorption, bone formation, and MAT in lumbar vertebrae of ovariectomized (OVX) rats. Twelve-week-old OVX Fischer 344 rats were randomly assigned to a ground control or flight group.",
+      "searchTerm": "bone loss spaceflight",
+      "organism": "Rattus norvegicus"
+    },
+    {
+      "accession": "OSD-661",
+      "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Lumbar Spine, HLS, DXA Scanning)",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-661",
+      "summary": "We examined the effects of ~30 days of spaceflight on glycogen synthase kinase 3 (GSK3) content and inhibitory serine phosphorylation in murine muscle and bone samples from four separate missions (BION-M1, Rodent Research RR1, RR9, and RR18). Spaceflight reduced GSK3b content across all missions, whereas its serine phosphorylation was elevated with RR18 and BION-M1. The reduction in GSK3b was linked to the reduction in type IIA fibers commonly observed with spaceflight as these fibers are particularly enriched with GSK3.",
+      "searchTerm": "bone loss spaceflight",
+      "organism": "Mus musculus"
+    },
+    {
+      "accession": "OSD-662",
+      "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Soleus, RR1, RR9, RR18, Bion-M1, HLU/HLS, Western Blot, Histology, and Muscle Contractility)",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-662",
+      "summary": "We examined the effects of ~30 days of spaceflight on glycogen synthase kinase 3 (GSK3) content and inhibitory serine phosphorylation in murine muscle and bone samples from four separate missions (BION-M1, Rodent Research missions RR1, RR9, and RR18). Spaceflight reduced GSK3b content across all missions, whereas its serine phosphorylation was elevated with RR18 and BION-M1. The reduction in GSK3b was linked to the reduction in type IIA fibers commonly observed with spaceflight as these fibers are particularly enriched with GSK3.",
+      "searchTerm": "muscle spaceflight",
+      "organism": "Mus musculus"
+    },
+    {
+      "accession": "OSD-660",
+      "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Tibialis Anterior, RR9, Western Blot)",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-660",
+      "summary": "We examined the effects of ~30 days of spaceflight on glycogen synthase kinase 3 (GSK3) content and inhibitory serine phosphorylation in murine muscle and bone samples from four separate missions (BION-M1, rodent research [RR]1, RR9, and RR18). Spaceflight reduced GSK3b content across all missions, whereas its serine phosphorylation was elevated with RR18 and BION-M1. The reduction in GSK3b was linked to the reduction in type IIA fibers commonly observed with spaceflight as these fibers are particularly enriched with GSK3.",
+      "searchTerm": "muscle spaceflight",
+      "organism": "Mus musculus"
+    }
+  ]
+}
