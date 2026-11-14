@@ -1,0 +1,117 @@
+{
+  "_note": "Lines for the 'Your choice and how real planners think' card. The order is the priority: the first two lines whose rule matches are shown. 'match' says whether the player's choice lines up with the planner thinking, for the score card. These lines are team explanations written for kids. Every one of them still needs a science review, so each carries the review flag.",
+  "lines": [
+    {
+      "id": "stormShelter",
+      "rule": "stormShelter",
+      "match": true,
+      "review": "needs science review",
+      "you": {
+        "en": "You sent the crew to the shelter during the solar storm.",
+        "ja": "太陽のあらしのあいだ、クルーをシェルターにひなんさせました。"
+      },
+      "planners": {
+        "en": "Real planners put crew safety first. When a strong solar storm comes, the crew moves to the best shielded place and the work waits.",
+        "ja": "本もののプランナーは、クルーのあんぜんをいちばんにかんがえます。つよい太陽のあらしが来たら、いちばんまもられた場しょにうつって、しごとはあとまわしにします。"
+      }
+    },
+    {
+      "id": "stormKeepWorking",
+      "rule": "stormKeepWorking",
+      "match": false,
+      "review": "needs science review",
+      "you": {
+        "en": "You kept the crew working during the solar storm.",
+        "ja": "太陽のあらしのあいだも、クルーはしごとをつづけました。"
+      },
+      "planners": {
+        "en": "Real planners usually pause outside work in a solar storm. Work can be done later. A thick shield is what makes staying at work less risky.",
+        "ja": "本もののプランナーは、太陽のあらしのときは、そとのしごとを休むことが多いです。しごとはあとでもできます。あついシールドがあれば、きけんは小さくなります。"
+      }
+    },
+    {
+      "id": "discoveryStudy",
+      "rule": "discoveryStudy",
+      "match": true,
+      "review": "needs science review",
+      "you": {
+        "en": "You chose to study the big discovery.",
+        "ja": "大はっけんをしらべることにしました。"
+      },
+      "planners": {
+        "en": "Science is a big reason to go to the Moon. Planners say yes to science when the base has enough air, water and power to spare.",
+        "ja": "月に行く大きなりゆうのひとつは、かがくです。空気と水と電気にあまりがあるとき、プランナーはかがくをえらびます。"
+      }
+    },
+    {
+      "id": "discoverySkip",
+      "rule": "discoverySkip",
+      "match": true,
+      "review": "needs science review",
+      "you": {
+        "en": "You skipped the discovery to look after the base.",
+        "ja": "きちをまもるために、大はっけんは見おくりました。"
+      },
+      "planners": {
+        "en": "Sometimes planners say \"not today\". A discovery can wait for a safer day. The crew cannot wait for air.",
+        "ja": "プランナーも「今日はやめておこう」ときめることがあります。はっけんはあんぜんな日までまてます。でも、クルーは空気をまてません。"
+      }
+    },
+    {
+      "id": "nightLowPower",
+      "rule": "nightLowPower",
+      "match": false,
+      "review": "needs science review",
+      "you": {
+        "en": "Your power dropped low during the night.",
+        "ja": "よるのあいだに、電気がとても少なくなりました。"
+      },
+      "planners": {
+        "en": "Solar panels make no power in the dark. Real planners fill the batteries during the day, so there is enough for the night.",
+        "ja": "くらいと、ソーラーパネルは電気を作れません。本もののプランナーは、ひるのうちにバッテリーをいっぱいにして、よるにそなえます。"
+      }
+    },
+    {
+      "id": "lifeCostsPower",
+      "rule": "lifeCostsPower",
+      "match": false,
+      "review": "needs science review",
+      "you": {
+        "en": "You ran Life Support while power was low.",
+        "ja": "電気が少ないときに、せいめいいじのしごとをしました。"
+      },
+      "planners": {
+        "en": "Making air and water uses electricity. Planners watch power and life support together, because one feeds the other.",
+        "ja": "空気と水を作るには、電気がいります。プランナーは、電気とせいめいいじを、いつもいっしょに見ています。"
+      }
+    },
+    {
+      "id": "lowShield",
+      "rule": "lowShield",
+      "match": false,
+      "review": "needs science review",
+      "you": {
+        "en": "Your shield stayed thin for the whole lunar day.",
+        "ja": "この月の一日は、ずっとシールドがうすいままでした。"
+      },
+      "planners": {
+        "en": "Planners build protection before they need it. You cannot pile up dirt once the storm has arrived.",
+        "ja": "プランナーは、ひつようになるまえに、まもりをつくっておきます。あらしが来てからでは、土をつむ時間がありません。"
+      }
+    },
+    {
+      "id": "balanced",
+      "rule": "balanced",
+      "match": true,
+      "review": "needs science review",
+      "you": {
+        "en": "You kept all three bars in a safe range.",
+        "ja": "3 つのバーを、どれもあんぜんなところにたもちました。"
+      },
+      "planners": {
+        "en": "This is how real planners work: a little for every need, every round. No single job gets everything.",
+        "ja": "これが本もののプランナーのやり方です。どのしごとにも、まいかい少しずつ。ひとつのしごとにぜんぶはつかいません。"
+      }
+    }
+  ]
+}

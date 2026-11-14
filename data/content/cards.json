@@ -1,0 +1,314 @@
+{
+  "_note": "Mission Cards for the quiz. Each card has exactly 3 options and 'answer' is the index of the right one (the game shuffles them). A card is used only when its status is \"verified\" and it has a real source. Add a card only after opening and reading its source.",
+  "cards": [
+    {
+      "id": "card_earth_shield",
+      "status": "verified",
+      "q": {
+        "en": "What protects people on Earth from the worst solar storms?",
+        "ja": "ちきゅうの人を、つよい太陽のあらしからまもっているのは、なに？"
+      },
+      "options": [
+        { "en": "Earth's air and magnetic field", "ja": "ちきゅうの空気とじしゃくの力" },
+        { "en": "The light of the Moon", "ja": "月の光" },
+        { "en": "Rain clouds", "ja": "雨ぐも" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Earth's air and its magnetic field protect us from the worst solar storms. That is one of Earth's gifts.",
+        "ja": "ちきゅうの空気とじしゃくの力が、わたしたちをまもっています。これも、ちきゅうのおくりもののひとつです。"
+      },
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_flare_x",
+      "status": "verified",
+      "q": {
+        "en": "Which letter do scientists use for the strongest solar flares?",
+        "ja": "いちばんつよい太陽フレアにつかう文字は、どれ？"
+      },
+      "options": [
+        { "en": "X", "ja": "X" },
+        { "en": "A", "ja": "A" },
+        { "en": "C", "ja": "C" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Flares are sorted A, B, C, M and X. X flares are the strongest.",
+        "ja": "フレアは A、B、C、M、X に分けられます。X がいちばんつよいフレアです。"
+      },
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_lcross",
+      "status": "verified",
+      "q": {
+        "en": "What did NASA's LCROSS mission find in a shadowed Moon crater in 2009?",
+        "ja": "2009 年、NASA の LCROSS は、月のくらいクレーターでなにを見つけた？"
+      },
+      "options": [
+        { "en": "Water ice", "ja": "水のこおり" },
+        { "en": "A warm lake", "ja": "あたたかいみずうみ" },
+        { "en": "Green plants", "ja": "みどりのしょくぶつ" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "LCROSS found water ice in a shadowed crater called Cabeus. Ice like that could help a crew make water and air.",
+        "ja": "LCROSS は、カベウスというくらいクレーターで水のこおりを見つけました。こおりがあれば、水や空気を作るのにやくだちます。"
+      },
+      "source": {
+        "name": "NASA Missions Uncover the Moon's Buried Treasures",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/news-release/nasa-missions-uncover-the-moons-buried-treasures/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_water_98",
+      "status": "verified",
+      "q": {
+        "en": "About how much of the crew's water can the space station recover?",
+        "ja": "うちゅうステーションでは、クルーの水をどのくらい、もういちどつかえる？"
+      },
+      "options": [
+        { "en": "About 98 percent", "ja": "やく 98 パーセント" },
+        { "en": "About 50 percent", "ja": "やく 50 パーセント" },
+        { "en": "About 10 percent", "ja": "やく 10 パーセント" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "NASA showed that the station's life support system can recover about 98 percent of the water.",
+        "ja": "NASA は、ステーションのせいめいいじそうちが、水のやく 98 パーセントをもういちどつかえることをたしかめました。"
+      },
+      "source": {
+        "name": "NASA Achieves Water Recovery Milestone on International Space Station",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_electrolysis",
+      "status": "verified",
+      "q": {
+        "en": "How is oxygen made on the space station?",
+        "ja": "うちゅうステーションでは、さんそをどうやって作っている？"
+      },
+      "options": [
+        { "en": "By splitting water with electricity", "ja": "電気で水を分ける" },
+        { "en": "By burning rocket fuel", "ja": "ロケットのねんりょうをもやす" },
+        { "en": "By melting rocks", "ja": "岩をとかす" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Electricity from the solar panels splits water into hydrogen and oxygen. That is why Life Support costs power in this game.",
+        "ja": "ソーラーパネルの電気で、水をすいそとさんそに分けます。だからこのゲームでも、せいめいいじには電気がいります。"
+      },
+      "source": {
+        "name": "Environmental Control and Life Support System (ECLSS) fact sheet",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/wp-content/uploads/2025/08/g-657270-59-hp-environmental-control-and-life-support-system-eclss.pdf",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_veggie_food",
+      "status": "verified",
+      "q": {
+        "en": "What have astronauts grown and eaten in the space garden called Veggie?",
+        "ja": "うちゅうひこうしが、うちゅうのはたけ「ベジー」でそだてて食べたものは？"
+      },
+      "options": [
+        { "en": "Lettuce", "ja": "レタス" },
+        { "en": "Bananas", "ja": "バナナ" },
+        { "en": "Rice", "ja": "お米" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Astronauts grew lettuce and other leafy greens in Veggie, and ate some of them.",
+        "ja": "うちゅうひこうしは、ベジーでレタスなどのはっぱのやさいをそだてて、食べました。"
+      },
+      "source": {
+        "name": "Growing Plants in Space",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_veggie_pink",
+      "status": "verified",
+      "q": {
+        "en": "Why does the Veggie space garden glow pink?",
+        "ja": "うちゅうのはたけ「ベジー」は、どうしてピンク色に光るの？"
+      },
+      "options": [
+        { "en": "Plants use mostly red and blue light", "ja": "しょくぶつが赤と青の光をたくさんつかうから" },
+        { "en": "The walls are painted pink", "ja": "かべがピンク色だから" },
+        { "en": "The Sun looks pink in space", "ja": "うちゅうでは太陽がピンクに見えるから" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Plants use mostly red and blue light to grow. That is why the Veggie lamps glow magenta pink.",
+        "ja": "しょくぶつは、そだつために赤と青の光をたくさんつかいます。だからベジーのライトは、ピンク色に光ります。"
+      },
+      "source": {
+        "name": "Growing Plants in Space",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_regolith_plants",
+      "status": "verified",
+      "q": {
+        "en": "Scientists grew plants in real Moon soil from Apollo. What happened?",
+        "ja": "かがくしゃが、アポロがもちかえった月の土でしょくぶつをそだてました。どうなった？"
+      },
+      "options": [
+        { "en": "They grew, but slowly and with stress", "ja": "そだったけれど、ゆっくりで元気がなかった" },
+        { "en": "They grew faster than on Earth", "ja": "ちきゅうよりはやくそだった" },
+        { "en": "No seed sprouted at all", "ja": "ひとつもめが出なかった" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "The plants sprouted and grew in Moon soil, but slowly and with signs of stress. Moon farming will need extra care.",
+        "ja": "しょくぶつは月の土でめを出してそだちましたが、ゆっくりで、元気がないようすでした。月でのはたけには、くふうがひつようです。"
+      },
+      "source": {
+        "name": "OSD-476: Plants grown in Apollo lunar regolith",
+        "agency": "NASA Open Science Data Repository",
+        "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-476",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_regolith_shield",
+      "status": "verified",
+      "q": {
+        "en": "About how thick a layer of Moon soil can protect a habitat from radiation?",
+        "ja": "きちをほうしゃせんからまもるには、月の土がどのくらいのあつさでひつよう？"
+      },
+      "options": [
+        { "en": "About 3 meters", "ja": "やく 3 メートル" },
+        { "en": "About 3 centimeters", "ja": "やく 3 センチメートル" },
+        { "en": "About 3 kilometers", "ja": "やく 3 キロメートル" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "About 3 meters of Moon soil can protect a habitat from radiation, even during solar flares. That is why Pip piles dirt on the roof.",
+        "ja": "やく 3 メートルの月の土があれば、太陽フレアのときでもきちをまもれます。だからピップは、やねに土をつむのです。"
+      },
+      "source": {
+        "name": "Archway for Radiation and Micrometeorite Occurrence Resistance (NASA Tech Briefs, December 2012)",
+        "agency": "NASA",
+        "url": "https://ntrs.nasa.gov/citations/20130009378",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_radio_delay",
+      "status": "verified",
+      "q": {
+        "en": "How long does a radio signal take to travel from Earth to the Moon?",
+        "ja": "でんぱが、ちきゅうから月にとどくまで、どのくらいかかる？"
+      },
+      "options": [
+        { "en": "A little over 1 second", "ja": "1 びょうとすこし" },
+        { "en": "About 1 hour", "ja": "やく 1 時間" },
+        { "en": "About 1 day", "ja": "やく 1 日" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Radio signals travel at the speed of light. They cross from Earth to the Moon in about 1.3 seconds.",
+        "ja": "でんぱは光とおなじはやさですすみます。ちきゅうから月まで、やく 1.3 びょうです。"
+      },
+      "source": {
+        "name": "What Is a Light-Day?",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/mission/voyager/voyager-1/voyager-1-what-is-a-light-day/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_south_pole",
+      "status": "verified",
+      "q": {
+        "en": "Which part of the Moon are NASA's Artemis missions aiming for?",
+        "ja": "NASA のアルテミスけいかくがめざしているのは、月のどのあたり？"
+      },
+      "options": [
+        { "en": "The area near the South Pole", "ja": "南きょくの近く" },
+        { "en": "The middle of the side we see", "ja": "ちきゅうから見えるがわのまんなか" },
+        { "en": "The equator", "ja": "せきどう" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Artemis aims for the area near the Moon's South Pole, where some craters stay dark and very cold.",
+        "ja": "アルテミスは、月の南きょくの近くをめざしています。そこには、ずっとくらくてとてもさむいクレーターがあります。"
+      },
+      "source": {
+        "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_cold_craters",
+      "status": "verified",
+      "q": {
+        "en": "How cold can the darkest craters near the Moon's South Pole get?",
+        "ja": "月の南きょくの近くの、いちばんくらいクレーターは、どのくらいさむくなる？"
+      },
+      "options": [
+        { "en": "About minus 203 degrees Celsius", "ja": "やくマイナス 203 ど" },
+        { "en": "About minus 20 degrees Celsius", "ja": "やくマイナス 20 ど" },
+        { "en": "About 0 degrees Celsius", "ja": "やく 0 ど" }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Some craters never get sunlight and can be as cold as minus 203 degrees Celsius.",
+        "ja": "太陽の光がまったくあたらないクレーターは、マイナス 203 どまで下がることがあります。"
+      },
+      "source": {
+        "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_lunar_day",
+      "status": "TODO_SOURCE",
+      "q": {
+        "en": "Away from the poles, about how long does daylight last on the Moon?",
+        "ja": "月のきょく地いがいでは、ひるはどのくらいつづく？"
+      },
+      "options": [
+        { "en": "About two Earth weeks", "ja": "ちきゅうのやく 2 しゅうかん" },
+        { "en": "About two hours", "ja": "やく 2 時間" },
+        { "en": "About two years", "ja": "やく 2 年" }
+      ],
+      "answer": 0,
+      "explain": null,
+      "source": {
+        "name": "TODO_SOURCE",
+        "agency": "NASA",
+        "url": "TODO_SOURCE",
+        "accessed": null
+      }
+    }
+  ]
+}

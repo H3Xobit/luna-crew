@@ -1,0 +1,233 @@
+.scene {
+  position: relative;
+  overflow: hidden;
+  background: #05060f;
+  min-height: 180px;
+}
+
+.scene-svg,
+.intro-panel,
+.intro-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.intro-panel {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(127, 212, 255, 0.18), transparent 40%),
+    #05060f;
+}
+
+.intro-art {
+  width: min(520px, 100%);
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.scene-svg .sky {
+  fill: #1a2748;
+  transition: fill 0.6s ease;
+}
+
+.scene-svg.is-night .sky { fill: #070b1c; }
+
+.scene-svg .stars { opacity: 0.15; transition: opacity 0.6s ease; }
+.scene-svg.is-night .stars { opacity: 0.95; }
+
+.star { fill: #fff; }
+.star.twinkle {
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+
+.scene-svg .sun {
+  transform-origin: 74px 236px;
+  transition: transform 0.7s ease, opacity 0.7s ease;
+}
+
+.scene-svg.is-night .sun {
+  transform: translate(-40px, 120px) scale(0.4);
+  opacity: 0.15;
+}
+
+.scene-svg .earth-in-sky {
+  transition: opacity 0.5s ease;
+}
+
+.scene-svg.is-night .earth-in-sky { opacity: 1; }
+.scene-svg:not(.is-night) .earth-in-sky { opacity: 0.85; }
+
+.far-rim { fill: #6f748c; }
+.scene-svg.is-night .far-rim { fill: #32364d; }
+
+.ground-night { opacity: 0; transition: opacity 0.6s ease; }
+.scene-svg.is-night .ground-night { opacity: 1; }
+.scene-svg.is-night .ground-day { opacity: 0; }
+
+.long-shadows {
+  fill: rgba(10, 12, 28, 0.28);
+  transition: opacity 0.5s ease;
+}
+
+.scene-svg.is-night .long-shadows { opacity: 0; }
+
+.crater { fill: rgba(20, 24, 43, 0.22); }
+.ice { fill: #bfe9ff; }
+
+.greenhouse-shell {
+  fill: rgba(180, 235, 255, 0.28);
+  stroke: #1b1630;
+  stroke-width: 2.5;
+}
+
+.grow-glow { opacity: 0; transition: opacity 0.35s ease; }
+.scene-svg.lights-on .grow-glow { opacity: 1; }
+
+.grow-lamp {
+  stroke: #ff7fd0;
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.25;
+}
+.scene-svg.lights-on .grow-lamp { opacity: 1; }
+
+.plant-stem { stroke: #1b1630; stroke-width: 2; fill: none; }
+.plant-leaf { fill: #5ee08a; stroke: #1b1630; stroke-width: 1.5; }
+.scene-svg:not(.lights-on) .plant-leaf { fill: #3f7a55; }
+
+.dome {
+  fill: #dfe5f5;
+  stroke: #1b1630;
+  stroke-width: 2.5;
+}
+
+.dome-shine {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.window { fill: #3a3f5c; stroke: #1b1630; stroke-width: 2; }
+.hatch { fill: #8d91a8; stroke: #1b1630; stroke-width: 2.5; }
+.hatch-light { fill: #7fe3ff; }
+.mast { stroke: #1b1630; stroke-width: 3; }
+.mast-light { fill: #5ee08a; }
+.scene-svg.sheltered .mast-light { fill: #ff9f43; }
+
+.dirt-layer {
+  fill: #8f7b63;
+  stroke: #1b1630;
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.scene-svg[data-dirt="1"] .dirt-layer[data-layer="1"],
+.scene-svg[data-dirt="2"] .dirt-layer[data-layer="1"],
+.scene-svg[data-dirt="2"] .dirt-layer[data-layer="2"],
+.scene-svg[data-dirt="3"] .dirt-layer[data-layer="1"],
+.scene-svg[data-dirt="3"] .dirt-layer[data-layer="2"],
+.scene-svg[data-dirt="3"] .dirt-layer[data-layer="3"],
+.scene-svg[data-dirt="4"] .dirt-layer { opacity: 1; }
+
+.pebble { fill: #6d5b45; }
+
+.panel-face { fill: #2f5fd6; stroke: #1b1630; stroke-width: 2.5; }
+.panel-grid { fill: none; stroke: #0e1a44; stroke-width: 1.5; }
+.panel-leg { stroke: #1b1630; stroke-width: 3; }
+.panel-crack,
+.repair-glow { opacity: 0; }
+
+.scene-svg.panels-damaged .panel-face { fill: #4a5578; }
+.scene-svg.panels-damaged .panel-crack {
+  opacity: 1;
+  fill: none;
+  stroke: #05060f;
+  stroke-width: 2.5;
+}
+
+.scene-svg.repaired .repair-glow {
+  opacity: 1;
+  fill: #ffd166;
+  animation: repair-flash 0.9s ease-out;
+}
+
+.drop { fill: #7fe3ff; stroke: #1b1630; stroke-width: 1.5; }
+.lab-light { fill: #ffd166; }
+
+.pip-rover {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pip-bob {
+  animation: pip-bob 1.8s ease-in-out infinite;
+  transform-origin: 0 0;
+}
+
+.pip-antenna { fill: #5ee08a; }
+.scene-svg.storm .pip-antenna { fill: #ff5c8a; }
+
+.storm-layer {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.scene-svg.storm .storm-layer { opacity: 1; }
+
+.storm-tint {
+  fill: rgba(255, 120, 40, 0.16);
+}
+
+.storm-streak {
+  fill: none;
+  stroke: #ffd166;
+  stroke-width: 2;
+  opacity: 0.7;
+  animation: streak 0.9s linear infinite;
+}
+
+.scene-svg.low-power .hatch-light,
+.scene-svg.low-power .lab-light {
+  fill: #8aa0b8;
+}
+
+.portrait {
+  overflow: visible;
+}
+
+.portrait-extras text {
+  font-family: var(--font-display), sans-serif;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@keyframes pip-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes streak {
+  from { transform: translateY(-20px); opacity: 0; }
+  30% { opacity: 0.8; }
+  to { transform: translateY(40px); opacity: 0; }
+}
+
+@keyframes repair-flash {
+  0% { opacity: 0; r: 4; }
+  40% { opacity: 1; }
+  100% { opacity: 0; r: 18; }
+}
+
+@media (max-width: 699px) {
+  .scene { max-height: 42vh; }
+}
