@@ -1,0 +1,56 @@
+// The last screen. A paused mission is never a punishment: the crew is safe,
+// one tip is offered and the player can try again.
+
+import { h, clear } from "./dom.js";
+import { icon } from "./icons.js";
+import { portrait, playerBadge } from "./characters.js";
+import { dataChip, stormSummary } from "./modals.js";
+
+export function renderEnd(root, { i18n, summary, story, config, player, nameOf, onAgain, onSameSeed, onData, onHome }) {
+  const complete = summary.status === "complete";
+  const vars = { player: player.name };
+  const tipLine = !complete && summary.reason ? story.paused[summary.reason] : null;
+  const lead = complete ? story.complete : [story.paused.intro];
+
+  const stats = [
+    [i18n.t("end.missionPoints"), String(summary.missionPoints)],
+    [i18n.t("end.rounds"), `${summary.roundsPlayed} / ${summary.totalRounds}`],
+    [i18n.t("end.days"), `${summary.daysSurvived} / ${config.lunarDays}`],
+    [i18n.t("end.quiz"), `${summary.quizCorrect} / ${summary.quizAsked}`],
+    [i18n.t("end.planner"), `${summary.nasaMatched} / ${summary.nasaShown}`]
+  ];
+  if (summary.sampleRecovered !== null) {
+    stats.push([i18n.t("end.sample"), i18n.t(summary.sampleRecovered ? "end.sampleYes" : "end.sampleNo")]);
+  }
+
+  const bars = ["power", "life", "shield"].map((name) =>
+    h("li", { class: `end-bar bar-${name}` }, [h("span", { class: "bar-icon", html: icon(name) }), `${i18n.t(`bar.${name}`)} ${Math.round(summary.bars[name])}`])
+  );
+
+  clear(root).append(
+    h("div", { class: `end-card ${complete ? "is-complete" : "is-paused"}` }, [
+      h("div", { class: "end-crew" }, [
+        h("span", { html: portrait("nova", complete ? "happy" : "neutral", { title: nameOf("nova") }) }),
+        h("span", { html: portrait("sprout", complete ? "excited" : "happy", { title: nameOf("sprout") }) }),
+        h("span", { html: portrait("pip", complete ? "excited" : "thinking", { title: nameOf("pip") }) }),
+        h("span", { html: playerBadge(player.helmet, { title: player.name }) })
+      ]),
+      h("h1", { class: "end-title", text: i18n.t(complete ? "end.completeTitle" : "end.pausedTitle") }),
+      ...lead.map((line) => h("p", { class: "end-line" }, [h("strong", { text: `${nameOf(line.who)}: ` }), i18n.pick(line.text, vars)])),
+      tipLine ? h("p", { class: "end-tip" }, [h("strong", { text: `${nameOf(tipLine.who)}: ` }), i18n.pick(tipLine.text, vars)]) : null,
+      complete ? h("p", { class: "end-closing", text: i18n.pick(story.closing) }) : null,
+      h("dl", { class: "end-stats" }, stats.flatMap(([label, value]) => [h("dt", { text: label }), h("dd", { text: value })])),
+      h("ul", { class: "end-bars" }, bars),
+      summary.storm
+        ? h("p", { class: "end-storm" }, [dataChip(i18n, summary.storm.label), " ", i18n.t("end.storm", { what: stormSummary(i18n, summary.storm) })])
+        : null,
+      h("p", { class: "small", text: i18n.t("end.seed", { seed: summary.seed }) }),
+      h("div", { class: "end-actions" }, [
+        h("button", { type: "button", class: "btn btn-primary", id: "play-again", text: i18n.t(complete ? "end.again" : "end.tryAgain"), onclick: onAgain }),
+        h("button", { type: "button", class: "btn btn-choice", text: i18n.t("end.sameSeed"), onclick: onSameSeed }),
+        h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("title.data"), onclick: onData }),
+        h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("ui.home"), onclick: onHome })
+      ])
+    ])
+  );
+}

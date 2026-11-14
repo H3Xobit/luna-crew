@@ -1,0 +1,305 @@
+{
+  "_note": "A fact is shown in the game only when its status is \"verified\". Verified means the source page was opened and read on the accessed date and it supports the sentence. Anything else stays \"TODO_SOURCE\" and is never shown.",
+  "facts": [
+    {
+      "id": "earth_shield",
+      "status": "verified",
+      "text": {
+        "en": "Earth's air and its magnetic field protect us from the worst solar storms.",
+        "ja": "ちきゅうの空気とじしゃくの力が、つよい太陽のあらしから、わたしたちをまもっています。"
+      },
+      "usedFor": "Intro story, quiz card",
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "flare_what",
+      "status": "verified",
+      "text": {
+        "en": "A solar flare is a sudden, bright burst of light on the Sun.",
+        "ja": "太陽フレアは、太陽でとつぜんおきる、とても明るい光のばくはつです。"
+      },
+      "usedFor": "Storm card",
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "flare_classes",
+      "status": "verified",
+      "text": {
+        "en": "Scientists sort solar flares by strength with the letters A, B, C, M and X. X flares are the strongest.",
+        "ja": "かがくしゃは、太陽フレアのつよさを A、B、C、M、X の文字で分けます。X がいちばんつよいフレアです。"
+      },
+      "usedFor": "Storm card, quiz card",
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "solar_particles",
+      "status": "verified",
+      "text": {
+        "en": "Solar storms can send tiny particles into space at very high speeds. They can be a radiation risk for astronauts.",
+        "ja": "太陽のあらしは、小さなつぶを、とてもはやいスピードでうちゅうにとばします。うちゅうひこうしには、ほうしゃせんのきけんになります。"
+      },
+      "usedFor": "Storm card",
+      "source": {
+        "name": "Solar Storms and Flares",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/sun/solar-storms-and-flares/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "south_pole_target",
+      "status": "verified",
+      "text": {
+        "en": "NASA's Artemis missions aim for the area near the Moon's South Pole.",
+        "ja": "NASA のアルテミスけいかくは、月の南きょくの近くをめざしています。"
+      },
+      "usedFor": "Intro story, quiz card",
+      "source": {
+        "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "cold_craters",
+      "status": "verified",
+      "text": {
+        "en": "Some craters near the Moon's South Pole never get sunlight. They can be as cold as minus 203 degrees Celsius.",
+        "ja": "月の南きょくの近くには、太陽の光がまったくあたらないクレーターがあります。そこはマイナス 203 どまで下がることがあります。"
+      },
+      "usedFor": "Intro story, round tip, quiz card",
+      "source": {
+        "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "long_shadows",
+      "status": "verified",
+      "text": {
+        "en": "Near the Moon's South Pole the Sun stays low near the horizon, so mountains cast long, dark shadows.",
+        "ja": "月の南きょくの近くでは、太陽がいつも地平線の近くにあります。だから山が長くてくらいかげを作ります。"
+      },
+      "usedFor": "Round tip",
+      "source": {
+        "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "lcross_water",
+      "status": "verified",
+      "text": {
+        "en": "In 2009, NASA's LCROSS mission found water ice in a shadowed Moon crater called Cabeus.",
+        "ja": "2009 年、NASA の LCROSS（エルクロス）は、月のカベウスというくらいクレーターで、水のこおりを見つけました。"
+      },
+      "usedFor": "Round tip, quiz card",
+      "source": {
+        "name": "NASA Missions Uncover the Moon's Buried Treasures",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/news-release/nasa-missions-uncover-the-moons-buried-treasures/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "water_98",
+      "status": "verified",
+      "text": {
+        "en": "NASA showed that the life support system on the International Space Station can recover about 98 percent of the crew's water.",
+        "ja": "NASA は、こくさいうちゅうステーションで、クルーがつかった水のやく 98 パーセントを、もういちどつかえることをたしかめました。"
+      },
+      "usedFor": "Round tip, quiz card",
+      "source": {
+        "name": "NASA Achieves Water Recovery Milestone on International Space Station",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/missions/station/iss-research/nasa-achieves-water-recovery-milestone-on-international-space-station/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "eclss_what",
+      "status": "verified",
+      "text": {
+        "en": "On the space station, a life support system cleans the air, recycles water and makes oxygen for the crew.",
+        "ja": "うちゅうステーションでは、せいめいいじそうちが、空気をきれいにして、水をもういちどつかえるようにして、さんそを作っています。"
+      },
+      "usedFor": "Tutorial",
+      "source": {
+        "name": "Environmental Control and Life Support Systems (ECLSS)",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "electrolysis",
+      "status": "verified",
+      "text": {
+        "en": "On the space station, oxygen is made by using electricity to split water.",
+        "ja": "うちゅうステーションでは、電気をつかって水を分けて、さんそを作っています。"
+      },
+      "usedFor": "Tutorial, quiz card",
+      "source": {
+        "name": "Environmental Control and Life Support System (ECLSS) fact sheet",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/wp-content/uploads/2025/08/g-657270-59-hp-environmental-control-and-life-support-system-eclss.pdf",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "veggie_food",
+      "status": "verified",
+      "text": {
+        "en": "Astronauts have grown lettuce and other leafy greens in a space garden called Veggie, and eaten some of them.",
+        "ja": "うちゅうひこうしは、「ベジー」といううちゅうのはたけで、レタスなどのはっぱのやさいをそだてて、食べたこともあります。"
+      },
+      "usedFor": "Round tip, quiz card",
+      "source": {
+        "name": "Growing Plants in Space",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "veggie_pink",
+      "status": "verified",
+      "text": {
+        "en": "The Veggie space garden glows magenta pink, because plants use mostly red and blue light.",
+        "ja": "うちゅうのはたけ「ベジー」は、ピンク色に光ります。しょくぶつは、赤と青の光をたくさんつかうからです。"
+      },
+      "usedFor": "Round tip, quiz card, greenhouse art",
+      "source": {
+        "name": "Growing Plants in Space",
+        "agency": "NASA",
+        "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "regolith_plants",
+      "status": "verified",
+      "text": {
+        "en": "Scientists grew small plants in real Moon soil brought back by Apollo astronauts. The plants grew, but slowly and with signs of stress.",
+        "ja": "かがくしゃは、アポロのうちゅうひこうしがもちかえった本ものの月の土で、小さなしょくぶつをそだてました。そだちましたが、ゆっくりで、元気がないようすも見られました。"
+      },
+      "usedFor": "Greenhouse research card, quiz card",
+      "source": {
+        "name": "OSD-476: Plants grown in Apollo lunar regolith present stress-associated transcriptomes that inform prospects for lunar exploration",
+        "agency": "NASA Open Science Data Repository",
+        "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-476",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "regolith_shield",
+      "status": "verified",
+      "text": {
+        "en": "A layer of Moon soil about 3 meters thick can protect a habitat from radiation, even during solar flares.",
+        "ja": "あつさ 3 メートルくらいの月の土は、太陽フレアのときでも、きちをほうしゃせんからまもることができます。"
+      },
+      "usedFor": "Round tip, quiz card",
+      "source": {
+        "name": "Archway for Radiation and Micrometeorite Occurrence Resistance (NASA Tech Briefs, December 2012)",
+        "agency": "NASA",
+        "url": "https://ntrs.nasa.gov/citations/20130009378",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "radio_delay",
+      "status": "verified",
+      "text": {
+        "en": "Light and radio signals take about 1.3 seconds to travel between Earth and the Moon.",
+        "ja": "光やでんぱが、ちきゅうと月のあいだをすすむのに、やく 1.3 びょうかかります。"
+      },
+      "usedFor": "Ask Earth tooltip, quiz card",
+      "source": {
+        "name": "What Is a Light-Day?",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/mission/voyager/voyager-1/voyager-1-what-is-a-light-day/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "csa_toolkit",
+      "status": "verified",
+      "text": {
+        "en": "The Canadian Space Agency has a toolkit for students and teachers about producing food on the Moon and in remote areas.",
+        "ja": "カナダうちゅうちょうには、月やとおい場しょで食べものを作ることを学べる、子どもと先生のためのツールキットがあります。"
+      },
+      "usedFor": "For teachers and parents screen",
+      "source": {
+        "name": "Toolkit for educators and youth: Food production on the Moon and in remote areas",
+        "agency": "Canadian Space Agency",
+        "url": "https://www.asc-csa.gc.ca/eng/youth-educators/toolkits/food-production/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "donki_what",
+      "status": "verified",
+      "text": {
+        "en": "DONKI is a NASA database where space weather experts record solar flares and other space weather events.",
+        "ja": "DONKI（ドンキ）は、うちゅうてんきのせんもんかが、太陽フレアなどのできごとをきろくする NASA のデータベースです。"
+      },
+      "usedFor": "Real NASA Data screen",
+      "source": {
+        "name": "CCMC DONKI System",
+        "agency": "NASA CCMC",
+        "url": "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
+        "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "lro_coldest",
+      "status": "TODO_SOURCE",
+      "text": {
+        "en": "NASA's Lunar Reconnaissance Orbiter measured the temperature inside the Moon's shadowed craters from orbit.",
+        "ja": "NASA のたんさき LRO は、月のくらいクレーターの中のおんどを、うちゅうからはかりました。"
+      },
+      "usedFor": "Not shown. Waiting for a NASA LRO page that the team has opened and checked.",
+      "source": {
+        "name": "TODO_SOURCE",
+        "agency": "NASA",
+        "url": "TODO_SOURCE",
+        "accessed": null
+      }
+    },
+    {
+      "id": "lunar_day_length",
+      "status": "TODO_SOURCE",
+      "text": {
+        "en": "Away from the poles, daylight on the Moon lasts about two Earth weeks, and so does the night.",
+        "ja": "月のきょく地いがいでは、ひるがちきゅうのやく 2 しゅうかん、よるもやく 2 しゅうかんつづきます。"
+      },
+      "usedFor": "Not shown. Waiting for a source the team has opened and checked.",
+      "source": {
+        "name": "TODO_SOURCE",
+        "agency": "NASA",
+        "url": "TODO_SOURCE",
+        "accessed": null
+      }
+    }
+  ]
+}

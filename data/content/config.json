@@ -1,0 +1,39 @@
+{
+  "_note": "Team settings. Change names and colors here, not in the code. 'overrides' may replace single numbers from js/engine/config.js.",
+  "title": {
+    "en": "Luna Crew: Moon Base Mission",
+    "ja": "ルナクルー：月のきちミッション"
+  },
+  "tagline": {
+    "en": "Plan the work. Keep the crew safe. Learn why Earth is special.",
+    "ja": "しごとをきめて、クルーをまもろう。ちきゅうのすごさを知ろう。"
+  },
+  "team": "Maja Madi",
+  "challenge": "NASA Space Apps Challenge 2026: Build a Junior Astronaut Mission Trainer",
+  "license": "Apache-2.0",
+  "characters": {
+    "nova": {
+      "name": { "en": "Commander Nova", "ja": "ノバたいちょう" },
+      "short": { "en": "Nova", "ja": "ノバ" },
+      "role": { "en": "Team leader", "ja": "チームのリーダー" }
+    },
+    "sprout": {
+      "name": { "en": "Dr. Sprout", "ja": "スプラウトはかせ" },
+      "short": { "en": "Dr. Sprout", "ja": "はかせ" },
+      "role": { "en": "Air, water and plant scientist", "ja": "空気と水としょくぶつのかがくしゃ" }
+    },
+    "pip": {
+      "name": { "en": "Pip", "ja": "ピップ" },
+      "short": { "en": "Pip", "ja": "ピップ" },
+      "role": { "en": "Helper rover", "ja": "おてつだいローバー" }
+    },
+    "earth": {
+      "name": { "en": "Mission Control", "ja": "ちきゅうのかんせいしつ" },
+      "short": { "en": "Earth", "ja": "ちきゅう" },
+      "role": { "en": "The team back on Earth", "ja": "ちきゅうにいるなかま" }
+    }
+  },
+  "defaultPlayerName": { "en": "Planner", "ja": "プランナー" },
+  "helmetColors": ["#4fd1ff", "#ff9f43", "#5ee08a", "#ff5c8a", "#b79cff", "#ffd166"],
+  "overrides": {}
+}

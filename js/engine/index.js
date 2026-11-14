@@ -11,6 +11,7 @@ export {
   applyEventOutcome,
   checkEnd,
   resolveRound,
+  forecastRound,
   powerRate,
   topJob,
   lowestBar

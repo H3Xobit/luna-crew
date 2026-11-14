@@ -1,0 +1,627 @@
+{
+  "_note": "Every dialogue line in the game. who: nova, sprout, pip or earth. expr: neutral, happy, excited, worried, sleepy or thinking. Placeholders: {player} {nova} {sprout} {pip} {n}. A line with \"fact\" shows that fact from facts.json after the lead text, and only when the fact is verified. Story events (the rescue, the discovery) are made up for the game and are not science facts.",
+  "intro": [
+    {
+      "art": "earth",
+      "lines": [
+        {
+          "who": "nova",
+          "expr": "happy",
+          "text": {
+            "en": "Earth gives us gifts every day: air to breathe, water to drink and food to eat.",
+            "ja": "ちきゅうは、まいにちおくりものをくれます。すう空気、のむ水、そして食べもの。"
+          }
+        },
+        {
+          "who": "nova",
+          "expr": "neutral",
+          "lead": { "en": "And one more gift.", "ja": "そして、もうひとつ。" },
+          "fact": "earth_shield"
+        }
+      ]
+    },
+    {
+      "art": "moon",
+      "lines": [
+        {
+          "who": "sprout",
+          "expr": "thinking",
+          "text": {
+            "en": "The Moon gives us none of these. On the Moon, people must make or bring everything they need.",
+            "ja": "月には、そのどれもありません。月では、ひつようなものを、じぶんたちで作るか、もっていくしかありません。"
+          }
+        },
+        {
+          "who": "sprout",
+          "expr": "happy",
+          "text": {
+            "en": "So we practise living there, one careful step at a time. It also shows us how special Earth is.",
+            "ja": "だから、月でくらすれんしゅうを、すこしずつします。そうすると、ちきゅうのすごさもわかります。"
+          }
+        }
+      ]
+    },
+    {
+      "art": "base",
+      "lines": [
+        {
+          "who": "pip",
+          "expr": "excited",
+          "lead": { "en": "Beep! This is our base.", "ja": "ピピッ！ここが、ぼくたちのきちだよ。" },
+          "fact": "south_pole_target"
+        },
+        {
+          "who": "pip",
+          "expr": "thinking",
+          "lead": { "en": "It is a strange place.", "ja": "ここは、ふしぎな場しょなんだ。" },
+          "fact": "cold_craters"
+        }
+      ]
+    },
+    {
+      "art": "planner",
+      "lines": [
+        {
+          "who": "nova",
+          "expr": "happy",
+          "text": {
+            "en": "You are our new Mission Planner. You decide how the crew uses its work points.",
+            "ja": "あなたは、あたらしいミッションプランナーです。クルーのしごとポイントのつかい方を、あなたがきめます。"
+          }
+        },
+        {
+          "who": "nova",
+          "expr": "neutral",
+          "text": {
+            "en": "Keep us safe for 3 lunar days. We are counting on you.",
+            "ja": "月の 3 日間、みんなをまもってください。たよりにしています。"
+          }
+        }
+      ]
+    }
+  ],
+  "tutorial": [
+    {
+      "who": "sprout",
+      "expr": "happy",
+      "target": null,
+      "text": {
+        "en": "Welcome, {player}! I am {sprout}. Let's try one practice round together.",
+        "ja": "ようこそ、{player}！わたしは{sprout}。いっしょに、れんしゅうを 1 回やってみましょう。"
+      }
+    },
+    {
+      "who": "pip",
+      "expr": "excited",
+      "target": null,
+      "text": {
+        "en": "And I am {pip}! Beep beep! I help with every job!",
+        "ja": "ぼくは{pip}！ピピッ！どんなしごとも、てつだうよ！"
+      }
+    },
+    {
+      "who": "sprout",
+      "expr": "neutral",
+      "target": "bars",
+      "text": {
+        "en": "These three bars keep the crew safe: Power, Life Support and Shield. If one reaches zero, the mission pauses and the crew goes home.",
+        "ja": "この 3 つのバーが、クルーをまもります。電気、せいめいいじ、シールド。ひとつでもゼロになると、ミッションはお休み。クルーはちきゅうに帰ります。"
+      }
+    },
+    {
+      "who": "pip",
+      "expr": "happy",
+      "target": "points",
+      "text": {
+        "en": "Each round you get 10 work points. Share them between four jobs.",
+        "ja": "1 回ごとに、しごとポイントが 10 もらえるよ。4 つのしごとに分けてね。"
+      }
+    },
+    {
+      "who": "sprout",
+      "expr": "neutral",
+      "target": "jobs",
+      "text": {
+        "en": "Power cleans the solar panels. Life Support makes air and water from ice. Shield piles Moon dirt on the roof. Science runs experiments, and only Science earns Mission Points.",
+        "ja": "「電気」はソーラーパネルのそうじ。「せいめいいじ」はこおりから空気と水を作ります。「シールド」はやねに月の土をつみます。「かがく」はじっけん。ミッションポイントがもらえるのは、かがくだけです。"
+      }
+    },
+    {
+      "who": "sprout",
+      "expr": "happy",
+      "target": "job-life",
+      "lead": { "en": "This part is real.", "ja": "これは本当のはなしです。" },
+      "fact": "eclss_what"
+    },
+    {
+      "who": "pip",
+      "expr": "thinking",
+      "target": "job-life",
+      "lead": {
+        "en": "That is why Life Support costs a little power here.",
+        "ja": "だから、せいめいいじには、電気がすこしいるんだ。"
+      },
+      "fact": "electrolysis"
+    },
+    {
+      "who": "sprout",
+      "expr": "happy",
+      "target": "lights",
+      "text": {
+        "en": "The greenhouse grows our food. Lights on: the plants grow and Life Support goes up, but the lights use power. Lights off: we save power, but the plants suffer.",
+        "ja": "おんしつでは、食べものをそだてます。ライトをつけると、しょくぶつがそだって、せいめいいじがふえます。でも電気をつかいます。けすと、電気はへりませんが、しょくぶつが弱ります。"
+      }
+    },
+    {
+      "who": "pip",
+      "expr": "neutral",
+      "target": "ask",
+      "text": {
+        "en": "Not sure what to do? Ask Earth! It costs 1 work point, and the message needs a moment to travel.",
+        "ja": "まよったら、ちきゅうにきいてみよう！しごとポイントを 1 つかうよ。メッセージがとどくまで、すこしまってね。"
+      }
+    },
+    {
+      "who": "sprout",
+      "expr": "excited",
+      "target": "go",
+      "text": {
+        "en": "Now you try! Tap the plus buttons to share your points, then press GO.",
+        "ja": "さあ、やってみましょう！プラスのボタンでポイントを分けて、GO をおしてください。"
+      }
+    }
+  ],
+  "practiceDone": [
+    {
+      "who": "sprout",
+      "expr": "happy",
+      "text": {
+        "en": "Well done! That was only practice. The bars are back to the start for the real mission.",
+        "ja": "よくできました！いまのは、れんしゅうです。本ばんのために、バーをはじめにもどしました。"
+      }
+    },
+    {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "Mission Planner {player}, Lunar Day 1 begins now. Good luck!",
+        "ja": "ミッションプランナー {player}、月の 1 日目がはじまります。がんばって！"
+      }
+    }
+  ],
+  "missionStart": [
+    {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "Mission Planner {player}, Lunar Day 1 begins now. Good luck!",
+        "ja": "ミッションプランナー {player}、月の 1 日目がはじまります。がんばって！"
+      }
+    }
+  ],
+  "rescue": {
+    "intro": [
+      {
+        "who": "pip",
+        "expr": "worried",
+        "text": {
+          "en": "Uh oh! My battery ran low in the dark crater. And I am carrying an ice sample!",
+          "ja": "たいへん！くらいクレーターの中で、バッテリーがなくなりそう。こおりのサンプルも、もっているのに！"
+        }
+      },
+      {
+        "who": "nova",
+        "expr": "thinking",
+        "text": {
+          "en": "We can rescue {pip} now, or wait for sunlight to warm the crater edge. Your call, Planner.",
+          "ja": "いますぐ{pip}をたすけに行くか、太陽の光であたたまるのをまつか。きめてください、プランナー。"
+        }
+      }
+    ],
+    "rescueNow": [
+      {
+        "who": "pip",
+        "expr": "excited",
+        "text": {
+          "en": "You came for me! The ice sample is safe. Thank you!",
+          "ja": "たすけに来てくれた！こおりのサンプルも、ぶじだよ。ありがとう！"
+        }
+      }
+    ],
+    "waitForSun": [
+      {
+        "who": "pip",
+        "expr": "sleepy",
+        "text": {
+          "en": "I will wait for the Sun. I had to leave the ice sample behind, and I need a rest next round.",
+          "ja": "太陽をまつよ。こおりのサンプルは、おいてきちゃった。つぎの回は、すこし休むね。"
+        }
+      }
+    ]
+  },
+  "storm": {
+    "intro": [
+      {
+        "who": "nova",
+        "expr": "worried",
+        "text": {
+          "en": "Attention, crew. Our instruments picked up a solar storm.",
+          "ja": "クルーのみんな、きいてください。かんそくきが、太陽のあらしをとらえました。"
+        }
+      },
+      {
+        "who": "pip",
+        "expr": "worried",
+        "text": {
+          "en": "The Sun sent out a burst of fast particles. We can't see them, but our instruments can.",
+          "ja": "太陽が、はやいつぶをたくさんとばしたんだ。目には見えないけど、かんそくきにはわかるよ。"
+        }
+      }
+    ],
+    "shelter": [
+      {
+        "who": "nova",
+        "expr": "neutral",
+        "text": {
+          "en": "Everyone is in the shelter. We wait together until the storm has passed.",
+          "ja": "ぜんいん、シェルターに入りました。あらしがすぎるまで、みんなでまちます。"
+        }
+      }
+    ],
+    "held": [
+      {
+        "who": "pip",
+        "expr": "happy",
+        "text": {
+          "en": "The dirt shield held! We only lost a little.",
+          "ja": "土のシールドが、まもってくれた！へったのは、すこしだけ。"
+        }
+      }
+    ],
+    "notHeld": [
+      {
+        "who": "sprout",
+        "expr": "worried",
+        "text": {
+          "en": "The shield was too thin for this storm. We lost some Life Support and some of the dirt cover.",
+          "ja": "このあらしには、シールドがうすすぎました。せいめいいじと、土のおおいが、へってしまいました。"
+        }
+      }
+    ],
+    "damaged": [
+      {
+        "who": "pip",
+        "expr": "worried",
+        "text": {
+          "en": "The storm hurt our solar panels. They make half the power until we fix them. Repair time next round!",
+          "ja": "あらしで、ソーラーパネルがこわれちゃった。なおすまで、電気ははんぶんしか作れない。つぎの回で、しゅうりしよう！"
+        }
+      }
+    ]
+  },
+  "repair": {
+    "intro": [
+      {
+        "who": "pip",
+        "expr": "excited",
+        "text": {
+          "en": "Repair time! Tap the 3 glowing spots on the panels before the timer runs out.",
+          "ja": "しゅうりの時間だ！時間がなくなるまえに、パネルの光っているところを 3 つタップしてね。"
+        }
+      }
+    ],
+    "success": [
+      {
+        "who": "pip",
+        "expr": "happy",
+        "text": {
+          "en": "Zap! The panels work again. That cost 1 work point.",
+          "ja": "ビビッ！パネルがなおったよ。しごとポイントを 1 つかったよ。"
+        }
+      }
+    ],
+    "fail": [
+      {
+        "who": "pip",
+        "expr": "thinking",
+        "text": {
+          "en": "Not fixed yet. That is okay. We will try again next round.",
+          "ja": "まだなおらなかった。だいじょうぶ。つぎの回に、もういちどやってみよう。"
+        }
+      }
+    ]
+  },
+  "research": [
+    {
+      "who": "sprout",
+      "expr": "excited",
+      "lead": { "en": "Research news for the greenhouse!", "ja": "おんしつの、けんきゅうニュースです！" },
+      "fact": "regolith_plants"
+    },
+    {
+      "who": "sprout",
+      "expr": "thinking",
+      "text": {
+        "en": "So growing food on the Moon takes extra care. Watch the greenhouse lights, Planner.",
+        "ja": "月で食べものをそだてるには、くふうがいります。おんしつのライトに、気をつけてくださいね。"
+      }
+    }
+  ],
+  "discovery": {
+    "intro": [
+      {
+        "who": "sprout",
+        "expr": "excited",
+        "text": {
+          "en": "{pip} found something near the ice crater! Stripes in the ice, like the pages of a book.",
+          "ja": "{pip}が、こおりのクレーターの近くで、なにか見つけました！こおりの中に、本のページのようなしまもようがあります。"
+        }
+      },
+      {
+        "who": "nova",
+        "expr": "thinking",
+        "text": {
+          "en": "We can study it now. It is big science, but it is hard work for the crew. Or we can skip it and look after the base.",
+          "ja": "いましらべることもできます。大きなかがくですが、クルーにはたいへんなしごとです。やめて、きちをまもることもできます。"
+        }
+      }
+    ],
+    "study": [
+      {
+        "who": "sprout",
+        "expr": "happy",
+        "text": {
+          "en": "What a find! The crew is tired, but the science team on Earth is cheering.",
+          "ja": "すばらしいはっけんです！クルーはつかれましたが、ちきゅうのかがくチームは大よろこびです。"
+        }
+      }
+    ],
+    "skip": [
+      {
+        "who": "nova",
+        "expr": "neutral",
+        "text": {
+          "en": "A calm choice. The discovery will still be there on a safer day.",
+          "ja": "おちついたはんだんです。はっけんは、あんぜんな日までまっていてくれます。"
+        }
+      }
+    ]
+  },
+  "roundTips": {
+    "1": {
+      "who": "pip",
+      "expr": "happy",
+      "text": {
+        "en": "It is day. The Sun is up, so cleaning the panels makes lots of power.",
+        "ja": "いまはひる。太陽が出ているから、パネルをそうじすると、電気がたくさんできるよ。"
+      }
+    },
+    "2": {
+      "who": "pip",
+      "expr": "thinking",
+      "lead": { "en": "Look at those shadows!", "ja": "あのかげを見て！" },
+      "fact": "long_shadows"
+    },
+    "3": {
+      "who": "pip",
+      "expr": "sleepy",
+      "text": {
+        "en": "Night has come. No sunlight for the panels, and the heaters use extra power. I hope the batteries are full.",
+        "ja": "よるになった。パネルに光があたらないし、だんぼうで電気をたくさんつかう。バッテリーは、たりるかな。"
+      }
+    },
+    "4": {
+      "who": "sprout",
+      "expr": "happy",
+      "lead": { "en": "See our pink greenhouse glow?", "ja": "おんしつがピンク色に光っているでしょう？" },
+      "fact": "veggie_pink"
+    },
+    "5": {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "Lunar Day 2. The Sun is back. A good moment to fill the batteries and thicken the shield.",
+        "ja": "月の 2 日目です。太陽がもどりました。バッテリーをためて、シールドをあつくするチャンスです。"
+      }
+    },
+    "6": {
+      "who": "pip",
+      "expr": "neutral",
+      "lead": { "en": "Why do I pile dirt on the roof?", "ja": "どうして、やねに土をつむのかって？" },
+      "fact": "regolith_shield"
+    },
+    "7": {
+      "who": "sprout",
+      "expr": "happy",
+      "lead": { "en": "Space crews are great at saving water.", "ja": "うちゅうのクルーは、水をとても大切にします。" },
+      "fact": "water_98"
+    },
+    "8": {
+      "who": "sprout",
+      "expr": "happy",
+      "lead": { "en": "Fresh food in space is real.", "ja": "うちゅうで、とれたてのやさい。本当のはなしです。" },
+      "fact": "veggie_food"
+    },
+    "9": {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "Lunar Day 3, our last one. Keep every bar healthy until the end.",
+        "ja": "月の 3 日目、さいごの日です。おわりまで、どのバーも元気にたもちましょう。"
+      }
+    },
+    "10": {
+      "who": "nova",
+      "expr": "happy",
+      "lead": { "en": "This is why we built near the dark craters.", "ja": "くらいクレーターの近くにきちを作ったのは、このためです。" },
+      "fact": "lcross_water"
+    },
+    "11": {
+      "who": "pip",
+      "expr": "sleepy",
+      "text": {
+        "en": "The last night. Brrr. Heaters on, batteries ready?",
+        "ja": "さいごのよる。ぶるぶる。だんぼうをつけるよ。バッテリーはだいじょうぶ？"
+      }
+    },
+    "12": {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "Final round, Planner. Bring us home with all three bars above zero.",
+        "ja": "さいごの回です、プランナー。3 つのバーをゼロにしないで、ミッションをやりとげましょう。"
+      }
+    }
+  },
+  "shelterHint": {
+    "who": "nova",
+    "expr": "neutral",
+    "text": {
+      "en": "The crew is in the shelter. Jobs pause this round. Press GO when you are ready.",
+      "ja": "クルーはシェルターにいます。この回は、しごとをお休みします。じゅんびができたら、GO をおしてください。"
+    }
+  },
+  "result": {
+    "good": [
+      {
+        "who": "pip",
+        "expr": "happy",
+        "text": { "en": "Nice plan! The base is humming.", "ja": "いいけいかく！きちは元気だよ。" }
+      },
+      {
+        "who": "pip",
+        "expr": "excited",
+        "text": { "en": "Beep! Jobs done. What is next?", "ja": "ピピッ！しごとかんりょう。つぎは、なに？" }
+      },
+      {
+        "who": "sprout",
+        "expr": "happy",
+        "text": { "en": "The plants look happy with that.", "ja": "しょくぶつも、よろこんでいますよ。" }
+      }
+    ],
+    "unused": {
+      "who": "pip",
+      "expr": "thinking",
+      "text": {
+        "en": "You left {n} work points unused. They do not carry over to the next round.",
+        "ja": "しごとポイントが {n} のこったよ。つぎの回には、もちこせないんだ。"
+      }
+    },
+    "lowPower": {
+      "who": "pip",
+      "expr": "worried",
+      "text": {
+        "en": "Careful! Power is getting low. Panels work best in the day.",
+        "ja": "気をつけて！電気が少なくなってきた。パネルは、ひるにいちばんはたらくよ。"
+      }
+    },
+    "lowLife": {
+      "who": "sprout",
+      "expr": "worried",
+      "text": {
+        "en": "Life Support is getting low. The crew needs air and water every round.",
+        "ja": "せいめいいじが少なくなっています。クルーには、まいかい空気と水がひつようです。"
+      }
+    },
+    "lowShield": {
+      "who": "nova",
+      "expr": "worried",
+      "text": {
+        "en": "Our shield is thin. Let's add dirt before the next storm.",
+        "ja": "シールドがうすいです。つぎのあらしのまえに、土をつみましょう。"
+      }
+    }
+  },
+  "askEarth": {
+    "life": {
+      "who": "earth",
+      "expr": "neutral",
+      "text": {
+        "en": "Mission Control here. Life Support is your lowest bar. Give it some points soon.",
+        "ja": "こちら、ちきゅうのかんせいしつ。いちばん少ないのは、せいめいいじです。はやめにポイントを入れましょう。"
+      }
+    },
+    "power": {
+      "who": "earth",
+      "expr": "neutral",
+      "text": {
+        "en": "Mission Control here. Power is your lowest bar. Clean the panels while the Sun is up.",
+        "ja": "こちら、ちきゅうのかんせいしつ。いちばん少ないのは、電気です。太陽が出ているうちに、パネルをそうじしましょう。"
+      }
+    },
+    "shield": {
+      "who": "earth",
+      "expr": "neutral",
+      "text": {
+        "en": "Mission Control here. Shield is your lowest bar. Pile up dirt before a storm arrives.",
+        "ja": "こちら、ちきゅうのかんせいしつ。いちばん少ないのは、シールドです。あらしが来るまえに、土をつみましょう。"
+      }
+    }
+  },
+  "review": [
+    {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "Lunar Day {n} is done. Let's look at your choices together.",
+        "ja": "月の {n} 日目がおわりました。あなたのえらんだことを、いっしょに見てみましょう。"
+      }
+    }
+  ],
+  "paused": {
+    "intro": {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "The mission is paused. Everyone is safe on the return ship, heading home to Earth.",
+        "ja": "ミッションは、お休みです。みんなぶじに、帰りのふねで、ちきゅうにむかっています。"
+      }
+    },
+    "power": {
+      "who": "pip",
+      "expr": "thinking",
+      "text": {
+        "en": "Tip: the batteries ran empty. Put more points into Power during the day, before the night comes.",
+        "ja": "ヒント：バッテリーがからっぽになったよ。よるになるまえの、ひるのあいだに、電気にポイントを多めに入れてみよう。"
+      }
+    },
+    "life": {
+      "who": "sprout",
+      "expr": "thinking",
+      "text": {
+        "en": "Tip: air and water ran low. Give Life Support a few points every round, and keep the greenhouse lights on when you can.",
+        "ja": "ヒント：空気と水がたりなくなりました。せいめいいじに、まいかいすこしずつポイントを入れましょう。できるときは、おんしつのライトもつけましょう。"
+      }
+    },
+    "shield": {
+      "who": "nova",
+      "expr": "thinking",
+      "text": {
+        "en": "Tip: the shield wore away. Pile up dirt on quiet rounds, before a storm arrives.",
+        "ja": "ヒント：シールドがなくなりました。あらしが来るまえの、しずかな回に、土をつんでおきましょう。"
+      }
+    }
+  },
+  "complete": [
+    {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "Three lunar days, and the whole crew is safe. Well done, {player}.",
+        "ja": "月の 3 日間、クルーはみんなぶじでした。よくやりましたね、{player}。"
+      }
+    },
+    {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "Out here, every breath of air and every drop of water takes work. At home, Earth gives them to us.",
+        "ja": "ここでは、ひとすいの空気も、ひとしずくの水も、みんなで作らなければなりません。ちきゅうでは、それをちきゅうがくれます。"
+      }
+    }
+  ],
+  "closing": {
+    "en": "Earth is the best base we'll ever have.",
+    "ja": "ちきゅうは、わたしたちのいちばんのきちです。"
+  }
+}

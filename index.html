@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" data-motion="full" data-contrast="normal" data-text="normal">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Luna Crew: Moon Base Mission. A junior astronaut mission trainer. Plan the work, keep the crew safe, learn why Earth is special." />
+    <meta name="theme-color" content="#0b1024" />
+    <title>Luna Crew: Moon Base Mission</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Sofia+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/scene.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#app">Skip to game</a>
+    <div id="app" data-mode="boot">
+      <p id="boot-note" class="boot-note" role="status">Loading Luna Crew…</p>
+      <main id="screen" class="screen" aria-live="polite"></main>
+      <section id="play" class="play" hidden>
+        <div id="scene" class="scene" aria-hidden="true"></div>
+        <div class="play-ui">
+          <div id="hud" class="hud"></div>
+          <div id="crew-rail" class="crew-rail" aria-hidden="true"></div>
+          <div id="jobs" class="jobs"></div>
+        </div>
+      </section>
+      <div id="dialogue" class="dialogue" hidden></div>
+      <div id="modals" class="modals" hidden></div>
+    </div>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

@@ -104,6 +104,26 @@ export function checkEnd(state, config) {
   return null;
 }
 
+// What the bars would be after jobs, greenhouse and drains, before any storm
+// or story event. The jobs panel shows this so players can see a trade-off
+// before they press GO.
+export function forecastRound(state, allocation, config) {
+  const sheltered = state.eventChoice === "shelter";
+  const used = {};
+  for (const job of JOBS) used[job] = sheltered ? 0 : Math.max(0, Math.floor(allocation?.[job] ?? 0));
+  const jobs = applyJobs(state, used, config);
+  const greenhouse = applyGreenhouse(state, config);
+  const drains = applyDrains(state, config);
+  const bar = (name) =>
+    clamp(state[name] + jobs[name] + (greenhouse[name] ?? 0) + drains[name], config.bars.min, config.bars.max);
+  return {
+    power: bar("power"),
+    life: bar("life"),
+    shield: bar("shield"),
+    missionPoints: state.missionPoints + jobs.missionPoints
+  };
+}
+
 // Order: validate -> jobs -> greenhouse -> drains -> event outcome -> clamp
 // -> log the decision -> check the end.
 export function resolveRound(state, allocation, config) {
