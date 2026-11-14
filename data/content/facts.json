@@ -273,32 +273,32 @@
     },
     {
       "id": "lro_coldest",
-      "status": "TODO_SOURCE",
+      "status": "verified",
       "text": {
         "en": "NASA's Lunar Reconnaissance Orbiter measured the temperature inside the Moon's shadowed craters from orbit.",
         "ja": "NASA のたんさき LRO は、月のくらいクレーターの中のおんどを、うちゅうからはかりました。"
       },
-      "usedFor": "Not shown. Waiting for a NASA LRO page that the team has opened and checked.",
+      "usedFor": "Real NASA Data screen",
       "source": {
-        "name": "TODO_SOURCE",
+        "name": "10 Cool Things NASA's Lunar Reconnaissance Orbiter is Teaching Us About the Moon",
         "agency": "NASA",
-        "url": "TODO_SOURCE",
-        "accessed": null
+        "url": "https://science.nasa.gov/solar-system/moon/10-cool-things-nasas-lunar-reconnaissance-orbiter-is-teaching-us-about-the-moon/",
+        "accessed": "2026-11-14"
       }
     },
     {
       "id": "lunar_day_length",
-      "status": "TODO_SOURCE",
+      "status": "verified",
       "text": {
-        "en": "Away from the poles, daylight on the Moon lasts about two Earth weeks, and so does the night.",
-        "ja": "月のきょく地いがいでは、ひるがちきゅうのやく 2 しゅうかん、よるもやく 2 しゅうかんつづきます。"
+        "en": "Lunar day and night are each about two Earth weeks long.",
+        "ja": "月のひるとよるは、それぞれちきゅうのやく 2 しゅうかんです。"
       },
-      "usedFor": "Not shown. Waiting for a source the team has opened and checked.",
+      "usedFor": "Real NASA Data screen",
       "source": {
-        "name": "TODO_SOURCE",
+        "name": "Moonlight",
         "agency": "NASA",
-        "url": "TODO_SOURCE",
-        "accessed": null
+        "url": "https://science.nasa.gov/moon/moonlight/",
+        "accessed": "2026-11-14"
       }
     }
   ]

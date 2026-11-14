@@ -291,23 +291,26 @@
     },
     {
       "id": "card_lunar_day",
-      "status": "TODO_SOURCE",
+      "status": "verified",
       "q": {
-        "en": "Away from the poles, about how long does daylight last on the Moon?",
-        "ja": "月のきょく地いがいでは、ひるはどのくらいつづく？"
+        "en": "About how long are lunar day and night?",
+        "ja": "月のひるとよるは、どのくらい？"
       },
       "options": [
-        { "en": "About two Earth weeks", "ja": "ちきゅうのやく 2 しゅうかん" },
-        { "en": "About two hours", "ja": "やく 2 時間" },
-        { "en": "About two years", "ja": "やく 2 年" }
+        { "en": "About two Earth weeks each", "ja": "それぞれちきゅうのやく 2 しゅうかん" },
+        { "en": "About two hours each", "ja": "それぞれやく 2 時間" },
+        { "en": "About two years each", "ja": "それぞれやく 2 年" }
       ],
       "answer": 0,
-      "explain": null,
+      "explain": {
+        "en": "The Moon takes about a month to turn once, so day and night each last about two Earth weeks.",
+        "ja": "月は 1 回転するのにやく 1 か月かかるので、ひるとよるはそれぞれちきゅうのやく 2 しゅうかんです。"
+      },
       "source": {
-        "name": "TODO_SOURCE",
+        "name": "Moonlight",
         "agency": "NASA",
-        "url": "TODO_SOURCE",
-        "accessed": null
+        "url": "https://science.nasa.gov/moon/moonlight/",
+        "accessed": "2026-11-14"
       }
     }
   ]
