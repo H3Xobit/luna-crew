@@ -1,0 +1,20 @@
+{
+  "name": "luna-crew",
+  "version": "1.0.0",
+  "description": "Luna Crew: Moon Base Mission. A junior astronaut mission trainer for the NASA Space Apps Challenge 2026.",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "python3 -m http.server 4173",
+    "test": "node --test",
+    "simulate": "node scripts/simulate.mjs",
+    "data:archive": "node scripts/fetch-donki.mjs --archive",
+    "data:latest": "node scripts/fetch-donki.mjs --latest",
+    "data:osdr": "node scripts/fetch-osdr.mjs",
+    "data:radlab": "node scripts/fetch-radlab.mjs"
+  }
+}
