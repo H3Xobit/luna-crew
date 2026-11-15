@@ -211,6 +211,9 @@ export function createScene(container) {
       svg.classList.toggle("sheltered", Boolean(view.sheltered));
       svg.classList.toggle("low-power", view.power <= 25);
       svg.dataset.dirt = String(shieldLayerCount(view.shield ?? 0));
+      const life = Number.isFinite(view.life) ? view.life : 70;
+      const scale = view.lightsOn ? 0.55 + life / 180 : 0.4;
+      svg.style.setProperty("--plant-scale", String(Math.max(0.35, Math.min(1.15, scale))));
     },
     movePip(spot) {
       const [x, y] = PIP_SPOTS[spot] || PIP_SPOTS.idle;

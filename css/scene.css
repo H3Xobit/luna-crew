@@ -161,6 +161,7 @@
 .drop { fill: #7fe3ff; stroke: #1b1630; stroke-width: 1.5; }
 .lab-light { fill: #ffd166; }
 
+.plant { transform-box: fill-box; transform-origin: center bottom; transform: scaleY(var(--plant-scale, 1)); }
 .pip-rover {
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }

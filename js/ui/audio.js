@@ -45,6 +45,14 @@ const SOUNDS = {
     { f: 392, d: 0.2, type: "sine", v: 0.12 },
     { f: 330, d: 0.2, type: "sine", v: 0.12, at: 0.2 },
     { f: 392, d: 0.34, type: "sine", v: 0.12, at: 0.4 }
+  ],
+  chirp: [
+    { f: 880, d: 0.04, type: "sine", v: 0.04 },
+    { f: 990, d: 0.05, type: "sine", v: 0.03, at: 0.16 }
+  ],
+  sting: [
+    { f: 523, d: 0.1, type: "triangle", v: 0.1 },
+    { f: 784, d: 0.16, type: "triangle", v: 0.1, at: 0.1 }
   ]
 };
 
@@ -54,6 +62,7 @@ export function createAudio({ enabled = true, AudioContextClass } = {}) {
   const Ctor = AudioContextClass || globalThis.AudioContext || globalThis.webkitAudioContext;
   let context = null;
   let on = Boolean(enabled);
+  let hum = null;
 
   function ensure() {
     if (!Ctor) return null;
@@ -87,6 +96,28 @@ export function createAudio({ enabled = true, AudioContextClass } = {}) {
     // Call from a tap handler so the browser allows sound.
     unlock() {
       if (on) ensure();
+    },
+    startHum() {
+      if (!on || hum) return;
+      try {
+        const ctx = ensure();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = 82;
+        gain.gain.value = 0.012;
+        osc.connect(gain).connect(ctx.destination);
+        osc.start();
+        hum = { osc, gain };
+      } catch {
+        hum = null;
+      }
+    },
+    stopHum() {
+      if (!hum) return;
+      try { hum.osc.stop(); } catch { /* already stopped */ }
+      hum = null;
     },
     play(name) {
       if (!on || !SOUNDS[name]) return false;

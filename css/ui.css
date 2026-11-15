@@ -436,6 +436,34 @@
   letter-spacing: 0.04em;
 }
 
+.cutscene {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  background: #070b18;
+  color: var(--paper);
+}
+
+.cutscene-stage { overflow: hidden; display: grid; place-items: center; }
+.cutscene-camera { width: min(100%, 960px); transform-origin: center center; }
+.cutscene-svg { width: 100%; height: auto; display: block; background: #0b1024; }
+.cutscene-sub {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: rgba(7, 11, 24, 0.92);
+}
+.cutscene-face .portrait { width: 72px; height: auto; }
+.cutscene-who { display: block; }
+.cutscene-line { margin: 0.15rem 0 0; font-size: 1.05rem; }
+.cutscene-actions { display: flex; justify-content: flex-end; gap: 0.5rem; padding: 0.6rem 1rem 1rem; }
+.portrait-body { transform-origin: 60px 100px; animation: breathe 3.4s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: translateY(-1.5px); } }
+
 .weights-wrap { overflow-x: auto; margin-bottom: 1rem; }
 .weights-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .weights-table th,

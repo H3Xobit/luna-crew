@@ -7,6 +7,7 @@ const FILES = {
   nasaChoice: "data/content/nasa_choice.json",
   cards: "data/content/cards.json",
   facts: "data/content/facts.json",
+  cutscenes: "data/content/cutscenes.json",
   osdr: "data/osdr.json",
   radlab: "data/radlab.json"
 };

@@ -8,6 +8,7 @@ import { createI18n, loadDictionaries, detectLanguage } from "./ui/i18n.js";
 import { $, clear, h, setNewTabNote, sleep } from "./ui/dom.js";
 import { createAudio } from "./ui/audio.js";
 import { createModals, rescueCard, discoveryCard, stormCard, resultCard, reviewCard } from "./ui/modals.js";
+import { playCutscene } from "./ui/cutscene.js";
 import { createDialogue } from "./ui/dialogue.js";
 import { createHud, LOW_BAR } from "./ui/hud.js";
 import { createJobsPanel, emptyPlan } from "./ui/jobs.js";
@@ -100,7 +101,22 @@ async function boot() {
   let busy = false;
   let lastSeed = null;
   let forceSeed = seedFromUrl();
+  let sawNight = false;
+  let sawGreenhouse = false;
   const demo = queryFlag("demo") === "1";
+
+  async function cut(id) {
+    const host = document.getElementById("app");
+    if (!host || !content.cutscenes) return;
+    await playCutscene(host, {
+      id,
+      script: content.cutscenes,
+      i18n,
+      audio,
+      reduced: settings.reduceMotion,
+      nameOf
+    });
+  }
 
   const nameOf = (who) => {
     if (who === "player") return player.name || i18n.pick(content.config.defaultPlayerName);
@@ -296,8 +312,13 @@ async function boot() {
     busy = true;
     lastSeed = seed;
     forceSeed = null;
-    if (!skipIntro) await runIntro();
-    else showScreen("play");
+    sawNight = false;
+    sawGreenhouse = false;
+    if (!skipIntro) {
+      await runIntro();
+      await cut("opening");
+      await cut("arrival");
+    } else showScreen("play");
 
     const stormData = {
       events: stormInfo.source.events,
@@ -368,7 +389,9 @@ async function boot() {
           return;
         }
         if (phase === "end") {
-          showEnd(game.summary());
+          const summary = game.summary();
+          await cut(summary.status === "complete" ? "endingComplete" : "endingPaused");
+          showEnd(summary);
           return;
         }
         break;
@@ -381,6 +404,7 @@ async function boot() {
   async function runEvent(state) {
     const event = state.event;
     if (event.type === "rescue") {
+      await cut("rescue");
       scene.movePip("crater");
       await say(content.story.rescue.intro, { skippable: true });
       const choice = await rescueCard(modals, { i18n, event, available: game.available() });
@@ -389,6 +413,7 @@ async function boot() {
       return;
     }
     if (event.type === "discovery") {
+      await cut("discovery");
       scene.movePip("crater");
       await say(content.story.discovery.intro, { skippable: true });
       const choice = await discoveryCard(modals, { i18n, event, available: game.available() });
@@ -410,6 +435,7 @@ async function boot() {
         reading
       });
       game.chooseEvent(choice);
+      await cut(choice === "shelter" ? "stormShelter" : "stormWork");
       if (choice === "shelter") await say(content.story.storm.shelter, { skippable: true });
       return;
     }
@@ -440,6 +466,14 @@ async function boot() {
     jobs.render(state, game.available(), { reset: true });
     hud.forecast(forecastRound(state, emptyPlan(), game.config));
     scene.movePip(state.eventChoice === "shelter" ? "shelter" : "idle");
+    if (state.isNight && state.lunarDay === 1 && !sawNight) {
+      sawNight = true;
+      await cut("nightfall");
+    }
+    if (!sawGreenhouse && state.lightsOn && state.round === 2 && content.factIndex.get("regolith_plants")?.status === "verified") {
+      sawGreenhouse = true;
+      await cut("greenhouse");
+    }
 
     if (state.eventChoice === "shelter") {
       await say([content.story.shelterHint], { skippable: true });
