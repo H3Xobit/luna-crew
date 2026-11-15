@@ -36,7 +36,15 @@
 
 .scene-svg.is-night .sky { fill: #070b1c; }
 
+.scene-svg .earth-in-sky { transform-origin: 640px 92px; transform-box: fill-box; animation: earth-turn 36s linear infinite; }
 .scene-svg .stars { opacity: 0.15; transition: opacity 0.6s ease; }
+.scene-svg.is-night .sky { transition: fill 1.2s ease; }
+.pip-tool { opacity: 0; }
+.scene-svg[data-pip="power"] .pip-tool-power,
+.scene-svg[data-pip="life"] .pip-tool-life,
+.scene-svg[data-pip="shield"] .pip-tool-shield,
+.scene-svg[data-pip="science"] .pip-tool-science { opacity: 1; }
+@keyframes earth-turn { to { transform: rotate(360deg); } }
 .scene-svg.is-night .stars { opacity: 0.95; }
 
 .star { fill: #fff; }

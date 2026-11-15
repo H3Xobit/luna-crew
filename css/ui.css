@@ -446,8 +446,26 @@
   color: var(--paper);
 }
 
-.cutscene-stage { overflow: hidden; display: grid; place-items: center; }
-.cutscene-camera { width: min(100%, 960px); transform-origin: center center; }
+.cutscene-stage { overflow: hidden; display: grid; place-items: center; width: 100%; }
+.cutscene-camera { width: min(100%, 960px); aspect-ratio: 16 / 9; transform-origin: center center; }
+.title-sky { position: relative; height: 72px; margin-bottom: 0.4rem; overflow: hidden; border-radius: 16px; background: radial-gradient(circle at 20% 80%, #2f7fd6 0 18px, transparent 19px), #070b18; }
+.title-sky span { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: twinkle 2.4s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: 0.25; } }
+.moon-map { width: 100%; height: auto; margin-bottom: 0.8rem; }
+.end-card { position: relative; }
+.fly-point {
+  position: fixed;
+  z-index: 30;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sun);
+  pointer-events: none;
+  transition: transform 0.45s ease;
+}
+.confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; top: -10px; width: 8px; height: 8px; background: var(--sun); animation: confetti-fall 1.4s linear forwards; }
+@keyframes confetti-fall { to { transform: translateY(70vh) rotate(180deg); opacity: 0; } }
 .cutscene-svg { width: 100%; height: auto; display: block; background: #0b1024; }
 .cutscene-sub {
   display: grid;

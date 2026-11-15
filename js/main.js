@@ -709,6 +709,25 @@ async function boot() {
     refreshPlay();
   }
 
+  function flyPoints(plan) {
+    for (const job of ["power", "life", "shield"]) {
+      if (!plan[job]) continue;
+      const from = document.getElementById(`job-${job}`);
+      const to = document.querySelector(`.bar-${job}`);
+      if (!from || !to) continue;
+      const start = from.getBoundingClientRect();
+      const end = to.getBoundingClientRect();
+      const dot = h("span", { class: "fly-point" });
+      dot.style.left = `${start.left + 12}px`;
+      dot.style.top = `${start.top + 12}px`;
+      document.body.append(dot);
+      requestAnimationFrame(() => {
+        dot.style.transform = `translate(${end.left - start.left}px, ${end.top - start.top}px)`;
+      });
+      setTimeout(() => dot.remove(), 500);
+    }
+  }
+
   async function submitPlan(plan) {
     if (!game || busy || game.state.phase !== "allocate") return;
     const left = game.available() - planTotal(plan);
@@ -738,6 +757,7 @@ async function boot() {
     }
     const spot = result.result.topJob || "idle";
     scene.movePip(spot);
+    if (!settings.reduceMotion) flyPoints(plan);
     await sleep(settings.reduceMotion ? 120 : 480);
     if (game.state.isNight !== beforeNight) audio.play(game.state.isNight ? "night" : "day");
     hud.showChange(result.result.change);
@@ -807,6 +827,7 @@ async function boot() {
       player,
       nameOf,
       mission: currentMission,
+      reduced: settings.reduceMotion,
       onAgain: () => (missions.length ? showMap() : startMission({ seed: randomSeed(), mission: null })),
       onSameSeed: () => startMission({ seed: summary.seed, mission: currentMission }),
       onNext: nextMission

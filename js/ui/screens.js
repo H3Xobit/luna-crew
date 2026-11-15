@@ -56,6 +56,12 @@ export function renderTitle(root, { i18n, content, stormInfo, demo, nameOf, onSt
   clear(root).append(
     h("div", { class: "title-card" }, [
       h("div", { class: "title-top" }, [languageSwitch(i18n, onLang)]),
+      h("div", { class: "title-sky", "aria-hidden": "true" }, [0, 1, 2, 3, 4, 5, 6, 7].map((n) => {
+        const star = h("span");
+        star.style.left = `${8 + n * 12}%`;
+        star.style.top = `${12 + (n % 3) * 22}%`;
+        return star;
+      })),
       h("div", { class: "title-crew" }, [
         h("span", { class: "crew-face", html: portrait("sprout", "happy", { title: nameOf("sprout") }) }),
         h("span", { class: "crew-face is-big", html: portrait("nova", "happy", { title: nameOf("nova") }) }),
@@ -303,6 +309,29 @@ const CUTSCENE_KEYS = {
   endingPaused: "cut.home.1"
 };
 
+function moonPath(missions, progress, demo) {
+  const marks = missions
+    .map((mission, index) => {
+      const x = 28 + index * 40;
+      const y = index % 2 === 0 ? 78 : 42;
+      const open = demo || isUnlocked(mission, missions, progress);
+      const earned = progress.stars?.[mission.id] || 0;
+      return `<circle cx="${x}" cy="${y}" r="9" fill="${open ? "#ffd166" : "#3a4160"}" stroke="#f3f6ff" stroke-width="1"/>` +
+        `<text x="${x}" y="${y + 18}" text-anchor="middle" fill="#ffd166" font-size="8">${earned}</text>`;
+    })
+    .join("");
+  return h("div", {
+    class: "moon-map",
+    html:
+      `<svg viewBox="0 0 360 110" role="img" aria-hidden="true">` +
+      `<rect width="360" height="110" rx="16" fill="#141a33"/>` +
+      `<circle cx="312" cy="36" r="22" fill="#c5c9d4"/>` +
+      `<path d="M28 78 L68 42 L108 78 L148 42 L188 78 L228 42 L268 78 L308 42" fill="none" stroke="#7fd4ff" stroke-width="3"/>` +
+      marks +
+      `</svg>`
+  });
+}
+
 export function renderMap(root, { i18n, missions, progress, demo = false, urlSeed = null, onPlay, onJournal, onReset, onHome, onSettings, onIntro, onReplay }) {
   const stars = totalStars(progress);
   const rank = rankFor(stars);
@@ -373,6 +402,7 @@ export function renderMap(root, { i18n, missions, progress, demo = false, urlSee
       h("h1", { text: i18n.t("map.title") }),
       h("p", { text: i18n.t("map.lead") }),
       h("p", { class: "map-rank", text: i18n.t("map.rank", { rank: i18n.t(`rank.${rank.id}`), stars }) }),
+      moonPath(missions, progress, demo),
       nodes,
       h("h2", { text: i18n.t("map.badges") }),
       h("ul", { class: "badge-shelf" }, badges),

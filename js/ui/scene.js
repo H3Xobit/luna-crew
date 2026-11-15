@@ -181,6 +181,10 @@ function svgMarkup() {
       <rect x="-15" y="-15" width="30" height="20" rx="6" fill="#7fe3ff" stroke="#1b1630" stroke-width="2"/>
       <ellipse cx="-6" cy="-6" rx="2.6" ry="3.6" fill="#0b2b3a"/><ellipse cx="6" cy="-6" rx="2.6" ry="3.6" fill="#0b2b3a"/>
       <path d="M-4 0 Q0 3 4 0" fill="none" stroke="#0b2b3a" stroke-width="1.8" stroke-linecap="round"/>
+      <g class="pip-tool pip-tool-power"><rect x="16" y="-8" width="14" height="4" rx="1" fill="#d7deee"/></g>
+      <g class="pip-tool pip-tool-life"><ellipse cx="22" cy="-4" rx="6" ry="8" fill="#b7f0ff"/></g>
+      <g class="pip-tool pip-tool-shield"><path d="M18 -10 l8 4 v6 l-8 4 -8 -4 v-6 z" fill="#c4a574"/></g>
+      <g class="pip-tool pip-tool-science"><rect x="16" y="-12" width="6" height="14" rx="2" fill="#e8eefc"/></g>
     </g>
   </g>
 

@@ -19,7 +19,7 @@ const STAR_KEYS = {
   repair: "star.repair"
 };
 
-export function renderEnd(root, { i18n, summary, story, config, player, nameOf, mission, onAgain, onSameSeed, onNext, onData, onHome }) {
+export function renderEnd(root, { i18n, summary, story, config, player, nameOf, mission, reduced, onAgain, onSameSeed, onNext, onData, onHome }) {
   const complete = summary.status === "complete";
   const vars = { player: nameOf("player"), days: summary.daysLabel || "" };
   const tipLine = !complete && summary.reason ? story.paused[summary.reason] : null;
@@ -43,8 +43,17 @@ export function renderEnd(root, { i18n, summary, story, config, player, nameOf, 
     h("li", { class: `end-bar bar-${name}` }, [h("span", { class: "bar-icon", html: icon(name) }), `${i18n.t(`bar.${name}`)} ${Math.round(summary.bars[name])}`])
   );
 
+  const bits = !reduced && complete
+    ? h("div", { class: "confetti", "aria-hidden": "true" }, [0, 1, 2, 3, 4, 5, 6, 7].map((n) => {
+        const bit = h("i");
+        bit.style.left = `${8 + n * 11}%`;
+        bit.style.animationDelay = `${n * 0.08}s`;
+        return bit;
+      }))
+    : null;
   clear(root).append(
     h("div", { class: `end-card ${complete ? "is-complete" : "is-paused"}` }, [
+      bits,
       h("div", { class: "end-crew" }, [
         h("span", { html: portrait("nova", complete ? "happy" : "neutral", { title: nameOf("nova") }) }),
         h("span", { html: portrait("sprout", complete ? "excited" : "happy", { title: nameOf("sprout") }) }),

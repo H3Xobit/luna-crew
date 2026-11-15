@@ -45,13 +45,26 @@ export function cutsceneLength(scene) {
   return shots.reduce((sum, shot) => sum + (Number(shot.duration) || 0), 0);
 }
 
+function ease(t) {
+  return 1 - (1 - t) * (1 - t);
+}
+
+export function shotHold(shot, text) {
+  const letters = [...String(text || "")].length;
+  return Math.max(Number(shot?.duration) || 2000, Math.min(7000, letters * 45));
+}
+
+function layerName(layer) {
+  return typeof layer === "string" ? layer : layer?.name;
+}
+
 export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf }) {
   const scene = script?.[id];
   if (!scene || !Array.isArray(scene.shots) || scene.shots.length === 0) return Promise.resolve("missing");
 
   return new Promise((resolve) => {
     let index = 0;
-    let drawn = -1;
+    let nodes = [];
     const previousFocus = document.activeElement;
     let started = performance.now();
     let paused = false;
@@ -63,11 +76,13 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 800 450");
     svg.setAttribute("class", "cutscene-svg");
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
     camera.append(svg);
     const who = h("strong", { class: "cutscene-who" });
     const line = h("p", { class: "cutscene-line" });
     const face = h("span", { class: "cutscene-face" });
     const skip = h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("cut.skip"), onclick: () => finish("skip") });
+    const next = h("button", { type: "button", class: "btn btn-primary", text: i18n.t("ui.next"), onclick: () => goNext(true) });
     const pause = h("button", {
       type: "button",
       class: "btn btn-quiet",
@@ -82,14 +97,20 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     const overlay = h("div", { class: "cutscene", role: "dialog", "aria-modal": "true", "aria-label": i18n.t("cut.label") }, [
       stage,
       h("div", { class: "cutscene-sub" }, [face, h("div", {}, [who, line])]),
-      h("div", { class: "cutscene-actions" }, [pause, skip])
+      h("div", { class: "cutscene-actions" }, [pause, next, skip])
     ]);
     stage.append(camera);
+    stage.addEventListener("click", () => goNext(true));
 
     function onKey(event) {
       if (event.key === "Escape") {
         event.preventDefault();
         finish("skip");
+        return;
+      }
+      if (event.key === " " || event.key === "Enter" || event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext(true);
       }
     }
 
@@ -106,49 +127,80 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       resolve(reason || "done");
     }
 
-    function draw(shot, t, shotIndex) {
-      const from = shot.camera || {};
-      const to = shot.tween || {};
-      const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, t);
-      const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, t);
-      const scale = lerp(from.scale || 1, to.scale != null ? to.scale : from.scale || 1, t);
-      camera.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-      if (drawn === shotIndex) return;
-      drawn = shotIndex;
-      svg.innerHTML = (shot.layers || []).map(layerMarkup).join("");
+    function mount(shot) {
+      svg.replaceChildren();
+      nodes = (shot.layers || []).map((layer) => {
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.innerHTML = layerMarkup(layerName(layer));
+        svg.append(g);
+        const motion = typeof layer === "string" ? {} : layer;
+        return { g, from: motion.from || {}, to: motion.to || {} };
+      });
       const speaker = shot.who ? nameOf(shot.who) : "";
       who.textContent = speaker ? `${speaker}: ` : "";
       line.textContent = shot.line ? i18n.t(shot.line) : "";
       face.innerHTML = shot.who ? portrait(shot.who, shot.expr || "neutral", { title: speaker }) : "";
     }
 
+    function pose(node, t) {
+      const from = node.from;
+      const to = node.to;
+      const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, t);
+      const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, t);
+      const scale = lerp(from.scale != null ? from.scale : 1, to.scale != null ? to.scale : from.scale != null ? from.scale : 1, t);
+      const rotate = lerp(from.rotate || 0, to.rotate != null ? to.rotate : from.rotate || 0, t);
+      const opacity = lerp(from.opacity != null ? from.opacity : 1, to.opacity != null ? to.opacity : from.opacity != null ? from.opacity : 1, t);
+      node.g.setAttribute("transform", `translate(${x} ${y}) rotate(${rotate} 400 225) scale(${scale})`);
+      node.g.setAttribute("opacity", String(opacity));
+    }
+
+    function draw(shot, t) {
+      const from = shot.camera || {};
+      const to = shot.tween || {};
+      const amount = reduced ? 1 : ease(t);
+      const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, amount);
+      const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, amount);
+      const scale = lerp(from.scale || 1, to.scale != null ? to.scale : from.scale || 1, amount);
+      camera.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      for (const node of nodes) pose(node, amount);
+    }
+
+    function goNext(fromUser) {
+      if (done || paused) return;
+      const shot = scene.shots[index];
+      const hold = shotHold(shot, shot.line ? i18n.t(shot.line) : "");
+      if (fromUser && !reduced && performance.now() - started < hold) return;
+      index += 1;
+      if (index >= scene.shots.length) {
+        finish("done");
+        return;
+      }
+      started = performance.now();
+      mount(scene.shots[index]);
+      draw(scene.shots[index], reduced ? 1 : 0);
+      if (scene.shots[index].sound) audio?.play(scene.shots[index].sound);
+    }
+
     function tick(now) {
       if (done) return;
       if (!paused) {
         const shot = scene.shots[index];
-        const duration = Math.max(400, shot.duration || 2000);
+        const duration = shotHold(shot, line.textContent);
         const elapsed = now - started;
         const t = reduced ? 1 : Math.min(1, elapsed / duration);
-        draw(shot, t, index);
-        if (elapsed >= duration) {
-          index += 1;
-          started = now;
-          if (index >= scene.shots.length) {
-            finish("done");
-            return;
-          }
-          if (scene.shots[index].sound) audio?.play(scene.shots[index].sound);
-        }
+        draw(shot, t);
+        if (!reduced && elapsed >= duration) goNext(false);
       }
       frame = requestAnimationFrame(tick);
     }
 
     document.addEventListener("keydown", onKey);
     host.append(overlay);
-    skip.focus();
+    next.focus();
     audio?.startHum?.();
+    mount(scene.shots[0]);
     if (scene.shots[0].sound) audio?.play(scene.shots[0].sound);
-    draw(scene.shots[0], reduced ? 1 : 0, 0);
+    draw(scene.shots[0], reduced ? 1 : 0);
     frame = requestAnimationFrame(tick);
   });
 }
