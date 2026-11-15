@@ -8,7 +8,7 @@ Verified facts and Mission Cards, with the page that was checked, are in `data/c
 
 | File | Source | Role in play |
 | --- | --- | --- |
-| `data/latest.json` | NASA DONKI (weekly refresh) | Preferred storm list. Label: **NASA data updated …** |
+| `data/latest.json` | NASA DONKI, refreshed daily, last 7 days | Newest storms. Each event is labeled **NASA data updated …** |
 | `data/storms.json` | NASA DONKI archive | Fallback storm list. Label: **Saved NASA data from …** |
 | `data/osdr.json` | NASA OSDR | Regolith plant study for a greenhouse research line |
 | `data/radlab.json` | NASA RadLab | One radiation reading on the storm card when present |
@@ -18,7 +18,7 @@ Verified facts and Mission Cards, with the page that was checked, are in `data/c
 
 ## Honesty labels
 
-`js/data/storms.js` picks the storm source in this order: latest, then archive, then a training alert. Labels are:
+The game builds one storm pool from `data/latest.json` and `data/storms.json`. Duplicate ids keep the latest file's label. Mission of the Day draws from the latest file only, and falls back to the archive with the saved label. Storm Watch draws a level 2 storm. Other missions use a seeded mix of about 50 percent level 2, 35 percent level 3 and 15 percent level 4. `?demo=1` with no seed uses the archive's strongest flare. Labels are:
 
 1. **Live NASA data** reserved for a real live feed. This project does not emit it.
 2. **NASA data updated {date}** from `latest.json`.

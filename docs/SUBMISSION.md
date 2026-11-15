@@ -65,7 +65,7 @@ Static SPA, works on phone and laptop, clear HUD, large buttons, optional sound 
 
 1. Open with `?demo=1` and Japanese or English.
 2. Show the title banner and Real NASA Data screen (labels).
-3. Start with practice off if time is tight, or skip practice after one tip.
+3. On the map, open Full Mission. The briefing and a Why card show the weights.
 4. Play until the storm. Point at the data chip and DONKI link.
 5. Finish a lunar day: planner review + Mission Card with source.
 6. End on the closing line about Earth as home.

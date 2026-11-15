@@ -194,7 +194,7 @@ export function stormCard(modals, { i18n, storm, shield, config, facts, reading 
           })
         : i18n.t("storm.training")
     }),
-    h("p", { class: "storm-matters", text: i18n.t("storm.matters", { n: level }) }),
+    h("p", { class: "storm-matters", text: i18n.t("storm.matters", { n: level, need: line }) }),
     storm.real && storm.hasLinkedSEP ? h("p", { class: "storm-linked", text: i18n.t("storm.linked") }) : null,
     storm.real && storm.link ? h("p", {}, [sourceLink(storm.link, i18n.t("storm.seeDonki"))]) : h("p", { class: "story-note", text: i18n.t("storm.trainingNote") }),
     h("div", { class: "storm-level" }, [

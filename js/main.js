@@ -1,6 +1,6 @@
 // Wires the engine to the page: title, setup, play loop, data and settings.
 
-import { createGame, forecastRound, parseSeed, randomSeed, topJob, config as engineConfig, mergeConfig } from "./engine/index.js";
+import { createGame, forecastRound, parseSeed, randomSeed, topJob, roundTipId, totalRounds, config as engineConfig, mergeConfig } from "./engine/index.js";
 import { loadContent, resolveLines, radiationReading, regolithStudy } from "./data/content.js";
 import { loadStormData } from "./data/storms.js";
 import { buildSources } from "./data/sources.js";
@@ -11,12 +11,12 @@ import { createModals, rescueCard, discoveryCard, stormCard, resultCard, reviewC
 import { playCutscene } from "./ui/cutscene.js";
 import { createDialogue } from "./ui/dialogue.js";
 import { createHud, LOW_BAR } from "./ui/hud.js";
-import { createJobsPanel, emptyPlan } from "./ui/jobs.js";
+import { createJobsPanel, emptyPlan, planTotal } from "./ui/jobs.js";
 import { createScene, introArt } from "./ui/scene.js";
 import { runRepair } from "./ui/repair.js";
 import { askQuiz, showQuizAnswer } from "./ui/quizView.js";
 import { renderTitle, renderSetup, renderMap, openJournal, openDataScreen, openTeachers, openSettings } from "./ui/screens.js";
-import { awardMission, loadProgress, resetProgress, saveProgress, verifiedFactIds } from "./ui/progress.js";
+import { awardMission, dailySeed, isUnlocked, loadProgress, markSeen, resetProgress, saveProgress, verifiedFactIds } from "./ui/progress.js";
 import { renderEnd } from "./ui/endScreen.js";
 import { portrait, playerBadge } from "./ui/characters.js";
 
@@ -24,7 +24,8 @@ const SETTINGS_KEY = "luna-crew-settings";
 const PLAYER_KEY = "luna-crew-player";
 
 const DEFAULT_SETTINGS = {
-  lang: "en",
+  lang: null,
+  langChosen: false,
   sound: true,
   reduceMotion: false,
   highContrast: false,
@@ -83,16 +84,16 @@ async function boot() {
   });
 
   const stored = readJson(SETTINGS_KEY, DEFAULT_SETTINGS);
-  const startLang = detectLanguage(location.search, stored.lang, navigator.language);
+  const storedLang = stored.langChosen ? stored.lang : null;
+  const startLang = detectLanguage(location.search, storedLang, navigator.language);
   const i18n = createI18n(dictionaries, startLang);
-  const settings = { ...DEFAULT_SETTINGS, ...stored, lang: startLang };
+  const settings = { ...DEFAULT_SETTINGS, ...stored, lang: startLang, langChosen: Boolean(stored.langChosen) };
   const audio = createAudio({ enabled: settings.sound });
   const modals = createModals(modalRoot, { i18n, audio });
 
   let player = readJson(PLAYER_KEY, {
     name: "",
-    helmet: content.config.helmetColors[0],
-    practice: true
+    helmet: content.config.helmetColors[0]
   });
   let game = null;
   let hud = null;
@@ -102,10 +103,11 @@ async function boot() {
   let busy = false;
   let lastSeed = null;
   let forceSeed = seedFromUrl();
-  let sawNight = false;
-  let sawGreenhouse = false;
+  const urlHadSeed = forceSeed != null;
+  let warnedUnspent = false;
   let progress = loadProgress();
   let currentMission = null;
+  let lastSummary = null;
   const demo = queryFlag("demo") === "1";
 
   async function cut(id) {
@@ -132,8 +134,19 @@ async function boot() {
     nova: nameOf("nova"),
     sprout: nameOf("sprout"),
     pip: nameOf("pip"),
-    n: game?.state?.lunarDay ?? 1
+    n: game?.state?.lunarDay ?? 1,
+    days: daysLabel(game?.config?.lunarDays || 1)
   });
+
+  function daysLabel(count) {
+    if (i18n.lang === "ja") return count === 1 ? "月の1日" : `月の${count}日間`;
+    return count === 1 ? "1 lunar day" : `${count} lunar days`;
+  }
+
+  function remember(next) {
+    progress = next;
+    saveProgress(progress);
+  }
 
   function applySettings() {
     document.documentElement.lang = i18n.lang;
@@ -194,14 +207,38 @@ async function boot() {
         settings,
         onChange: (patch) => {
           Object.assign(settings, patch);
-          if (patch.lang) i18n.setLang(patch.lang);
+          if (patch.lang) {
+            settings.langChosen = true;
+            i18n.setLang(patch.lang);
+          }
           applySettings();
         }
       });
       again = result === "changed";
-      if (again && app.dataset.mode === "title") showTitle();
-      if (again && app.dataset.mode === "setup") showSetup();
+      if (again) rerender();
     }
+  }
+
+  function rerender() {
+    const mode = app.dataset.mode;
+    if (mode === "title") showTitle();
+    else if (mode === "setup") showSetup();
+    else if (mode === "map") showMap();
+    else if (mode === "play") refreshPlay();
+    else if (mode === "end" && lastSummary) showEnd(lastSummary);
+  }
+
+  async function confirmLeave(titleKey) {
+    const answer = await modals.open({
+      title: i18n.t(titleKey),
+      dismissible: true,
+      body: [h("p", { text: i18n.t("menu.confirmBody") })],
+      actions: [
+        { id: "no", label: i18n.t("ui.back"), kind: "quiet" },
+        { id: "yes", label: i18n.t("ui.yes"), kind: "primary" }
+      ]
+    });
+    return answer === "yes";
   }
 
   function showTitle() {
@@ -220,8 +257,10 @@ async function boot() {
       onData: () => openData(),
       onTeachers: () => showTeachers(),
       onSettings: () => showSettings(),
+      onCredits: () => openCredits(),
       onLang: (code) => {
         settings.lang = code;
+        settings.langChosen = true;
         i18n.setLang(code);
         applySettings();
         showTitle();
@@ -236,25 +275,27 @@ async function boot() {
       content,
       player,
       onBack: () => showTitle(),
-      onBegin: (next) => {
-        player = { ...player, ...next };
+      onBegin: async (next) => {
+        player = { name: next.name, helmet: next.helmet };
         writeJson(PLAYER_KEY, player);
         audio.unlock();
         audio.play("go");
+        if (!progress.seen?.intro) await playIntro(true);
         if (content.missions?.missions?.length) showMap();
-        else startMission({ practice: player.practice, seed: forceSeed ?? randomSeed() });
+        else startMission({ seed: forceSeed ?? randomSeed(), mission: null });
       }
     });
   }
 
   function wirePlayUi(config) {
     scene = createScene(sceneRoot);
-    hud = createHud(hudRoot, { i18n, config });
+    hud = createHud(hudRoot, { i18n, config, onMenu: () => openMenu() });
     jobs = createJobsPanel(jobsRoot, {
       i18n,
       audio,
       config,
       facts: content.factIndex,
+      modals,
       onChange: (plan) => {
         if (!game || busy) return;
         const state = game.state;
@@ -312,42 +353,117 @@ async function boot() {
     play.classList.remove("is-intro");
   }
 
+  async function playIntro(mark) {
+    showScreen("play");
+    await runIntro();
+    await cut("opening");
+    await cut("arrival");
+    if (mark) {
+      progress = markSeen(progress, "intro");
+      progress = markSeen(progress, "opening");
+      progress = markSeen(progress, "arrival");
+      saveProgress(progress);
+    }
+  }
+
+  async function openCredits() {
+    audio.unlock();
+    await modals.open({
+      title: i18n.t("credits.title"),
+      tone: "data",
+      wide: true,
+      dismissible: true,
+      body: ["credits.team", "credits.challenge", "credits.donki", "credits.osdr", "credits.radlab", "credits.csa", "credits.license", "credits.notNasa"].map((key) =>
+        h("p", { text: i18n.t(key) })
+      ),
+      actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }]
+    });
+  }
+
+  async function openMenu() {
+    if (!game || busy) {
+      audio.play("blocked");
+      return;
+    }
+    const choice = await modals.open({
+      title: i18n.t("menu.title"),
+      tone: "plain",
+      dismissible: true,
+      stack: true,
+      body: [h("p", { text: i18n.t("menu.lead") })],
+      actions: [
+        { id: "resume", label: i18n.t("menu.resume"), kind: "primary" },
+        { id: "how", label: i18n.t("menu.how") },
+        { id: "settings", label: i18n.t("menu.settings") },
+        { id: "map", label: i18n.t("menu.map") },
+        { id: "home", label: i18n.t("menu.home") }
+      ]
+    });
+    if (choice === "how") await showTeachers();
+    if (choice === "settings") await showSettings();
+    if (choice === "map" && (await confirmLeave("menu.map"))) showMap();
+    if (choice === "home" && (await confirmLeave("menu.home"))) showTitle();
+  }
+
   function showMap() {
-    showScreen("title");
+    showScreen("map");
     renderMap(screen, {
       i18n,
       missions: content.missions?.missions || [],
       progress,
       demo,
+      urlSeed: forceSeed,
       onPlay: (mission, seed) => {
         currentMission = mission;
-        const chosen = Number.isFinite(seed) && seed > 0 ? seed : randomSeed();
-        startMission({ practice: false, seed: chosen, skipIntro: true, mission });
+        const chosen = Number.isFinite(seed) && seed > 0 ? seed : forceSeed ?? randomSeed();
+        if (chosen === forceSeed) forceSeed = null;
+        startMission({ seed: chosen, mission });
       },
-      onJournal: () => openJournal(modals, { i18n, facts: content.factIndex, progress }),
-      onReset: () => {
+      onJournal: () => openJournal(modals, { i18n, facts: content.factIndex, progress, cards: content.cards?.cards || [] }),
+      onReset: async () => {
+        const yes = await confirmLeave("map.reset");
+        if (!yes) return;
         progress = resetProgress();
         showMap();
       },
-      onHome: () => showTitle()
+      onHome: () => showTitle(),
+      onSettings: () => showSettings(),
+      onIntro: async () => {
+        await playIntro(false);
+        showMap();
+      },
+      onReplay: async (id) => {
+        await cut(id);
+        showMap();
+      }
     });
   }
 
-  async function startMission({ practice, seed, skipIntro = false, mission = null }) {
+  function stormModeFor(mission) {
+    if (mission?.id === "mission-day") return "latest";
+    if (mission?.id === "storm-watch") return "level2";
+    if (demo && !urlHadSeed) return "strongest";
+    return "weighted";
+  }
+
+  async function playSeen(id) {
+    const seen = progress.seen?.cutscenes || [];
+    if (seen.includes(id)) return;
+    await cut(id);
+    progress = markSeen(progress, id);
+    saveProgress(progress);
+  }
+
+  async function startMission({ seed, mission = null }) {
     busy = true;
     lastSeed = seed;
-    forceSeed = null;
-    sawNight = false;
-    sawGreenhouse = false;
-    if (!skipIntro) {
-      await runIntro();
-      await cut("opening");
-      await cut("arrival");
-    } else showScreen("play");
+    warnedUnspent = false;
+    showScreen("play");
 
     const stormData = {
       events: stormInfo.source.events,
-      label: stormInfo.source.label
+      latestEvents: stormInfo.source.latestEvents || [],
+      strongest: stormInfo.source.strongest || null
     };
     const overrides = { ...(content.config.overrides || {}) };
     if (mission) {
@@ -359,8 +475,9 @@ async function boot() {
     game = createGame({
       seed,
       demo: demo && (!mission || mission.id === "full-mission"),
-      practice: Boolean(practice),
+      stormMode: stormModeFor(mission),
       stormData,
+      quizRecords: progress.quiz || {},
       cards: content.cards.cards,
       nasaChoice: content.nasaChoice,
       config: overrides
@@ -414,23 +531,18 @@ async function boot() {
           game.next();
           continue;
         }
-        if (phase === "practiceDone") {
-          await say(content.story.practiceDone, { skippable: true });
-          busy = false;
-          await startMission({ practice: false, seed: lastSeed, skipIntro: true });
-          return;
-        }
         if (phase === "end") {
           const summary = game.summary();
+          progress = { ...progress, quiz: game.quizRecords() };
           if (currentMission) {
             const result = awardMission(progress, currentMission, summary, verifiedFactIds(content.factIndex));
             progress = result.progress;
-            saveProgress(progress);
             summary.starReasons = result.earned.reasons;
             summary.starCount = result.earned.count;
-            if (result.rankUp) await cut("rank");
-          }
-          await cut(summary.status === "complete" ? "endingComplete" : "endingPaused");
+            saveProgress(progress);
+            if (result.rankUp) await playSeen("rank");
+          } else saveProgress(progress);
+          await playSeen(summary.status === "complete" ? "endingComplete" : "endingPaused");
           showEnd(summary);
           return;
         }
@@ -444,20 +556,26 @@ async function boot() {
   async function runEvent(state) {
     const event = state.event;
     if (event.type === "rescue") {
-      await cut("rescue");
+      await playSeen("rescue");
       scene.movePip("crater");
       await say(content.story.rescue.intro, { skippable: true });
       const choice = await rescueCard(modals, { i18n, event, available: game.available() });
-      game.chooseEvent(choice);
+      if (!game.chooseEvent(choice)?.ok) {
+        await needPoints();
+        return;
+      }
       await say(content.story.rescue[choice] || [], { skippable: true });
       return;
     }
     if (event.type === "discovery") {
-      await cut("discovery");
+      await playSeen("discovery");
       scene.movePip("crater");
       await say(content.story.discovery.intro, { skippable: true });
       const choice = await discoveryCard(modals, { i18n, event, available: game.available() });
-      game.chooseEvent(choice);
+      if (!game.chooseEvent(choice)?.ok) {
+        await needPoints();
+        return;
+      }
       await say(content.story.discovery[choice] || [], { skippable: true });
       return;
     }
@@ -474,12 +592,24 @@ async function boot() {
         facts: content.factIndex,
         reading
       });
-      game.chooseEvent(choice);
-      await cut(choice === "shelter" ? "stormShelter" : "stormWork");
+      if (!game.chooseEvent(choice)?.ok) {
+        await needPoints();
+        return;
+      }
+      await playSeen(choice === "shelter" ? "stormShelter" : "stormWork");
       if (choice === "shelter") await say(content.story.storm.shelter, { skippable: true });
       return;
     }
-    game.chooseEvent(event.options?.[0]?.id);
+    const fallback = event.options?.[0]?.id;
+    if (fallback && !game.chooseEvent(fallback)?.ok) await needPoints();
+  }
+
+  async function needPoints() {
+    await modals.open({
+      title: i18n.t("effect.notEnough"),
+      body: [h("p", { text: i18n.t("event.needPoints") })],
+      actions: [{ id: "ok", label: i18n.t("ui.ok"), kind: "primary" }]
+    });
   }
 
   async function runRepairPhase() {
@@ -491,6 +621,14 @@ async function boot() {
       timeLimitMs: game.config.repair.timeLimitMs
     });
     const result = game.completeRepair(ok);
+    if (ok && !result.fixed) {
+      await modals.open({
+        title: i18n.t("repair.needTitle"),
+        body: [h("p", { text: i18n.t("repair.needPoints") })],
+        actions: [{ id: "ok", label: i18n.t("ui.ok"), kind: "primary" }]
+      });
+      return;
+    }
     if (result.fixed) {
       scene.flashRepair();
       audio.play("good");
@@ -501,34 +639,46 @@ async function boot() {
     }
   }
 
+  function scrollPlayTop() {
+    play.scrollTop = 0;
+    const panel = document.querySelector(".play-ui");
+    if (panel) panel.scrollTop = 0;
+  }
+
   async function openAllocate(state) {
+    scrollPlayTop();
     jobs.lock(false);
     jobs.render(state, game.available(), { reset: true });
     hud.forecast(forecastRound(state, emptyPlan(), game.config));
     scene.movePip(state.eventChoice === "shelter" ? "shelter" : "idle");
-    if (state.isNight && state.lunarDay === 1 && !sawNight) {
-      sawNight = true;
-      await cut("nightfall");
-    }
-    if (!sawGreenhouse && state.lightsOn && state.round === 2 && content.factIndex.get("regolith_plants")?.status === "verified") {
-      sawGreenhouse = true;
-      await cut("greenhouse");
+    const garden = currentMission && (currentMission.id === "moon-garden" || currentMission.id === "full-mission");
+    if (state.isNight) await playSeen("nightfall");
+    if (garden && state.lightsOn && state.round === 2 && content.factIndex.get("regolith_plants")?.status === "verified") {
+      await playSeen("greenhouse");
     }
 
     if (state.eventChoice === "shelter") {
       await say([content.story.shelterHint], { skippable: true });
-    } else if (game.practice && state.round === 1) {
+    } else if (currentMission?.id === "first-light" && state.round === 1) {
       await say(content.story.tutorial, { skippable: true });
-    } else if (!game.practice) {
-      if (state.round === 1) await say(content.story.missionStart, { skippable: true });
-      const tip = content.story.roundTips?.[String(state.round)];
+    } else {
+      if (state.round === 1) {
+        const intro = currentMission?.intro;
+        if (intro) await say([{ who: "nova", expr: "happy", text: intro }], { skippable: true });
+        else await say(content.story.missionStart, { skippable: true });
+      }
+      const tipId = roundTipId({ ...state, totalRounds: totalRounds(game.config) }, currentMission?.id);
+      const tip = content.story.tips?.[tipId];
       if (tip) await say([tip], { skippable: true });
-      if (state.round === 2 && regolithStudy(content.osdr)) {
+      if (garden && state.round === 2 && !progress.seen?.research && regolithStudy(content.osdr)) {
         await say(content.story.research, { skippable: true });
+        progress = markSeen(progress, "research");
+        saveProgress(progress);
       }
     }
     jobs.lock(false);
     refreshPlay();
+    scrollPlayTop();
   }
 
   async function askEarth() {
@@ -550,6 +700,20 @@ async function boot() {
 
   async function submitPlan(plan) {
     if (!game || busy || game.state.phase !== "allocate") return;
+    const left = game.available() - planTotal(plan);
+    if (left > 0 && !warnedUnspent && game.state.eventChoice !== "shelter") {
+      warnedUnspent = true;
+      const choice = await modals.open({
+        title: i18n.t("jobs.unspentTitle"),
+        dismissible: true,
+        body: [h("p", { text: i18n.t("jobs.unspent", { n: left }) })],
+        actions: [
+          { id: "back", label: i18n.t("jobs.goBack"), kind: "quiet" },
+          { id: "go", label: i18n.t("jobs.goAnyway"), kind: "primary" }
+        ]
+      });
+      if (choice !== "go") return;
+    }
     audio.play("go");
     busy = true;
     jobs.lock(true);
@@ -597,8 +761,11 @@ async function boot() {
   }
 
   async function showQuiz(state) {
-    const index = await askQuiz(modals, { i18n, card: state.quizCard });
+    const hasNextRound = state.status === "playing";
+    const index = await askQuiz(modals, { i18n, card: state.quizCard, hasNextRound });
     const answered = game.answerQuiz(index);
+    progress = { ...progress, quiz: game.quizRecords() };
+    saveProgress(progress);
     audio.play(answered.correct ? "good" : "oops");
   }
 
@@ -615,7 +782,12 @@ async function boot() {
 
   function showEnd(summary) {
     showScreen("end");
+    summary.daysLabel = daysLabel(game.config.lunarDays);
+    lastSummary = summary;
     audio.play(summary.status === "complete" ? "win" : "home");
+    const missions = content.missions?.missions || [];
+    const index = missions.findIndex((item) => item.id === currentMission?.id);
+    const nextMission = index >= 0 ? missions.slice(index + 1).find((item) => demo || isUnlocked(item, missions, progress)) : null;
     renderEnd(screen, {
       i18n,
       summary,
@@ -623,8 +795,16 @@ async function boot() {
       config: game.config,
       player,
       nameOf,
-      onAgain: () => (content.missions?.missions?.length ? showMap() : startMission({ practice: false, seed: randomSeed(), skipIntro: true })),
-      onSameSeed: () => startMission({ practice: false, seed: summary.seed, skipIntro: true, mission: currentMission }),
+      mission: currentMission,
+      onAgain: () => (missions.length ? showMap() : startMission({ seed: randomSeed(), mission: null })),
+      onSameSeed: () => startMission({ seed: summary.seed, mission: currentMission }),
+      onNext: nextMission
+        ? () => {
+            currentMission = nextMission;
+            const seed = nextMission.daily ? dailySeed() : nextMission.chooseSeed ? forceSeed ?? 1234 : randomSeed();
+            startMission({ seed, mission: nextMission });
+          }
+        : null,
       onData: () => openData(),
       onHome: () => showTitle()
     });
@@ -634,7 +814,7 @@ async function boot() {
   if (bootNote) bootNote.remove();
   i18n.onChange(() => {
     setNewTabNote(i18n.t("ui.newTab"));
-    if (app.dataset.mode === "title") showTitle();
+    rerender();
   });
   showTitle();
 }

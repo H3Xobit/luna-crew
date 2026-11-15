@@ -51,6 +51,8 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
 
   return new Promise((resolve) => {
     let index = 0;
+    let drawn = -1;
+    const previousFocus = document.activeElement;
     let started = performance.now();
     let paused = false;
     let pausedAt = 0;
@@ -98,16 +100,21 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       document.removeEventListener("keydown", onKey);
       overlay.remove();
       audio?.stopHum?.();
+      if (previousFocus && typeof previousFocus.focus === "function" && document.contains(previousFocus)) {
+        previousFocus.focus({ preventScroll: true });
+      }
       resolve(reason || "done");
     }
 
-    function draw(shot, t) {
+    function draw(shot, t, shotIndex) {
       const from = shot.camera || {};
       const to = shot.tween || {};
       const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, t);
       const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, t);
       const scale = lerp(from.scale || 1, to.scale != null ? to.scale : from.scale || 1, t);
       camera.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      if (drawn === shotIndex) return;
+      drawn = shotIndex;
       svg.innerHTML = (shot.layers || []).map(layerMarkup).join("");
       const speaker = shot.who ? nameOf(shot.who) : "";
       who.textContent = speaker ? `${speaker}: ` : "";
@@ -122,7 +129,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
         const duration = Math.max(400, shot.duration || 2000);
         const elapsed = now - started;
         const t = reduced ? 1 : Math.min(1, elapsed / duration);
-        draw(shot, t);
+        draw(shot, t, index);
         if (elapsed >= duration) {
           index += 1;
           started = now;
@@ -141,7 +148,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     skip.focus();
     audio?.startHum?.();
     if (scene.shots[0].sound) audio?.play(scene.shots[0].sound);
-    draw(scene.shots[0], reduced ? 1 : 0);
+    draw(scene.shots[0], reduced ? 1 : 0, 0);
     frame = requestAnimationFrame(tick);
   });
 }

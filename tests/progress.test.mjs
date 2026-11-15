@@ -30,8 +30,25 @@ test("missions unlock in order and stars match the learning goal", () => {
   assert.equal(rankFor(0).id, "cadet");
 });
 
-test("daily seed stays the same for one UTC day", () => {
-  const day = new Date("2026-11-15T00:30:00Z");
-  assert.equal(dailySeed(day), dailySeed(new Date("2026-11-15T20:00:00Z")));
-  assert.notEqual(dailySeed(day), dailySeed(new Date("2026-11-16T00:30:00Z")));
+test("daily seed uses the player's local date", () => {
+  const morning = new Date(2026, 10, 15, 0, 30);
+  const evening = new Date(2026, 10, 15, 20, 0);
+  const next = new Date(2026, 10, 16, 0, 30);
+  assert.equal(dailySeed(morning), dailySeed(evening));
+  assert.notEqual(dailySeed(morning), dailySeed(next));
+});
+
+test("challenge third star needs 100 mission points", () => {
+  const mission = { id: "challenge", star3: "points", star3Need: 100 };
+  const summary = {
+    status: "complete",
+    bars: { power: 40, life: 40, shield: 40 },
+    missionPoints: 100,
+    log: []
+  };
+  const earned = starsFor(mission, summary);
+  assert.equal(earned.reasons.includes("points"), true);
+  assert.equal(earned.count, 3);
+  summary.missionPoints = 99;
+  assert.equal(starsFor(mission, summary).reasons.includes("points"), false);
 });

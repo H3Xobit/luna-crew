@@ -29,9 +29,14 @@ export function usableCards(cards) {
   return (Array.isArray(cards) ? cards : []).filter(isUsableCard);
 }
 
-export function createQuiz(cards, rng) {
+export function createQuiz(cards, rng, saved = {}) {
   const deck = rng.shuffle(usableCards(cards));
   const records = new Map();
+  for (const [id, record] of Object.entries(saved || {})) {
+    if (!deck.some((card) => card.id === id)) continue;
+    const box = Math.max(1, Math.min(MAX_BOX, Number(record?.box) || 1));
+    records.set(id, { box, dueTurn: box === 1 ? 0 : 2 ** (box - 1) });
+  }
   let turn = 0;
   let pending = null;
 
@@ -88,6 +93,11 @@ export function createQuiz(cards, rng) {
     boxOf(id) {
       const record = records.get(id);
       return record ? record.box : 0;
+    },
+    snapshot() {
+      const out = {};
+      for (const [id, record] of records) out[id] = { box: record.box };
+      return out;
     }
   };
 }

@@ -7,7 +7,7 @@ import { icon } from "./icons.js";
 const BARS = ["power", "life", "shield"];
 export const LOW_BAR = 25;
 
-export function createHud(root, { i18n, config }) {
+export function createHud(root, { i18n, config, onMenu }) {
   const dayText = h("span", { class: "hud-day-text" });
   const phaseChip = h("span", { class: "hud-phase" });
   const dots = h("ol", { class: "round-dots" });
@@ -43,8 +43,16 @@ export function createHud(root, { i18n, config }) {
     barList.append(row);
   }
 
+  const menu = h("button", {
+    type: "button",
+    class: "btn btn-quiet hud-menu",
+    id: "hud-menu",
+    text: i18n.t("menu.button"),
+    onclick: () => onMenu?.()
+  });
+
   clear(root).append(
-    h("div", { class: "hud-top" }, [h("div", { class: "hud-day" }, [dayText, phaseChip]), dots, pointsBox]),
+    h("div", { class: "hud-top" }, [h("div", { class: "hud-day" }, [dayText, phaseChip]), dots, pointsBox, menu]),
     barList
   );
 
@@ -69,6 +77,7 @@ export function createHud(root, { i18n, config }) {
   const api = {
     render(state) {
       last = state;
+      menu.textContent = i18n.t("menu.button");
       dayText.textContent = i18n.t("hud.lunarDay", { n: state.lunarDay, total: config.lunarDays });
       phaseChip.innerHTML = `${icon(state.isNight ? "moon" : "sun")}<span>${i18n.t(state.isNight ? "hud.night" : "hud.day")}</span>`;
       phaseChip.classList.toggle("is-night", state.isNight);
@@ -95,7 +104,7 @@ export function createHud(root, { i18n, config }) {
         if (!prediction || !last) {
           bar.next.textContent = "";
           bar.ghost.style.width = "0%";
-          bar.row.classList.remove("will-drop", "will-rise", "will-empty");
+          bar.row.classList.remove("will-drop", "will-rise", "will-empty", "storm-warn");
           continue;
         }
         const now = Math.round(last[name]);
@@ -106,6 +115,9 @@ export function createHud(root, { i18n, config }) {
         bar.row.classList.toggle("will-drop", then < now);
         bar.row.classList.toggle("will-rise", then > now);
         bar.row.classList.toggle("will-empty", then <= 0);
+        const warn = Array.isArray(prediction.warn) && prediction.warn.includes(name);
+        bar.row.classList.toggle("storm-warn", warn);
+        if (warn) bar.low.textContent = i18n.t("hud.stormMay");
       }
     },
     // The storm line on the shield bar: how much shield this storm needs.

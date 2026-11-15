@@ -11,7 +11,7 @@ export const RANKS = [
 ];
 
 export function emptyProgress() {
-  return { stars: {}, badges: [], journal: [], bestRank: "cadet" };
+  return { stars: {}, badges: [], journal: [], bestRank: "cadet", seen: { intro: false, research: false, cutscenes: [] }, quiz: {} };
 }
 
 export function loadProgress() {
@@ -19,11 +19,18 @@ export function loadProgress() {
     const raw = localStorage.getItem(KEY);
     if (!raw) return emptyProgress();
     const parsed = JSON.parse(raw);
+    const seen = parsed.seen && typeof parsed.seen === "object" ? parsed.seen : {};
     return {
       stars: parsed.stars && typeof parsed.stars === "object" ? parsed.stars : {},
       badges: Array.isArray(parsed.badges) ? parsed.badges : [],
       journal: Array.isArray(parsed.journal) ? parsed.journal : [],
-      bestRank: typeof parsed.bestRank === "string" ? parsed.bestRank : "cadet"
+      bestRank: typeof parsed.bestRank === "string" ? parsed.bestRank : "cadet",
+      seen: {
+        intro: Boolean(seen.intro),
+        research: Boolean(seen.research),
+        cutscenes: Array.isArray(seen.cutscenes) ? seen.cutscenes.filter((id) => typeof id === "string") : []
+      },
+      quiz: parsed.quiz && typeof parsed.quiz === "object" ? parsed.quiz : {}
     };
   } catch {
     return emptyProgress();
@@ -59,11 +66,29 @@ export function rankFor(stars) {
   return current;
 }
 
+export function localDateKey(date = new Date()) {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
 export function dailySeed(date = new Date()) {
-  const key = date.toISOString().slice(0, 10);
+  const key = localDateKey(date);
   let hash = 0;
   for (const char of key) hash = (hash * 33 + char.charCodeAt(0)) >>> 0;
   return (hash % 900000) + 1000;
+}
+
+export function markSeen(progress, id) {
+  const seen = {
+    intro: Boolean(progress.seen?.intro),
+    research: Boolean(progress.seen?.research),
+    cutscenes: [...(progress.seen?.cutscenes || [])]
+  };
+  if (id === "intro") seen.intro = true;
+  else if (id === "research") seen.research = true;
+  else if (id && !seen.cutscenes.includes(id)) seen.cutscenes.push(id);
+  return { ...progress, seen };
 }
 
 export function verifiedFactIds(facts) {
@@ -95,6 +120,7 @@ function learningStar(mission, summary) {
   if (goal === "lights") return log.length > 0 && log.every((row) => row.lightsOn);
   if (goal === "bars") return summary.bars.power > 25 && summary.bars.life > 25 && summary.bars.shield > 25;
   if (goal === "repair") return (summary.repairs || 0) > 0;
+  if (goal === "points") return summary.missionPoints >= (mission.star3Need || 100);
   return false;
 }
 
@@ -114,10 +140,12 @@ function addUnique(list, id) {
 export function awardMission(progress, mission, summary, factIds = []) {
   const earned = starsFor(mission, summary);
   const next = {
+    ...progress,
     stars: { ...progress.stars },
     badges: [...progress.badges],
     journal: [...progress.journal],
-    bestRank: progress.bestRank
+    seen: progress.seen || { intro: false, research: false, cutscenes: [] },
+    quiz: progress.quiz || {}
   };
   const previous = next.stars[mission.id] || 0;
   if (earned.count > previous) next.stars[mission.id] = earned.count;

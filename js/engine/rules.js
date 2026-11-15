@@ -172,14 +172,33 @@ export function forecastRound(state, allocation, config) {
   const jobs = applyJobs(state, used, config);
   const greenhouse = applyGreenhouse(state, config);
   const drains = applyDrains(state, config);
-  const bar = (name) =>
-    clamp(state[name] + jobs[name] + (greenhouse[name] ?? 0) + drains[name], config.bars.min, config.bars.max);
+  const study = state.eventChoice === "study";
+  const eventLife = study ? -config.discovery.lifeCost : 0;
+  const eventPoints = study ? config.discovery.points : 0;
+  const bar = (name, extra = 0) =>
+    clamp(state[name] + jobs[name] + (greenhouse[name] ?? 0) + drains[name] + extra, config.bars.min, config.bars.max);
+  const stormOpen = state.roundEvent?.type === "storm" && state.eventChoice === "keepWorking";
   return {
     power: bar("power"),
-    life: bar("life"),
+    life: bar("life", eventLife),
     shield: bar("shield"),
-    missionPoints: state.missionPoints + jobs.missionPoints
+    missionPoints: state.missionPoints + jobs.missionPoints + eventPoints,
+    warn: stormOpen ? ["life", "shield"] : []
   };
+}
+
+// Tips follow the situation, not the absolute round number.
+export function roundTipId(state, missionId) {
+  const last = state.totalRounds && state.round >= state.totalRounds;
+  if (state.round === 1 && missionId === "long-night") return "longNight";
+  if (state.round === 1 && missionId === "moon-garden") return "garden";
+  if (state.round === 1 && missionId === "ice-rescue") return "ice";
+  if (state.round === 1 && missionId === "storm-watch") return "stormWatch";
+  if (state.round === 1 && state.isNight) return "firstNight";
+  if (state.round === 1) return "firstDay";
+  if (last) return "last";
+  if (state.isNight) return "night";
+  return "day";
 }
 
 // Order: validate -> jobs -> greenhouse -> drains -> event outcome -> clamp

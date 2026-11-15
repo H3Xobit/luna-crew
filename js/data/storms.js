@@ -34,28 +34,67 @@ export function formatDateUtc(iso) {
   return date.toISOString().slice(0, 10);
 }
 
-// Order: latest.json, then storms.json, then the training alert.
-// A file can never be called live: nothing here returns the "live" kind.
+function stamp(file, kind, date) {
+  return usableEvents(file).map((event) => ({ ...event, label: { kind, date } }));
+}
+
+// One pool. Latest rows win when the same id is in both files, so that
+// event keeps the "updated" label. Every other archive row keeps "saved".
+export function buildStormPool(latest, saved) {
+  const seen = new Set();
+  const pool = [];
+  const add = (events) => {
+    for (const event of events) {
+      if (!event?.id || seen.has(event.id)) continue;
+      seen.add(event.id);
+      pool.push(event);
+    }
+  };
+  if (latest?.status === "ok") add(stamp(latest, "updated", formatDateTimeUtc(latest.fetchedAt)));
+  if (saved?.status === "ok") add(stamp(saved, "saved", formatDateUtc(saved.fetchedAt)));
+  return pool;
+}
+
+function strongestEvent(file, kind, date) {
+  const flare = file?.strongestFlare;
+  if (!file || file.status !== "ok" || !flare?.id) return null;
+  const match = usableEvents(file).find((event) => event.id === flare.id);
+  const event = match || {
+    id: flare.id,
+    type: "FLR",
+    date: flare.date,
+    classType: flare.classType,
+    link: flare.link,
+    hasLinkedSEP: false
+  };
+  if (!isUsableEvent(event)) return null;
+  return { ...event, label: { kind, date } };
+}
+
+// The playable pool is latest plus the archive. Nothing here is called live.
 export function chooseStormSource(latest, saved) {
-  const fresh = usableEvents(latest);
-  if (fresh.length > 0) {
+  const events = buildStormPool(latest, saved);
+  const latestEvents = latest?.status === "ok" ? stamp(latest, "updated", formatDateTimeUtc(latest.fetchedAt)) : [];
+  const strongest = strongestEvent(saved, "saved", saved?.fetchedAt ? formatDateUtc(saved.fetchedAt) : "") ||
+    strongestEvent(latest, "updated", latest?.fetchedAt ? formatDateTimeUtc(latest.fetchedAt) : "");
+  if (events.length === 0) {
     return {
-      events: fresh,
-      label: { kind: "updated", date: formatDateTimeUtc(latest.fetchedAt) },
-      file: "data/latest.json",
-      fetchedAt: latest.fetchedAt
+      events: [],
+      latestEvents: [],
+      strongest: null,
+      label: { kind: "training", date: null },
+      file: null,
+      fetchedAt: null
     };
   }
-  const archive = usableEvents(saved);
-  if (archive.length > 0) {
-    return {
-      events: archive,
-      label: { kind: "saved", date: formatDateUtc(saved.fetchedAt) },
-      file: "data/storms.json",
-      fetchedAt: saved.fetchedAt
-    };
-  }
-  return { events: [], label: { kind: "training", date: null }, file: null, fetchedAt: null };
+  return {
+    events,
+    latestEvents,
+    strongest,
+    label: null,
+    file: "pool",
+    fetchedAt: latest?.fetchedAt || saved?.fetchedAt || null
+  };
 }
 
 // The exact English label. Other languages go through labelKey().

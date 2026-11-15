@@ -520,7 +520,16 @@
 .job.is-off { opacity: 0.45; }
 
 .job-text { display: grid; gap: 0.1rem; min-width: 0; }
+.job-titleline { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; }
 .job-name { font-weight: 800; font-family: var(--font-display); }
+.job-why {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 800;
+}
 .job-what,
 .job-hint { font-size: 0.84rem; color: color-mix(in srgb, var(--paper) 72%, transparent); }
 
@@ -636,13 +645,29 @@
   position: relative;
   z-index: 1;
   width: min(560px, 100%);
-  max-height: min(88vh, 880px);
-  overflow: auto;
-  padding: 1.1rem 1.15rem 1.2rem;
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.1rem 1.15rem 0.8rem;
   border-radius: 24px;
   background: linear-gradient(180deg, #1a2348, #10182f);
   border: 1px solid color-mix(in srgb, var(--sky) 30%, transparent);
   box-shadow: var(--shadow);
+}
+
+.modal-body {
+  overflow: auto;
+  min-height: 0;
+  padding-bottom: 0.6rem;
+}
+
+.modal-actions {
+  position: sticky;
+  bottom: 0;
+  flex: none;
+  background: linear-gradient(180deg, transparent, #10182f 28%);
+  padding-top: 0.4rem;
 }
 
 .modal-card.is-wide { width: min(720px, 100%); }
@@ -1109,7 +1134,45 @@ html[data-contrast="high"] .dialogue-box {
 .mission-card { padding: 0.8rem; border-radius: 16px; background: rgba(255, 255, 255, 0.05); }
 .mission-node.is-locked { opacity: 0.55; }
 .badge-shelf { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
-.badge-shelf li { padding: 0.45rem 0.6rem; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.badge-shelf li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.badge-mark { width: 1.1rem; }
 .badge-shelf .is-locked { opacity: 0.55; }
+.star-row { display: flex; gap: 0.15rem; margin: 0.2rem 0; }
+.star-icon { width: 1.15rem; color: rgba(255, 255, 255, 0.28); }
+.star-icon.is-on { color: var(--sun); }
+.hud-menu { min-height: 2.75rem; }
+
+@media (min-width: 900px) and (max-height: 800px) {
+  .job-what, .points-pips { display: none; }
+  .job { padding: 0.28rem 0.4rem; }
+  .jobs-list { gap: 0.22rem; }
+  .play-ui { gap: 0.35rem; padding-top: 0.35rem; padding-bottom: 0.45rem; }
+  .briefing { margin-bottom: 0.15rem; }
+}
+
+@media (max-width: 700px) {
+  .bars {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(11, 16, 36, 0.96);
+    padding-bottom: 0.35rem;
+  }
+  .jobs-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    background: rgba(11, 16, 36, 0.96);
+    padding: 0.45rem 0 0.2rem;
+  }
+}
 .journal-card { margin-bottom: 0.7rem; }
 .seed-input { max-width: 8rem; margin: 0.3rem 0; }

@@ -24,7 +24,7 @@ export function buildSources({ stormInfo, osdr, radlab, facts }) {
       url: "https://ccmc.gsfc.nasa.gov/tools/DONKI/",
       useKey: "data.use.donki",
       status: source && source.events.length > 0 ? "used" : "failed",
-      label: source ? source.label : { kind: "training", date: null },
+      label: source?.label?.kind ? source.label : null,
       detailKey: "data.detail.donki",
       detailVars: {
         latest: latestCount,

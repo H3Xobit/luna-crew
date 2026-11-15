@@ -32,6 +32,11 @@ function panelArt() {
   );
 }
 
+// A finished panel is a success even if the clock has already run out.
+export function repairSuccess(fixed, total) {
+  return fixed >= total && total > 0;
+}
+
 export function runRepair(modals, { i18n, audio, hotspots, timeLimitMs, random = Math.random }) {
   const slots = pickSlots(hotspots, random);
   let fixed = 0;
@@ -65,7 +70,11 @@ export function runRepair(modals, { i18n, audio, hotspots, timeLimitMs, random =
         fixed += 1;
         audio.play("zap");
         count.textContent = i18n.t("repair.count", { n: fixed, total: slots.length });
-        if (fixed >= slots.length) setTimeout(() => finish(true), 260);
+        if (repairSuccess(fixed, slots.length)) {
+          clearTimeout(timeout);
+          clearInterval(ticker);
+          setTimeout(() => finish(true), 260);
+        }
       }
     });
     spot.style.left = `${x}%`;

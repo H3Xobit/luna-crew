@@ -73,7 +73,7 @@ function stormStreaks() {
 
 function svgMarkup() {
   return `
-<svg class="scene-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<svg class="scene-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#fff7d6"/><stop offset="35%" stop-color="#ffe9a3" stop-opacity="0.9"/>

@@ -2,102 +2,285 @@
   "missions": [
     {
       "id": "first-light",
-      "title": { "en": "First Light", "ja": "はじめての光" },
-      "goal": { "en": "Learn the four jobs in one lunar day.", "ja": "1日で、4つのしごとを覚えよう。" },
+      "title": {
+        "en": "First Light",
+        "ja": "はじめての光"
+      },
+      "goal": {
+        "en": "Learn the four jobs in one lunar day.",
+        "ja": "1日で、4つのしごとを覚えよう。"
+      },
       "lunarDays": 1,
       "events": [],
       "unlock": "start",
       "star3": "finish",
-      "facts": ["lunar_day_length"],
-      "discuss": { "en": "Which job felt most important, and why were the weights different?", "ja": "どのしごとがいちばんたいせつだと感じた？重さはなぜちがう？" }
+      "facts": [
+        "lunar_day_length"
+      ],
+      "discuss": {
+        "en": "Which job felt most important, and why were the weights different?",
+        "ja": "どのしごとがいちばんたいせつだと感じた？重さはなぜちがう？"
+      },
+      "intro": {
+        "en": "First Light begins. You have {days} to learn the four jobs.",
+        "ja": "はじめての光がはじまります。4つのしごとを覚える時間は{days}です。"
+      },
+      "outro": {
+        "en": "You finished {days}, and the crew is safe. You know the four jobs.",
+        "ja": "{days}が終わって、クルーはぶじです。4つのしごとがわかりましたね。"
+      }
     },
     {
       "id": "long-night",
-      "title": { "en": "The Long Night", "ja": "ながいよる" },
-      "goal": { "en": "The Sun is already down. Save power.", "ja": "太陽はもうない。電気をためよう。" },
+      "title": {
+        "en": "The Long Night",
+        "ja": "ながいよる"
+      },
+      "goal": {
+        "en": "The Sun is already down. Save power.",
+        "ja": "太陽はもうない。電気をためよう。"
+      },
       "lunarDays": 1,
-      "nightRounds": [1, 2, 3, 4],
+      "nightRounds": [
+        1,
+        2,
+        3,
+        4
+      ],
       "events": [],
       "unlock": "after",
       "after": "first-light",
       "star3": "nightPower",
-      "facts": ["lunar_day_length"],
-      "discuss": { "en": "Why does Power give only 1 per point at night?", "ja": "なぜよるの電気は、ポイント1つで1だけ？" }
+      "facts": [
+        "lunar_day_length"
+      ],
+      "discuss": {
+        "en": "Why does Power give only 1 per point at night?",
+        "ja": "なぜよるの電気は、ポイント1つで1だけ？"
+      },
+      "intro": {
+        "en": "The Long Night begins. You have {days}, and the Sun is already down.",
+        "ja": "ながい夜がはじまります。時間は{days}。太陽はもう出ていません。"
+      },
+      "outro": {
+        "en": "You finished {days} of night, and the crew is safe.",
+        "ja": "夜の{days}が終わって、クルーはぶじです。"
+      }
     },
     {
       "id": "ice-rescue",
-      "title": { "en": "Ice Rescue", "ja": "こおりのレスキュー" },
-      "goal": { "en": "Bring Pip's ice home. Ice can become water and air, and it costs power.", "ja": "ピップのこおりを持ち帰ろう。こおりは水と空気になるけど、電気がいる。" },
+      "title": {
+        "en": "Ice Rescue",
+        "ja": "こおりのレスキュー"
+      },
+      "goal": {
+        "en": "Bring Pip's ice home. Ice can become water and air, and it costs power.",
+        "ja": "ピップのこおりを持ち帰ろう。こおりは水と空気になるけど、電気がいる。"
+      },
       "lunarDays": 1,
-      "events": [{ "lunarDay": 1, "roundInDay": 1, "type": "rescue" }],
+      "events": [
+        {
+          "lunarDay": 1,
+          "roundInDay": 1,
+          "type": "rescue"
+        }
+      ],
       "unlock": "after",
       "after": "long-night",
       "star3": "sample",
-      "facts": ["lcross_water"],
-      "discuss": { "en": "What can ice give a Moon base that Earth gives us for free?", "ja": "こおりは、ちきゅうがただでくれる何を、月のきちにあたえる？" }
+      "facts": [
+        "lcross_water"
+      ],
+      "discuss": {
+        "en": "What can ice give a Moon base that Earth gives us for free?",
+        "ja": "こおりは、ちきゅうがただでくれる何を、月のきちにあたえる？"
+      },
+      "intro": {
+        "en": "Ice Rescue begins. You have {days} to bring the ice home.",
+        "ja": "こおりのレスキューがはじまります。こおりを持ち帰る時間は{days}です。"
+      },
+      "outro": {
+        "en": "You finished {days}. The crew is safe.",
+        "ja": "{days}が終わって、クルーはぶじです。"
+      }
     },
     {
       "id": "storm-watch",
-      "title": { "en": "Storm Watch", "ja": "あらしウォッチ" },
-      "goal": { "en": "A real DONKI storm is coming. Learn shelter and shielding.", "ja": "DONKIの本もののあらしが来る。シェルターとシールドを学ぼう。" },
+      "title": {
+        "en": "Storm Watch",
+        "ja": "あらしウォッチ"
+      },
+      "goal": {
+        "en": "A real DONKI storm is coming. Learn shelter and shielding.",
+        "ja": "DONKIの本もののあらしが来る。シェルターとシールドを学ぼう。"
+      },
       "lunarDays": 1,
-      "events": [{ "lunarDay": 1, "roundInDay": 2, "type": "storm" }],
+      "events": [
+        {
+          "lunarDay": 1,
+          "roundInDay": 2,
+          "type": "storm"
+        }
+      ],
       "unlock": "after",
       "after": "ice-rescue",
       "star3": "shelter",
-      "facts": ["flare_classes", "regolith_shield"],
-      "discuss": { "en": "When is shelter safer than keeping the work going?", "ja": "しごとをつづけるより、シェルターが安全なのはどんなとき？" }
+      "facts": [
+        "flare_classes",
+        "regolith_shield"
+      ],
+      "discuss": {
+        "en": "When is shelter safer than keeping the work going?",
+        "ja": "しごとをつづけるより、シェルターが安全なのはどんなとき？"
+      },
+      "intro": {
+        "en": "Storm Watch begins. You have {days}. A real storm is on the list.",
+        "ja": "あらしウォッチがはじまります。時間は{days}。本物のあらしが予定に入っています。"
+      },
+      "outro": {
+        "en": "You finished {days}, and the crew is safe.",
+        "ja": "{days}が終わって、クルーはぶじです。"
+      }
     },
     {
       "id": "moon-garden",
-      "title": { "en": "Moon Garden", "ja": "月のにわ" },
-      "goal": { "en": "Keep the greenhouse lights on and learn about plants in Moon soil.", "ja": "温室のライトをつけて、月の土のしょくぶつを学ぼう。" },
+      "title": {
+        "en": "Moon Garden",
+        "ja": "月のにわ"
+      },
+      "goal": {
+        "en": "Keep the greenhouse lights on and learn about plants in Moon soil.",
+        "ja": "温室のライトをつけて、月の土のしょくぶつを学ぼう。"
+      },
       "lunarDays": 1,
       "events": [],
       "unlock": "after",
       "after": "storm-watch",
       "star3": "lights",
-      "facts": ["regolith_plants"],
-      "discuss": { "en": "Plants grew in Apollo soil, but how did they look?", "ja": "アポロの土でしょくぶつは育った。でもようすはどうだった？" }
+      "facts": [
+        "regolith_plants"
+      ],
+      "discuss": {
+        "en": "Plants grew in Apollo soil, but how did they look?",
+        "ja": "アポロの土でしょくぶつは育った。でもようすはどうだった？"
+      },
+      "intro": {
+        "en": "Moon Garden begins. You have {days}. The lights help the plants.",
+        "ja": "月のにわがはじまります。時間は{days}。ライトは植物の助けになります。"
+      },
+      "outro": {
+        "en": "You finished {days}. The crew is safe.",
+        "ja": "{days}が終わって、クルーはぶじです。"
+      }
     },
     {
       "id": "full-mission",
-      "title": { "en": "Full Mission", "ja": "フルミッション" },
-      "goal": { "en": "Three lunar days. Everything together.", "ja": "月の3日間。全部まとめて。" },
+      "title": {
+        "en": "Full Mission",
+        "ja": "フルミッション"
+      },
+      "goal": {
+        "en": "Three lunar days. Everything together.",
+        "ja": "月の3日間。全部まとめて。"
+      },
       "lunarDays": 3,
       "events": null,
       "unlock": "after",
       "after": "moon-garden",
       "star3": "shelter",
-      "facts": ["eclss_what", "donki_what"],
-      "discuss": { "en": "What does Earth give us that the base had to make?", "ja": "きちが作らなければならなかったもので、ちきゅうがくれるものは？" }
+      "facts": [
+        "eclss_what",
+        "donki_what"
+      ],
+      "discuss": {
+        "en": "What does Earth give us that the base had to make?",
+        "ja": "きちが作らなければならなかったもので、ちきゅうがくれるものは？"
+      },
+      "intro": {
+        "en": "The full mission begins. You have {days}.",
+        "ja": "フルミッションがはじまります。時間は{days}です。"
+      },
+      "outro": {
+        "en": "You finished {days}, and the whole crew is safe.",
+        "ja": "{days}が終わって、クルーはみんなぶじです。"
+      }
     },
     {
       "id": "mission-day",
-      "title": { "en": "Mission of the Day", "ja": "きょうのミッション" },
-      "goal": { "en": "Today's seed uses the newest saved storm file, labeled honestly.", "ja": "きょうのシードは、いちばん新しい保存データ。ラベルは正直に出ます。" },
+      "title": {
+        "en": "Mission of the Day",
+        "ja": "きょうのミッション"
+      },
+      "goal": {
+        "en": "Today's seed uses the newest saved storm file, labeled honestly.",
+        "ja": "きょうのシードは、いちばん新しい保存データ。ラベルは正直に出ます。"
+      },
       "lunarDays": 1,
-      "events": [{ "lunarDay": 1, "roundInDay": 1, "type": "storm" }],
+      "events": [
+        {
+          "lunarDay": 1,
+          "roundInDay": 1,
+          "type": "storm"
+        }
+      ],
       "daily": true,
       "unlock": "after",
       "after": "full-mission",
       "star3": "shelter",
-      "facts": ["donki_what"],
-      "discuss": { "en": "Was today's storm labeled updated, saved, or training?", "ja": "きょうのあらしのラベルは、更新、保存、それとも訓練？" }
+      "facts": [
+        "donki_what"
+      ],
+      "discuss": {
+        "en": "Was today's storm labeled updated, saved, or training?",
+        "ja": "きょうのあらしのラベルは、更新、保存、それとも訓練？"
+      },
+      "intro": {
+        "en": "Mission of the Day begins. You have {days}. Today's storm uses the newest saved file.",
+        "ja": "きょうのミッションがはじまります。時間は{days}。きょうのあらしは、いちばん新しい保存ファイルです。"
+      },
+      "outro": {
+        "en": "You finished {days}, and the crew is safe.",
+        "ja": "{days}が終わって、クルーはぶじです。"
+      }
     },
     {
       "id": "challenge",
-      "title": { "en": "Challenge Mode", "ja": "チャレンジ" },
-      "goal": { "en": "Harder start numbers. Share the seed code.", "ja": "スタートがきびしい。シードコードを友だちにわたそう。" },
+      "title": {
+        "en": "Challenge Mode",
+        "ja": "チャレンジ"
+      },
+      "goal": {
+        "en": "Harder start numbers. Earn 100 Mission Points for the third star. Share the mission code.",
+        "ja": "スタートがきびしい。3つ目の星はミッションポイント100。ミッションコードを友だちにわたそう。"
+      },
       "lunarDays": 3,
       "events": null,
-      "start": { "power": 45, "life": 55, "shield": 20, "missionPoints": 0 },
+      "start": {
+        "power": 45,
+        "life": 55,
+        "shield": 20,
+        "missionPoints": 0
+      },
       "chooseSeed": true,
       "unlock": "after",
       "after": "full-mission",
-      "star3": "bars",
-      "facts": ["water_98"],
-      "discuss": { "en": "Which bar ran lowest, and what would you change first?", "ja": "どのバーがいちばんへった？最初に何を変える？" }
+      "star3": "points",
+      "facts": [
+        "water_98"
+      ],
+      "discuss": {
+        "en": "Which bar ran lowest, and what would you change first?",
+        "ja": "どのバーがいちばんへった？最初に何を変える？"
+      },
+      "intro": {
+        "en": "Challenge Mode begins. You have {days}, and the start is harder. 100 Mission Points earns the third star.",
+        "ja": "チャレンジがはじまります。時間は{days}で、スタートはきびしいです。ミッションポイント100で3つ目の星です。"
+      },
+      "outro": {
+        "en": "You finished {days}. The crew is safe.",
+        "ja": "{days}が終わって、クルーはぶじです。"
+      },
+      "star3Need": 100
     }
   ]
 }

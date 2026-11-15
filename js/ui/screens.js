@@ -7,6 +7,13 @@ import { portrait, playerBadge } from "./characters.js";
 import { dataChip } from "./modals.js";
 import { jobWeights } from "../engine/rules.js";
 import { dailySeed, isUnlocked, rankFor, totalStars } from "./progress.js";
+
+export function starIcons(count, label) {
+  const marks = [1, 2, 3].map((n) =>
+    h("span", { class: `star-icon${n <= count ? " is-on" : ""}`, html: icon("star"), "aria-hidden": "true" })
+  );
+  return h("p", { class: "star-row", "aria-label": label }, marks);
+}
 import { LANGUAGES } from "./i18n.js";
 
 const LANGUAGE_NAMES = { en: "English", ja: "\u65e5\u672c\u8a9e" };
@@ -44,7 +51,7 @@ function flareBanner(i18n, stormInfo) {
   ]);
 }
 
-export function renderTitle(root, { i18n, content, stormInfo, demo, nameOf, onStart, onData, onTeachers, onSettings, onLang }) {
+export function renderTitle(root, { i18n, content, stormInfo, demo, nameOf, onStart, onData, onTeachers, onSettings, onCredits, onLang }) {
   const config = content.config;
   clear(root).append(
     h("div", { class: "title-card" }, [
@@ -61,10 +68,11 @@ export function renderTitle(root, { i18n, content, stormInfo, demo, nameOf, onSt
         h("button", { type: "button", class: "btn btn-primary btn-big", id: "start-button", text: i18n.t("title.start"), onclick: onStart }),
         h("button", { type: "button", class: "btn btn-choice", id: "data-button", text: i18n.t("title.data"), onclick: onData }),
         h("button", { type: "button", class: "btn btn-choice", id: "teachers-button", text: i18n.t("title.teachers"), onclick: onTeachers }),
-        h("button", { type: "button", class: "btn btn-quiet", id: "settings-button", onclick: onSettings }, [h("span", { html: icon("gear") }), i18n.t("title.settings")])
+        h("button", { type: "button", class: "btn btn-quiet", id: "settings-button", onclick: onSettings }, [h("span", { html: icon("gear") }), i18n.t("title.settings")]),
+        h("button", { type: "button", class: "btn btn-quiet", id: "credits-button", text: i18n.t("title.credits"), onclick: onCredits })
       ]),
       flareBanner(i18n, stormInfo),
-      h("p", { class: "title-foot small", text: i18n.t("title.foot") })
+      h("p", { class: "title-foot small" }, [i18n.t("title.foot")])
     ])
   );
 }
@@ -82,7 +90,6 @@ export function renderSetup(root, { i18n, content, player, onBack, onBegin }) {
     value: player.name || "",
     placeholder: i18n.pick(content.config.defaultPlayerName)
   });
-  const practice = h("input", { type: "checkbox", id: "practice-toggle", checked: player.practice !== false });
   const swatches = h("div", { class: "helmet-colors", role: "radiogroup", "aria-label": i18n.t("setup.helmet") });
 
   function paintSwatches() {
@@ -114,7 +121,7 @@ export function renderSetup(root, { i18n, content, player, onBack, onBegin }) {
       onsubmit: (event) => {
         event.preventDefault();
         const name = nameInput.value.trim().slice(0, 12) || i18n.pick(content.config.defaultPlayerName);
-        onBegin({ name, helmet, practice: practice.checked });
+        onBegin({ name, helmet });
       }
     },
     [
@@ -126,7 +133,6 @@ export function renderSetup(root, { i18n, content, player, onBack, onBegin }) {
       h("p", { class: "small", text: i18n.t("setup.nameNote") }),
       h("p", { class: "field-label", text: i18n.t("setup.helmet") }),
       swatches,
-      h("label", { class: "check-row", for: "practice-toggle" }, [practice, h("span", { text: i18n.t("setup.practice") })]),
       h("div", { class: "setup-actions" }, [
         h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("ui.back"), onclick: onBack }),
         h("button", { type: "submit", class: "btn btn-primary btn-big", id: "begin-button", text: i18n.t("setup.begin") })
@@ -283,7 +289,21 @@ export function openSettings(modals, { i18n, settings, onChange }) {
   return modals.open({ title: i18n.t("title.settings"), tone: "plain", dismissible: true, body, actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }] });
 }
 
-export function renderMap(root, { i18n, missions, progress, demo = false, onPlay, onJournal, onReset, onHome }) {
+const CUTSCENE_KEYS = {
+  opening: "cut.opening.1",
+  arrival: "cut.arrival.1",
+  nightfall: "cut.night.1",
+  rescue: "cut.rescue.1",
+  stormShelter: "cut.storm.1",
+  stormWork: "cut.storm.1",
+  discovery: "cut.find.1",
+  greenhouse: "cut.green.1",
+  rank: "cut.rank.1",
+  endingComplete: "cut.end.1",
+  endingPaused: "cut.home.1"
+};
+
+export function renderMap(root, { i18n, missions, progress, demo = false, urlSeed = null, onPlay, onJournal, onReset, onHome, onSettings, onIntro, onReplay }) {
   const stars = totalStars(progress);
   const rank = rankFor(stars);
   const nodes = h("ol", { class: "mission-path" });
@@ -292,7 +312,14 @@ export function renderMap(root, { i18n, missions, progress, demo = false, onPlay
     const earned = progress.stars?.[mission.id] || 0;
     const seedNote = mission.daily ? i18n.t("map.daily", { seed: dailySeed() }) : "";
     const seedInput = mission.chooseSeed
-      ? h("input", { type: "number", class: "text-input seed-input", min: "1", max: "999999", value: "1234", "aria-label": i18n.t("map.seed") })
+      ? h("input", {
+          type: "number",
+          class: "text-input seed-input",
+          min: "1",
+          max: "999999",
+          value: String(urlSeed || 1234),
+          "aria-label": i18n.t("map.seed")
+        })
       : null;
     nodes.append(
       h("li", { class: `mission-node${open ? "" : " is-locked"}` }, [
@@ -300,7 +327,7 @@ export function renderMap(root, { i18n, missions, progress, demo = false, onPlay
           h("h2", { text: i18n.pick(mission.title) }),
           h("p", { text: open ? i18n.pick(mission.goal) : i18n.t("map.locked") }),
           seedNote ? h("p", { class: "small", text: seedNote }) : null,
-          h("p", { class: "mission-stars", text: i18n.t("map.starCount", { n: earned }) }),
+          starIcons(earned, i18n.t("map.starCount", { n: earned })),
           seedInput,
           h("button", {
             type: "button",
@@ -318,10 +345,29 @@ export function renderMap(root, { i18n, missions, progress, demo = false, onPlay
   }
   const badges = ["storm", "night", "water", "green", "science", "careful", "fix"].map((id) =>
     h("li", { class: progress.badges?.includes(id) ? "is-earned" : "is-locked" }, [
+      h("span", { class: "badge-mark", html: icon(progress.badges?.includes(id) ? "check" : "lock"), "aria-hidden": "true" }),
       h("strong", { text: i18n.t(`badge.${id}`) }),
       h("span", { class: "small", text: progress.badges?.includes(id) ? i18n.t("map.earned") : i18n.t("map.badgeLocked") })
     ])
   );
+  const seen = progress.seen?.cutscenes || [];
+  const replay = seen.length
+    ? h("div", { class: "cutscene-list" }, [
+        h("h2", { text: i18n.t("map.cutscenes") }),
+        h(
+          "div",
+          { class: "title-actions" },
+          seen.map((id) =>
+            h("button", {
+              type: "button",
+              class: "btn btn-quiet",
+              text: i18n.has(CUTSCENE_KEYS[id]) ? i18n.t(CUTSCENE_KEYS[id]) : id,
+              onclick: () => onReplay(id)
+            })
+          )
+        )
+      ])
+    : null;
   clear(root).append(
     h("div", { class: "title-card map-card" }, [
       h("h1", { text: i18n.t("map.title") }),
@@ -330,8 +376,11 @@ export function renderMap(root, { i18n, missions, progress, demo = false, onPlay
       nodes,
       h("h2", { text: i18n.t("map.badges") }),
       h("ul", { class: "badge-shelf" }, badges),
+      replay,
       h("div", { class: "title-actions" }, [
+        h("button", { type: "button", class: "btn btn-choice", text: i18n.t("map.watchIntro"), onclick: onIntro }),
         h("button", { type: "button", class: "btn btn-choice", text: i18n.t("map.journal"), onclick: onJournal }),
+        h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("title.settings"), onclick: onSettings }),
         h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("map.reset"), onclick: onReset }),
         h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("ui.home"), onclick: onHome })
       ])
@@ -339,9 +388,10 @@ export function renderMap(root, { i18n, missions, progress, demo = false, onPlay
   );
 }
 
-export function openJournal(modals, { i18n, facts, progress }) {
+export function openJournal(modals, { i18n, facts, progress, cards = [] }) {
+  const learned = (cards || []).filter((card) => (progress.quiz?.[card.id]?.box || 0) >= 2);
   const verified = [...facts.values()].filter((fact) => fact.status === "verified");
-  const cards = verified.map((fact) => {
+  const pages = verified.map((fact) => {
     const open = progress.journal?.includes(fact.id);
     return h("article", { class: `journal-card${open ? "" : " is-locked"}` }, [
       h("h3", { text: open ? i18n.pick(fact.text) : i18n.t("journal.locked") }),
@@ -353,7 +403,16 @@ export function openJournal(modals, { i18n, facts, progress }) {
     tone: "data",
     wide: true,
     dismissible: true,
-    body: cards.length ? cards : [h("p", { text: i18n.t("journal.empty") })],
+    body: [
+      ...pages,
+      ...learned.map((card) =>
+        h("article", { class: "journal-card" }, [
+          h("h3", { text: i18n.pick(card.q) }),
+          sourceLink(card.source.url, card.source.name)
+        ])
+      ),
+      pages.length + learned.length === 0 ? h("p", { text: i18n.t("journal.empty") }) : null
+    ],
     actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }]
   });
 }

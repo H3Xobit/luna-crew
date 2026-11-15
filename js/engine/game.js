@@ -25,13 +25,13 @@ export function createGame(options = {}) {
   const config = mergeConfig(defaultConfig, options.config);
   const seed = Number.isFinite(options.seed) ? options.seed >>> 0 : 1;
   const demo = Boolean(options.demo);
-  const practice = Boolean(options.practice);
   const wait = options.wait || defaultWait;
   const stormData = options.stormData || { events: [], label: { kind: "training", date: null } };
+  const stormMode = options.stormMode || "weighted";
   const nasaContent = options.nasaChoice || { lines: [] };
-  const schedule = practice ? [] : scheduleFor(config, demo);
+  const schedule = scheduleFor(config, demo);
   const stormRng = createRng(subSeed(seed, "storm"));
-  const quiz = createQuiz(options.cards, createRng(subSeed(seed, "quiz")));
+  const quiz = createQuiz(options.cards, createRng(subSeed(seed, "quiz")), options.quizRecords || {});
   const handlers = new Map();
 
   let state = createState(seed, config);
@@ -85,7 +85,7 @@ export function createGame(options = {}) {
     if (state.repairQueued) queue.push(buildEvent("repair", config));
     const type = scheduledType(schedule, position.lunarDay, position.roundInDay);
     if (type === "storm") {
-      if (!storm) storm = pickStorm(stormRng, stormData, config);
+      if (!storm) storm = pickStorm(stormRng, stormData, config, stormMode);
       state.storm = storm;
       state.roundEvent = buildEvent("storm", config, storm);
       queue.push(state.roundEvent);
@@ -114,7 +114,6 @@ export function createGame(options = {}) {
     config,
     seed,
     demo,
-    practice,
     get state() {
       return cloneState(state);
     },
@@ -183,7 +182,7 @@ export function createGame(options = {}) {
       if (!outcome.ok) return fail(outcome.error);
       state = outcome.state;
       emit("resolved", outcome.result);
-      setPhase(practice ? "practiceDone" : "result");
+      setPhase("result");
       return { ok: true, result: outcome.result };
     },
     // Moves on from a screen that has no choice on it.
@@ -234,6 +233,9 @@ export function createGame(options = {}) {
       state.quizResult = result;
       setPhase("quizDone");
       return { ok: true, ...result };
+    },
+    quizRecords() {
+      return quiz.snapshot();
     },
     summary() {
       const roundsDone = state.log.length;

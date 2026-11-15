@@ -20,6 +20,10 @@ UI strings live in `data/i18n/en.json` and `ja.json`. Story, cards and facts car
 
 Plain ES modules, static hosting, Web Audio beeps, SVG scene. Easy to fork for a classroom or a GitHub Pages deploy.
 
+## Storms come from one pool
+
+`data/latest.json` and `data/storms.json` are combined. Each event keeps the honest label of the file it came from. Latest wins when the id is in both. Mission of the Day uses only the latest file. Storm Watch uses a level 2 storm. Other missions roll about 50 percent level 2, 35 percent level 3 and 15 percent level 4, and fall back when a level is missing. `?demo=1` with no seed shows the archive's strongest flare. The daily mission seed uses the player's local calendar date, not UTC.
+
 ## Campaign saves on this browser only
 
 Missions reuse the same round engine. A mission may change the number of lunar days, which rounds are night, the start bars, and the event list. Full Mission and Challenge keep the normal three-day event list. Progress (stars, badges, journal, rank) is stored in localStorage under `luna-crew-progress`. Reset clears that key. No account and no player name is written there. The name stays in the older player settings key.

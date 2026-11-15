@@ -67,6 +67,22 @@ test("greenhouse on grows life and uses power", () => {
   assert.deepEqual(applyGreenhouse(off, config), config.greenhouse.off);
 });
 
+test("forecast includes the known Study life cost", () => {
+  const state = createState(1, config);
+  state.eventChoice = "study";
+  state.lightsOn = false;
+  const plain = createState(1, config);
+  plain.lightsOn = false;
+  const plan = { power: 2, life: 2, shield: 2, science: 0 };
+  const withStudy = forecastRound(state, plan, config);
+  const without = forecastRound(plain, plan, config);
+  assert.equal(withStudy.life, Math.max(0, without.life - config.discovery.lifeCost));
+  assert.equal(withStudy.missionPoints, without.missionPoints + config.discovery.points);
+  state.roundEvent = { type: "storm" };
+  state.eventChoice = "keepWorking";
+  assert.deepEqual(forecastRound(state, plan, config).warn, ["life", "shield"]);
+});
+
 test("forecastRound matches resolveRound bars before events", () => {
   const state = createState(1, config);
   state.isNight = false;

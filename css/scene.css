@@ -1,7 +1,7 @@
 .scene {
   position: relative;
   overflow: hidden;
-  background: #05060f;
+  background: linear-gradient(#1a2748 0 62%, #2a241c 62% 100%);
   min-height: 180px;
 }
 

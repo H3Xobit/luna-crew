@@ -22,7 +22,7 @@ test("labelText and labelKey cover every honesty kind", () => {
   assert.equal(labelKey({ kind: "mystery" }).key, "label.training");
 });
 
-test("chooseStormSource prefers latest, then archive, then training", () => {
+test("chooseStormSource pools both files and keeps each event's own label", () => {
   const empty = chooseStormSource(null, null);
   assert.equal(empty.label.kind, "training");
   assert.equal(empty.events.length, 0);
@@ -30,28 +30,29 @@ test("chooseStormSource prefers latest, then archive, then training", () => {
   const saved = {
     status: "ok",
     fetchedAt: "2026-10-01T00:00:00.000Z",
+    strongestFlare: { id: "FLR-X", date: "2026-05-14T00:00:00Z", classType: "X8.7", link: "https://example.test/x" },
     events: [
-      {
-        id: "FLR-1",
-        type: "FLR",
-        date: "2026-09-01T12:00:00Z",
-        link: "https://example.test/flr",
-        classType: "M1.0"
-      }
+      { id: "FLR-1", type: "FLR", date: "2026-09-01T12:00:00Z", link: "https://example.test/flr", classType: "M1.0" },
+      { id: "FLR-X", type: "FLR", date: "2026-05-14T00:00:00Z", link: "https://example.test/x", classType: "X8.7" }
     ]
   };
   const fromSaved = chooseStormSource({ status: "empty" }, saved);
-  assert.equal(fromSaved.label.kind, "saved");
-  assert.equal(fromSaved.events.length, 1);
+  assert.equal(fromSaved.events.length, 2);
+  assert.equal(fromSaved.events[0].label.kind, "saved");
+  assert.equal(fromSaved.strongest.classType, "X8.7");
+  assert.equal(fromSaved.strongest.label.kind, "saved");
 
   const latest = {
     status: "ok",
     fetchedAt: "2026-11-14T03:00:00.000Z",
-    events: saved.events
+    events: [{ id: "FLR-1", type: "FLR", date: "2026-11-07T12:00:00Z", link: "https://example.test/new", classType: "M2.0" }]
   };
-  const fromLatest = chooseStormSource(latest, saved);
-  assert.equal(fromLatest.label.kind, "updated");
-  assert.match(fromLatest.label.date, /UTC/);
+  const pooled = chooseStormSource(latest, saved);
+  assert.equal(pooled.events.length, 2);
+  assert.equal(pooled.events.find((event) => event.id === "FLR-1").label.kind, "updated");
+  assert.equal(pooled.events.find((event) => event.id === "FLR-X").label.kind, "saved");
+  assert.equal(pooled.latestEvents.length, 1);
+  assert.match(pooled.events[0].label.date, /UTC/);
 });
 
 test("usableEvents drops broken rows", () => {

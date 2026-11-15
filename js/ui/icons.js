@@ -32,6 +32,8 @@ const ICONS = {
     '<path d="m5 12.500 4.500 4.500L19 7.500" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>',
   alert:
     '<path d="M12 2 1 21h22L12 2Zm-1 7h2v6h-2V9Zm0 8h2v2h-2v-2Z" fill="currentColor" fill-rule="evenodd"/>',
+  lock:
+    '<path d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1Zm2 0h6V7a3 3 0 0 0-6 0v3Z" fill="currentColor"/>',
   book:
     '<path d="M4 4h7a3 3 0 0 1 1 .200A3 3 0 0 1 13 4h7v15h-7a1 1 0 0 0-1 1 1 1 0 0 0-1-1H4V4Zm2 2v11h5V6H6Zm7 0v11h5V6h-5Z" fill="currentColor" fill-rule="evenodd"/>'
 };

@@ -45,7 +45,18 @@ html[data-contrast="high"] {
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
+  min-height: 100%;
+  background:
+    radial-gradient(1200px 700px at 12% -10%, rgba(127, 212, 255, 0.28), transparent 55%),
+    radial-gradient(900px 600px at 92% 8%, rgba(255, 209, 102, 0.18), transparent 50%),
+    radial-gradient(800px 500px at 70% 100%, rgba(94, 224, 138, 0.12), transparent 45%),
+    linear-gradient(165deg, #070b1c 0%, #121833 42%, #0b1024 100%);
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
 }
+
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -55,12 +66,7 @@ body {
   font-size: var(--text);
   line-height: 1.45;
   color: var(--paper);
-  background:
-    radial-gradient(1200px 700px at 12% -10%, rgba(127, 212, 255, 0.28), transparent 55%),
-    radial-gradient(900px 600px at 92% 8%, rgba(255, 209, 102, 0.18), transparent 50%),
-    radial-gradient(800px 500px at 70% 100%, rgba(94, 224, 138, 0.12), transparent 45%),
-    linear-gradient(165deg, #070b1c 0%, #121833 42%, #0b1024 100%);
-  background-attachment: fixed;
+  background: transparent;
 }
 
 body.modal-open,

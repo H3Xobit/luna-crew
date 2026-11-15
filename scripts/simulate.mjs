@@ -145,7 +145,11 @@ export function checkTargets(rows) {
 async function main() {
   const games = Number.parseInt(process.argv[2] || "200", 10) || 200;
   const data = await loadData();
-  console.log(`Storm data: ${labelText(data.stormData.label)} (${data.stormData.events.length} events)`);
+  const events = data.stormData.events || [];
+  const updated = events.filter((event) => event.label?.kind === "updated").length;
+  const saved = events.filter((event) => event.label?.kind === "saved").length;
+  const summary = events.length === 0 ? labelText(data.stormData.label) : `${updated} updated, ${saved} saved`;
+  console.log(`Storm data: ${summary} (${events.length} events)`);
   console.log(`Quiz cards: ${usableCards(data.cards).length} verified of ${data.cards.length}`);
   console.log("");
   console.log("strategy       wins      win rate  avg score  paused by (power / life / shield)");

@@ -52,11 +52,7 @@ export function trainingStorm(config) {
   };
 }
 
-// stormData: { events: [...], label: { kind, date } } as built by js/data/storms.js.
-export function pickStorm(rng, stormData, config) {
-  const events = Array.isArray(stormData?.events) ? stormData.events : [];
-  if (events.length === 0) return trainingStorm(config);
-  const event = events[rng.int(events.length)];
+function eventToStorm(event, config) {
   return {
     type: "storm",
     real: true,
@@ -67,8 +63,38 @@ export function pickStorm(rng, stormData, config) {
     hasLinkedSEP: Boolean(event.hasLinkedSEP),
     link: event.link,
     severity: severityOf(event, config),
-    label: { kind: stormData.label.kind, date: stormData.label.date }
+    label: event.label || { kind: "saved", date: null }
   };
+}
+
+function bucket(events, config, level) {
+  return events.filter((event) => severityOf(event, config) === level);
+}
+
+// mode: weighted (50% level 2, 35% level 3, 15% level 4), level2, latest, strongest.
+export function pickStorm(rng, stormData, config, mode = "weighted") {
+  const all = Array.isArray(stormData?.events) ? stormData.events : [];
+  let events = all;
+  if (mode === "latest") {
+    const fresh = Array.isArray(stormData?.latestEvents) ? stormData.latestEvents : [];
+    events = fresh.length > 0 ? fresh : all;
+  }
+  if (mode === "strongest" && stormData?.strongest) return eventToStorm(stormData.strongest, config);
+  if (events.length === 0) return trainingStorm(config);
+  if (mode === "level2") {
+    const mild = bucket(events, config, 2);
+    const pool = mild.length > 0 ? mild : events;
+    return eventToStorm(pool[rng.int(pool.length)], config);
+  }
+  if (mode === "uniform") return eventToStorm(events[rng.int(events.length)], config);
+  const roll = rng.int(100);
+  const want = roll < 50 ? 2 : roll < 85 ? 3 : 4;
+  const order = [want, 2, 3, 4, 1].filter((level, index, list) => list.indexOf(level) === index);
+  for (const level of order) {
+    const found = bucket(events, config, level);
+    if (found.length > 0) return eventToStorm(found[rng.int(found.length)], config);
+  }
+  return eventToStorm(events[rng.int(events.length)], config);
 }
 
 export function buildEvent(type, config, storm) {

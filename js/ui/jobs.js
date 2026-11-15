@@ -22,7 +22,18 @@ const WHY_FACT = {
   science: "regolith_plants"
 };
 
-export function createJobsPanel(root, { i18n, audio, config, facts, onChange, onLights, onAsk, onGo }) {
+export function hintText(i18n, job, state, config) {
+  const weights = jobWeights(state, config);
+  if (job === "power") {
+    const text = i18n.t(state.isNight ? "job.power.hintNight" : "job.power.hintDay", { n: weights.power.perPoint });
+    return weights.power.damaged ? `${text} ${i18n.t("job.power.damaged")}` : text;
+  }
+  if (job === "life") return i18n.t("job.life.hint", { n: weights.life.perPoint, per: weights.life.powerCostPer });
+  if (job === "shield") return i18n.t("job.shield.hint", { n: weights.shield.perPoint });
+  return i18n.t("job.science.hint", { n: weights.science.perPoint });
+}
+
+export function createJobsPanel(root, { i18n, audio, config, facts, modals, onChange, onLights, onAsk, onGo }) {
   let plan = emptyPlan();
   let available = config.baseWorkPoints;
   let state = null;
@@ -50,19 +61,18 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
     const value = h("output", { class: "job-value", text: "0" });
     const minus = h("button", { type: "button", class: "step step-minus", text: "\u2212", onclick: () => change(job, -1) });
     const plus = h("button", { type: "button", class: "step step-plus", text: "+", onclick: () => change(job, 1) });
-    const whyBody = h("div", { class: "why-body", hidden: true });
     const why = h("button", {
       type: "button",
-      class: "btn btn-quiet why-button",
-      "aria-expanded": "false",
-      onclick: () => toggleWhy(job)
+      class: "job-why",
+      text: "?",
+      onclick: () => openWhy(job)
     });
     const row = h("div", { class: `job job-${job}`, id: `job-${job}`, dataset: { job } }, [
       h("span", { class: "job-icon", html: icon(job) }),
-      h("div", { class: "job-text" }, [name, what, hint, why, whyBody]),
+      h("div", { class: "job-text" }, [h("div", { class: "job-titleline" }, [name, why]), what, hint]),
       h("div", { class: "job-stepper", role: "group" }, [minus, value, plus])
     ]);
-    rows[job] = { row, name, what, hint, value, minus, plus, why, whyBody, open: false };
+    rows[job] = { row, name, what, hint, value, minus, plus, why };
     list.append(row);
   }
 
@@ -124,11 +134,18 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
 
   clear(root).append(briefing, header, shelterNote, list, lights, h("div", { class: "jobs-actions" }, [ask, go]));
 
-  function toggleWhy(job) {
-    const row = rows[job];
-    row.open = !row.open;
+  function openWhy(job) {
+    if (!modals || !state) return;
     audio.play("tap");
-    paint();
+    const weights = jobWeights(state, config);
+    paintWhy(job, weights);
+    modals.open({
+      title: i18n.t(`job.${job}.name`),
+      tone: "plain",
+      dismissible: true,
+      body: [rows[job].whyNodes],
+      actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }]
+    });
   }
 
   function factLine(job) {
@@ -178,7 +195,7 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
       changes = i18n.t("why.lifeChanges");
     } else if (job === "shield") {
       now = i18n.t("why.shieldNow", { n: weight.perPoint });
-      if (weight.stormLevel) now += ` ${i18n.t("why.shieldStorm", { level: weight.stormLevel, line: weight.line, base: weight.linePerLevel })}`;
+      if (weight.stormLevel) now += ` ${i18n.t("why.shieldStorm", { n: weight.stormLevel, need: weight.line })}`;
       changes = i18n.t("why.shieldChanges");
     } else {
       now = i18n.t("why.scienceNow", { n: weight.perPoint });
@@ -188,7 +205,7 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
     if (job === "power") icons.push(weight.isNight ? "moon" : "sun");
     if (job === "power" && weight.damaged) icons.push("alert");
     if (job === "shield" && weight.stormLevel) icons.push("alert");
-    clear(row.whyBody).append(
+    row.whyNodes = h("div", { class: "why-body" }, [
       h("p", { class: "why-now", text: now }),
       h("p", { class: "why-changes" }, [
         h("span", { class: "why-icons", html: icons.map((name) => icon(name)).join(""), "aria-hidden": "true" }),
@@ -196,19 +213,11 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
       ]),
       h("p", { class: "why-reason", text: i18n.t(`why.reason.${job}`) }),
       factLine(job)
-    );
+    ]);
   }
 
   function hintFor(job) {
-    const jobs = config.jobs;
-    if (job === "power") {
-      const rate = state.isNight ? jobs.power.night : jobs.power.day;
-      const text = i18n.t(state.isNight ? "job.power.hintNight" : "job.power.hintDay", { n: rate });
-      return state.panelsDamaged ? `${text} ${i18n.t("job.power.damaged")}` : text;
-    }
-    if (job === "life") return i18n.t("job.life.hint", { n: jobs.life.gain, per: jobs.life.powerCostPer });
-    if (job === "shield") return i18n.t("job.shield.hint", { n: jobs.shield.gain });
-    return i18n.t("job.science.hint", { n: jobs.science.gain });
+    return hintText(i18n, job, state, config);
   }
 
   function paint() {
@@ -240,7 +249,8 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
       ahead: "brief.ahead"
     }[brief];
     briefText.textContent = i18n.t(briefKey, {
-      n: brief === "storm" ? weights.shield.times : weights.power.night
+      n: brief === "storm" ? weights.shield.stormLevel : weights.power.night,
+      need: weights.shield.line || 0
     });
     const briefIconNames = brief === "storm" ? ["alert", "shield"] : brief === "panels" ? ["power", "alert"] : brief === "life" ? ["life"] : brief === "night" ? ["moon", "power"] : ["sun", "moon"];
     briefIcons.innerHTML = briefIconNames.map((name) => icon(name)).join("");
@@ -258,10 +268,8 @@ export function createJobsPanel(root, { i18n, audio, config, facts, onChange, on
       row.plus.setAttribute("aria-label", i18n.t("jobs.more", { job: i18n.t(`job.${job}.name`) }));
       row.row.classList.toggle("has-points", plan[job] > 0);
       row.row.classList.toggle("is-off", sheltered);
-      row.why.textContent = i18n.t(row.open ? "why.hide" : "why.button");
-      row.why.setAttribute("aria-expanded", row.open ? "true" : "false");
-      row.whyBody.hidden = !row.open;
-      if (row.open) paintWhy(job, weights);
+      row.why.setAttribute("aria-label", i18n.t("why.button"));
+      row.why.disabled = locked;
     }
 
     const on = state.lightsOn;

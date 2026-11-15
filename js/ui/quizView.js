@@ -4,7 +4,7 @@
 import { h, sourceLink } from "./dom.js";
 import { icon } from "./icons.js";
 
-export async function askQuiz(modals, { i18n, card }) {
+export async function askQuiz(modals, { i18n, card, hasNextRound = true }) {
   const answer = await modals.open({
     title: i18n.t("quiz.title"),
     tone: "quiz",
@@ -12,7 +12,7 @@ export async function askQuiz(modals, { i18n, card }) {
     body: [
       card.repeat ? h("p", { class: "quiz-repeat", text: i18n.t("quiz.again") }) : null,
       h("p", { class: "quiz-question", text: i18n.pick(card.q) }),
-      h("p", { class: "small", text: i18n.t("quiz.bonusHint") })
+      h("p", { class: "small", text: i18n.t(hasNextRound ? "quiz.bonusHint" : "quiz.finalHint") })
     ],
     actions: card.options.map((option, index) => ({ id: String(index), label: i18n.pick(option) }))
   });
@@ -36,6 +36,7 @@ export function showQuizAnswer(modals, { i18n, card, result, bonus, hasNextRound
         sourceLink(card.source.url, `${card.source.agency}: ${card.source.name}`)
       ]),
       result.correct && hasNextRound ? h("p", { class: "quiz-bonus", text: i18n.t("quiz.bonus", { n: bonus }) }) : null,
+      result.correct && !hasNextRound ? h("p", { class: "quiz-bonus", text: i18n.t("quiz.journal") }) : null,
       !result.correct ? h("p", { class: "small", text: i18n.t("quiz.comesBack") }) : null
     ],
     actions: [{ id: "next", label: i18n.t("ui.next"), kind: "primary" }]

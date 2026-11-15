@@ -15,7 +15,10 @@
         {
           "who": "nova",
           "expr": "neutral",
-          "lead": { "en": "And one more gift.", "ja": "そして、もうひとつ。" },
+          "lead": {
+            "en": "And one more gift.",
+            "ja": "そして、もうひとつ。"
+          },
           "fact": "earth_shield"
         }
       ]
@@ -47,13 +50,19 @@
         {
           "who": "pip",
           "expr": "excited",
-          "lead": { "en": "Beep! This is our base.", "ja": "ピピッ！ここが、ぼくたちのきちだよ。" },
+          "lead": {
+            "en": "Beep! This is our base.",
+            "ja": "ピピッ！ここが、ぼくたちのきちだよ。"
+          },
           "fact": "south_pole_target"
         },
         {
           "who": "pip",
           "expr": "thinking",
-          "lead": { "en": "It is a strange place.", "ja": "ここは、ふしぎな場しょなんだ。" },
+          "lead": {
+            "en": "It is a strange place.",
+            "ja": "ここは、ふしぎな場しょなんだ。"
+          },
           "fact": "cold_craters"
         }
       ]
@@ -86,8 +95,8 @@
       "expr": "happy",
       "target": null,
       "text": {
-        "en": "Welcome, {player}! I am {sprout}. Let's try one practice round together.",
-        "ja": "ようこそ、{player}！わたしは{sprout}。いっしょに、れんしゅうを 1 回やってみましょう。"
+        "en": "Welcome, {player}! I am {sprout}. This first round shows the four jobs.",
+        "ja": "ようこそ、{player}！わたしは{sprout}。最初の回で、4つのしごとを見てみよう。"
       }
     },
     {
@@ -130,7 +139,10 @@
       "who": "sprout",
       "expr": "happy",
       "target": "job-life",
-      "lead": { "en": "This part is real.", "ja": "これは本当のはなしです。" },
+      "lead": {
+        "en": "This part is real.",
+        "ja": "これは本当のはなしです。"
+      },
       "fact": "eclss_what"
     },
     {
@@ -335,7 +347,10 @@
     {
       "who": "sprout",
       "expr": "excited",
-      "lead": { "en": "Research news for the greenhouse!", "ja": "おんしつの、けんきゅうニュースです！" },
+      "lead": {
+        "en": "Research news for the greenhouse!",
+        "ja": "おんしつの、けんきゅうニュースです！"
+      },
       "fact": "regolith_plants"
     },
     {
@@ -399,7 +414,10 @@
     "2": {
       "who": "pip",
       "expr": "thinking",
-      "lead": { "en": "Look at those shadows!", "ja": "あのかげを見て！" },
+      "lead": {
+        "en": "Look at those shadows!",
+        "ja": "あのかげを見て！"
+      },
       "fact": "long_shadows"
     },
     "3": {
@@ -413,7 +431,10 @@
     "4": {
       "who": "sprout",
       "expr": "happy",
-      "lead": { "en": "See our pink greenhouse glow?", "ja": "おんしつがピンク色に光っているでしょう？" },
+      "lead": {
+        "en": "See our pink greenhouse glow?",
+        "ja": "おんしつがピンク色に光っているでしょう？"
+      },
       "fact": "veggie_pink"
     },
     "5": {
@@ -427,19 +448,28 @@
     "6": {
       "who": "pip",
       "expr": "neutral",
-      "lead": { "en": "Why do I pile dirt on the roof?", "ja": "どうして、やねに土をつむのかって？" },
+      "lead": {
+        "en": "Why do I pile dirt on the roof?",
+        "ja": "どうして、やねに土をつむのかって？"
+      },
       "fact": "regolith_shield"
     },
     "7": {
       "who": "sprout",
       "expr": "happy",
-      "lead": { "en": "Space crews are great at saving water.", "ja": "うちゅうのクルーは、水をとても大切にします。" },
+      "lead": {
+        "en": "Space crews are great at saving water.",
+        "ja": "うちゅうのクルーは、水をとても大切にします。"
+      },
       "fact": "water_98"
     },
     "8": {
       "who": "sprout",
       "expr": "happy",
-      "lead": { "en": "Fresh food in space is real.", "ja": "うちゅうで、とれたてのやさい。本当のはなしです。" },
+      "lead": {
+        "en": "Fresh food in space is real.",
+        "ja": "うちゅうで、とれたてのやさい。本当のはなしです。"
+      },
       "fact": "veggie_food"
     },
     "9": {
@@ -453,7 +483,10 @@
     "10": {
       "who": "nova",
       "expr": "happy",
-      "lead": { "en": "This is why we built near the dark craters.", "ja": "くらいクレーターの近くにきちを作ったのは、このためです。" },
+      "lead": {
+        "en": "This is why we built near the dark craters.",
+        "ja": "くらいクレーターの近くにきちを作ったのは、このためです。"
+      },
       "fact": "lcross_water"
     },
     "11": {
@@ -486,17 +519,26 @@
       {
         "who": "pip",
         "expr": "happy",
-        "text": { "en": "Nice plan! The base is humming.", "ja": "いいけいかく！きちは元気だよ。" }
+        "text": {
+          "en": "Nice plan! The base is humming.",
+          "ja": "いいけいかく！きちは元気だよ。"
+        }
       },
       {
         "who": "pip",
         "expr": "excited",
-        "text": { "en": "Beep! Jobs done. What is next?", "ja": "ピピッ！しごとかんりょう。つぎは、なに？" }
+        "text": {
+          "en": "Beep! Jobs done. What is next?",
+          "ja": "ピピッ！しごとかんりょう。つぎは、なに？"
+        }
       },
       {
         "who": "sprout",
         "expr": "happy",
-        "text": { "en": "The plants look happy with that.", "ja": "しょくぶつも、よろこんでいますよ。" }
+        "text": {
+          "en": "The plants look happy with that.",
+          "ja": "しょくぶつも、よろこんでいますよ。"
+        }
       }
     ],
     "unused": {
@@ -623,5 +665,79 @@
   "closing": {
     "en": "Earth is the best base we'll ever have.",
     "ja": "ちきゅうは、わたしたちのいちばんのきちです。"
+  },
+  "tips": {
+    "firstDay": {
+      "who": "pip",
+      "expr": "happy",
+      "text": {
+        "en": "The Sun is up. Cleaning the panels makes a lot of power.",
+        "ja": "太陽が出ているよ。パネルをそうじすると、電気がたくさんできる。"
+      }
+    },
+    "firstNight": {
+      "who": "pip",
+      "expr": "sleepy",
+      "text": {
+        "en": "The Sun is down. Power from the panels is small, so use what you saved.",
+        "ja": "太陽は沈んだよ。パネルの電気は少ないから、ためた分を使おう。"
+      }
+    },
+    "day": {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "It is daytime. A good moment to fill the batteries.",
+        "ja": "今は昼です。バッテリーをためるチャンスです。"
+      }
+    },
+    "night": {
+      "who": "sprout",
+      "expr": "thinking",
+      "text": {
+        "en": "Night uses extra power. Keep some in the batteries.",
+        "ja": "夜は電気を余分に使います。バッテリーに少し残しておきましょう。"
+      }
+    },
+    "last": {
+      "who": "nova",
+      "expr": "happy",
+      "text": {
+        "en": "This is the last round. Check every bar before you press GO.",
+        "ja": "これが最後の回です。GOの前に、どのバーも見てね。"
+      }
+    },
+    "longNight": {
+      "who": "nova",
+      "expr": "thinking",
+      "text": {
+        "en": "This whole lesson is night. Power only gives a little, so spend it carefully.",
+        "ja": "このレッスンはずっと夜です。電気は少ししか増えないので、大切に使いましょう。"
+      }
+    },
+    "garden": {
+      "who": "sprout",
+      "expr": "happy",
+      "text": {
+        "en": "The greenhouse lights help the plants. They also use power.",
+        "ja": "温室のライトは植物の助けになります。電気も使います。"
+      }
+    },
+    "ice": {
+      "who": "pip",
+      "expr": "worried",
+      "text": {
+        "en": "I may need help in a dark crater. Rescue costs power.",
+        "ja": "くらいクレーターで助けがいるかも。レスキューには電気がいるよ。"
+      }
+    },
+    "stormWatch": {
+      "who": "nova",
+      "expr": "neutral",
+      "text": {
+        "en": "A storm can arrive this lesson. Shield is what keeps the crew working.",
+        "ja": "このレッスンではあらしが来ることがあります。シールドがあると、しごとをつづけられます。"
+      }
+    }
   }
 }
