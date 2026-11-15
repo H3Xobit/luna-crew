@@ -2,6 +2,8 @@
 // day or night, greenhouse lights, dirt on the roof, panel damage, the storm,
 // and Pip driving to the job that got the most work points.
 
+import { skyEarth } from "./cutsceneArt.js";
+
 const STARS = [
   [22, 30, 1.2], [58, 88, 0.9], [96, 22, 1.4], [140, 64, 1], [176, 128, 0.8], [204, 36, 1.3], [248, 92, 1],
   [286, 18, 0.9], [318, 150, 1.1], [352, 58, 1.4], [398, 112, 0.9], [432, 30, 1.2], [470, 168, 0.8],
@@ -90,16 +92,10 @@ function svgMarkup() {
     </linearGradient>
   </defs>
 
-  <rect class="sky" width="800" height="450"/>
+  <rect class="sky" x="-1600" y="-1200" width="4000" height="1650"/>
   <g class="stars">${stars()}</g>
 
-  <g class="earth-in-sky">
-    <circle cx="640" cy="92" r="31" fill="#2f7fd6"/>
-    <path d="M620 78 q10 -12 22 -6 q4 8 -6 13 q-8 0 -10 9 q-9 -4 -6 -16 Z" fill="#5ee08a"/>
-    <path d="M648 96 q13 -3 17 8 q-4 12 -13 14 q-7 -8 -4 -22 Z" fill="#5ee08a"/>
-    <path d="M612 92 q16 6 30 2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
-    <path d="M640 61 a31 31 0 0 1 0 62 a44 44 0 0 0 0 -62 Z" fill="#05060f" opacity="0.45"/>
-  </g>
+  <g class="earth-in-sky" style="animation:none">${skyEarth(640, 92, 34)}</g>
 
   <g class="sun">
     <circle cx="74" cy="236" r="78" fill="url(#sunGlow)"/>
@@ -107,8 +103,11 @@ function svgMarkup() {
   </g>
 
   <path class="far-rim" d="M0 252 L54 226 L126 246 L208 216 L300 248 L420 230 L520 250 L612 222 L702 246 L800 228 L800 270 L0 270 Z"/>
-  <rect class="ground ground-day" x="0" y="250" width="800" height="200" fill="url(#groundDay)"/>
-  <rect class="ground ground-night" x="0" y="250" width="800" height="200" fill="url(#groundNight)"/>
+  <rect class="far-rim" x="-1600" y="246" width="1601" height="24"/><rect class="far-rim" x="799" y="232" width="1601" height="38"/>
+  <rect class="ground ground-day" x="-1600" y="449" width="4000" height="1200" fill="#8f93a8"/>
+  <rect class="ground ground-night" x="-1600" y="449" width="4000" height="1200" fill="#262940"/>
+  <rect class="ground ground-day" x="-1600" y="250" width="4000" height="200" fill="url(#groundDay)"/>
+  <rect class="ground ground-night" x="-1600" y="250" width="4000" height="200" fill="url(#groundNight)"/>
 
   <g class="long-shadows">
     <path d="M250 352 L520 372 L520 352 Z"/>

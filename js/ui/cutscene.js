@@ -1,52 +1,25 @@
-// A small timeline player. Shots are data. Skip and Escape end the whole
-// cutscene. Reduced motion shows one still frame per shot, with subtitles.
+// Cutscene player. Each shot names a scene from cutsceneArt.js. The scene is
+// built once, then moved every frame. Skip and Escape end the whole cutscene.
+// Reduced motion shows one still picture per shot, with subtitles.
 
 import { h } from "./dom.js";
 import { portrait } from "./characters.js";
+import { SCENES, STAGE, artMarkup } from "./cutsceneArt.js";
 
-const LAYERS = {
-  stars: `<g class="cs-stars">${Array.from({ length: 28 }, (_, i) => {
-    const x = (i * 97) % 800;
-    const y = (i * 53) % 220;
-    return `<circle cx="${x}" cy="${y}" r="${i % 3 === 0 ? 1.6 : 1}" fill="#d7e6ff"/>`;
-  }).join("")}</g>`,
-  earth: `<g class="cs-earth"><circle cx="400" cy="230" r="150" fill="#2f6dff"/><ellipse cx="400" cy="230" rx="150" ry="46" fill="none" stroke="#b7f0ff" stroke-width="10" opacity="0.55"/><path d="M280 180 q40 -30 90 0 q30 20 70 -10 q40 10 80 40 q-20 40 -70 50 q-80 10 -140 -20 z" fill="#3dcb7a" opacity="0.9"/></g>`,
-  moon: `<g class="cs-moon"><circle cx="400" cy="260" r="170" fill="#c5c9d4"/><circle cx="330" cy="210" r="28" fill="#a7adba"/><circle cx="470" cy="250" r="18" fill="#a7adba"/><circle cx="390" cy="320" r="22" fill="#9aa1b0"/></g>`,
-  ridge: `<path d="M0 300 L180 210 L320 280 L520 160 L800 250 L800 450 L0 450 Z" fill="#6e7484"/>`,
-  sun: `<g class="cs-sun"><circle cx="640" cy="90" r="36" fill="#ffe08a"/><circle cx="640" cy="90" r="70" fill="#ffe08a" opacity="0.25"/></g>`,
-  base: `<g class="cs-base"><rect x="300" y="250" width="200" height="90" rx="16" fill="#d7deee" stroke="#1b1630" stroke-width="3"/><rect class="cs-window" x="330" y="270" width="36" height="28" rx="4" fill="#9ad7ff"/><rect class="cs-window" x="430" y="270" width="36" height="28" rx="4" fill="#9ad7ff"/><path d="M250 340 H550" stroke="#8d93a3" stroke-width="8"/></g>`,
-  lights: `<g class="cs-lights"><rect x="332" y="272" width="32" height="24" fill="#ffe08a" opacity="0.85"/><rect x="432" y="272" width="32" height="24" fill="#ffe08a" opacity="0.85"/></g>`,
-  lander: `<g class="cs-lander"><path d="M360 200 h80 l18 70 h-116 z" fill="#e8eefc" stroke="#1b1630" stroke-width="3"/><path d="M350 270 h100" stroke="#1b1630" stroke-width="4"/></g>`,
-  dust: `<g class="cs-dust" opacity="0.7"><ellipse cx="400" cy="300" rx="90" ry="16" fill="#c5c9d4"/><circle cx="330" cy="286" r="6" fill="#d7dbe4"/><circle cx="470" cy="284" r="5" fill="#d7dbe4"/></g>`,
-  ramp: `<path d="M470 300 L560 360" stroke="#d7deee" stroke-width="10" stroke-linecap="round"/>`,
-  frost: `<g class="cs-frost">${Array.from({ length: 10 }, (_, i) => `<circle cx="${80 + i * 28}" cy="${40 + (i % 4) * 22}" r="2" fill="#e7f6ff"/>`).join("")}</g>`,
-  cart: `<g class="cs-cart"><rect x="180" y="300" width="70" height="28" rx="6" fill="#ffd166" stroke="#1b1630" stroke-width="2"/><circle cx="196" cy="332" r="6" fill="#1b1630"/><circle cx="234" cy="332" r="6" fill="#1b1630"/></g>`,
-  flare: `<g class="cs-flare"><circle cx="120" cy="70" r="28" fill="#fff"/><circle cx="120" cy="70" r="60" fill="#ffb45a" opacity="0.45"/></g>`,
-  streaks: `<g class="cs-streaks">${Array.from({ length: 8 }, (_, i) => `<path d="M${40 + i * 90} ${20 + (i % 3) * 30} l40 70" stroke="#ffe08a" stroke-width="2" opacity="0.7"/>`).join("")}</g>`,
-  shelter: `<g class="cs-shelter"><path d="M340 210 h140 v90 h-140 z" fill="#1b1630" opacity="0.35"/><rect x="360" y="230" width="100" height="60" rx="8" fill="#ffe08a"/></g>`,
-  sparks: `<g class="cs-sparks"><path d="M560 240 l14 10 -8 2 10 12" stroke="#ffd166" stroke-width="3" fill="none"/><path d="M600 220 l10 16" stroke="#fff" stroke-width="2"/></g>`,
-  crystal: `<g class="cs-crystal"><path d="M400 250 l22 36 -22 14 -22 -14 z" fill="#b7f0ff" stroke="#1b1630" stroke-width="2"/></g>`,
-  plants: `<g class="cs-plants"><rect x="300" y="250" width="200" height="80" fill="#2a1440"/><path d="M360 320 q-16 -40 0 -60 q16 20 0 60" fill="#8be28f"/><path d="M430 320 q-16 -50 0 -74 q16 24 0 74" fill="#5ee08a"/></g>`,
-  badge: `<g class="cs-badge"><circle cx="400" cy="180" r="46" fill="#ffd166" stroke="#1b1630" stroke-width="4"/><path d="M400 150 l8 18 20 2 -15 13 5 19 -18 -10 -18 10 5 -19 -15 -13 20 -2 z" fill="#fff"/></g>`,
-  ship: `<g class="cs-ship"><path d="M370 160 h60 l16 80 h-92 z" fill="#e8eefc" stroke="#1b1630" stroke-width="3"/><path d="M360 250 h80" stroke="#8d93a3" stroke-width="6"/></g>`,
-  title: ""
-};
+const SVG_NS = "http://www.w3.org/2000/svg";
+const FADE_MS = 260;
+const TAP_GUARD_MS = 450;
 
-function layerMarkup(name) {
-  return LAYERS[name] || "";
-}
-
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
+const STYLE = `
+.cutscene-stage { background: #02030a; }
+.cutscene-camera { width: min(100%, calc((100vh - 200px) * 16 / 9)); min-width: min(100%, 320px); aspect-ratio: 16 / 9; transform: none; }
+.cutscene-svg { width: 100%; height: 100%; display: block; background: #02030a; border-radius: 14px; }
+.cutscene.is-still .cx-tw { animation: none; }
+`;
 
 export function cutsceneLength(scene) {
   const shots = Array.isArray(scene?.shots) ? scene.shots : [];
   return shots.reduce((sum, shot) => sum + (Number(shot.duration) || 0), 0);
-}
-
-function ease(t) {
-  return 1 - (1 - t) * (1 - t);
 }
 
 export function shotHold(shot, text) {
@@ -54,8 +27,12 @@ export function shotHold(shot, text) {
   return Math.max(Number(shot?.duration) || 2000, Math.min(7000, letters * 45));
 }
 
-function layerName(layer) {
-  return typeof layer === "string" ? layer : layer?.name;
+function addStyle() {
+  if (document.getElementById("cx-style")) return;
+  const style = document.createElement("style");
+  style.id = "cx-style";
+  style.textContent = STYLE;
+  document.head.append(style);
 }
 
 export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf }) {
@@ -63,20 +40,24 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
   if (!scene || !Array.isArray(scene.shots) || scene.shots.length === 0) return Promise.resolve("missing");
 
   return new Promise((resolve) => {
+    addStyle();
     let index = 0;
-    let nodes = [];
+    let art = null;
+    let parts = new Map();
     const previousFocus = document.activeElement;
     let started = performance.now();
     let paused = false;
     let pausedAt = 0;
     let frame = 0;
     let done = false;
+
     const stage = h("div", { class: "cutscene-stage" });
     const camera = h("div", { class: "cutscene-camera" });
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 800 450");
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${STAGE.width} ${STAGE.height}`);
     svg.setAttribute("class", "cutscene-svg");
     svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    svg.setAttribute("aria-hidden", "true");
     camera.append(svg);
     const who = h("strong", { class: "cutscene-who" });
     const line = h("p", { class: "cutscene-line" });
@@ -94,13 +75,15 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
         else started += performance.now() - pausedAt;
       }
     });
-    const overlay = h("div", { class: "cutscene", role: "dialog", "aria-modal": "true", "aria-label": i18n.t("cut.label") }, [
+    const overlay = h("div", { class: reduced ? "cutscene is-still" : "cutscene", role: "dialog", "aria-modal": "true", "aria-label": i18n.t("cut.label") }, [
       stage,
-      h("div", { class: "cutscene-sub" }, [face, h("div", {}, [who, line])]),
+      h("div", { class: "cutscene-sub", "aria-live": "polite" }, [face, h("div", {}, [who, line])]),
       h("div", { class: "cutscene-actions" }, [pause, next, skip])
     ]);
     stage.append(camera);
     stage.addEventListener("click", () => goNext(true));
+
+    const q = (name) => parts.get(name) || null;
 
     function onKey(event) {
       if (event.key === "Escape") {
@@ -109,6 +92,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
         return;
       }
       if (event.key === " " || event.key === "Enter" || event.key === "ArrowRight") {
+        if (event.target === pause || event.target === skip) return;
         event.preventDefault();
         goNext(true);
       }
@@ -128,68 +112,67 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     }
 
     function mount(shot) {
-      svg.replaceChildren();
-      nodes = (shot.layers || []).map((layer) => {
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.innerHTML = layerMarkup(layerName(layer));
-        svg.append(g);
-        const motion = typeof layer === "string" ? {} : layer;
-        return { g, from: motion.from || {}, to: motion.to || {} };
-      });
+      art = SCENES[shot.art] || null;
+      parts = new Map();
+      try {
+        svg.innerHTML = artMarkup(shot.art);
+        for (const node of svg.querySelectorAll("[data-a]")) parts.set(node.getAttribute("data-a"), node);
+      } catch (error) {
+        art = null;
+        svg.innerHTML = "";
+        console.error("cutscene art failed", shot.art, error);
+      }
       const speaker = shot.who ? nameOf(shot.who) : "";
       who.textContent = speaker ? `${speaker}: ` : "";
       line.textContent = shot.line ? i18n.t(shot.line) : "";
       face.innerHTML = shot.who ? portrait(shot.who, shot.expr || "neutral", { title: speaker }) : "";
     }
 
-    function pose(node, t) {
-      const from = node.from;
-      const to = node.to;
-      const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, t);
-      const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, t);
-      const scale = lerp(from.scale != null ? from.scale : 1, to.scale != null ? to.scale : from.scale != null ? from.scale : 1, t);
-      const rotate = lerp(from.rotate || 0, to.rotate != null ? to.rotate : from.rotate || 0, t);
-      const opacity = lerp(from.opacity != null ? from.opacity : 1, to.opacity != null ? to.opacity : from.opacity != null ? from.opacity : 1, t);
-      node.g.setAttribute("transform", `translate(${x} ${y}) rotate(${rotate} 400 225) scale(${scale})`);
-      node.g.setAttribute("opacity", String(opacity));
+    function draw(p, seconds) {
+      if (!art) return;
+      try {
+        art.frame(q, p, seconds);
+      } catch (error) {
+        console.error("cutscene frame failed", error);
+        art = null;
+      }
     }
 
-    function draw(shot, t) {
-      const from = shot.camera || {};
-      const to = shot.tween || {};
-      const amount = reduced ? 1 : ease(t);
-      const x = lerp(from.x || 0, to.x != null ? to.x : from.x || 0, amount);
-      const y = lerp(from.y || 0, to.y != null ? to.y : from.y || 0, amount);
-      const scale = lerp(from.scale || 1, to.scale != null ? to.scale : from.scale || 1, amount);
-      camera.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-      for (const node of nodes) pose(node, amount);
+    function show(shot) {
+      started = performance.now();
+      mount(shot);
+      if (reduced) {
+        const still = Number.isFinite(shot.still) ? shot.still : 0.8;
+        draw(still, still * (shotHold(shot, line.textContent) / 1000));
+        svg.style.opacity = "1";
+      } else {
+        draw(0, 0);
+        svg.style.opacity = "0";
+      }
+      if (shot.sound) audio?.play(shot.sound);
     }
 
     function goNext(fromUser) {
-      if (done || paused) return;
-      const shot = scene.shots[index];
-      const hold = shotHold(shot, shot.line ? i18n.t(shot.line) : "");
-      if (fromUser && !reduced && performance.now() - started < hold) return;
+      if (done) return;
+      if (fromUser && paused) return;
+      if (fromUser && performance.now() - started < TAP_GUARD_MS) return;
       index += 1;
       if (index >= scene.shots.length) {
         finish("done");
         return;
       }
-      started = performance.now();
-      mount(scene.shots[index]);
-      draw(scene.shots[index], reduced ? 1 : 0);
-      if (scene.shots[index].sound) audio?.play(scene.shots[index].sound);
+      show(scene.shots[index]);
     }
 
     function tick(now) {
       if (done) return;
-      if (!paused) {
+      if (!paused && !reduced) {
         const shot = scene.shots[index];
         const duration = shotHold(shot, line.textContent);
-        const elapsed = now - started;
-        const t = reduced ? 1 : Math.min(1, elapsed / duration);
-        draw(shot, t);
-        if (!reduced && elapsed >= duration) goNext(false);
+        const elapsed = Math.max(0, now - started);
+        draw(Math.min(1, elapsed / duration), elapsed / 1000);
+        svg.style.opacity = String(Math.min(1, elapsed / FADE_MS, Math.max(0.35, (duration - elapsed) / FADE_MS + 0.35)));
+        if (elapsed >= duration) goNext(false);
       }
       frame = requestAnimationFrame(tick);
     }
@@ -198,9 +181,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     host.append(overlay);
     next.focus();
     audio?.startHum?.();
-    mount(scene.shots[0]);
-    if (scene.shots[0].sound) audio?.play(scene.shots[0].sound);
-    draw(scene.shots[0], reduced ? 1 : 0);
+    show(scene.shots[0]);
     frame = requestAnimationFrame(tick);
   });
 }

@@ -15,6 +15,7 @@ export function starIcons(count, label) {
   return h("p", { class: "star-row", "aria-label": label }, marks);
 }
 import { LANGUAGES } from "./i18n.js";
+import { titleBanner } from "./cutsceneArt.js";
 
 const LANGUAGE_NAMES = { en: "English", ja: "\u65e5\u672c\u8a9e" };
 
@@ -56,12 +57,7 @@ export function renderTitle(root, { i18n, content, stormInfo, demo, nameOf, onSt
   clear(root).append(
     h("div", { class: "title-card" }, [
       h("div", { class: "title-top" }, [languageSwitch(i18n, onLang)]),
-      h("div", { class: "title-sky", "aria-hidden": "true" }, [0, 1, 2, 3, 4, 5, 6, 7].map((n) => {
-        const star = h("span");
-        star.style.left = `${8 + n * 12}%`;
-        star.style.top = `${12 + (n % 3) * 22}%`;
-        return star;
-      })),
+      h("div", { class: "title-sky", "aria-hidden": "true", html: titleBanner() }),
       h("div", { class: "title-crew" }, [
         h("span", { class: "crew-face", html: portrait("sprout", "happy", { title: nameOf("sprout") }) }),
         h("span", { class: "crew-face is-big", html: portrait("nova", "happy", { title: nameOf("nova") }) }),

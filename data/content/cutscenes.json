@@ -1,89 +1,89 @@
 {
   "opening": {
     "shots": [
-      { "duration": 3000, "layers": ["stars", "earth"], "camera": { "scale": 1 }, "tween": { "scale": 1.35 }, "who": "nova", "expr": "neutral", "line": "cut.opening.1", "sound": "sting" },
-      { "duration": 3000, "layers": ["stars", "moon"], "camera": { "scale": 1.1, "y": 20 }, "tween": { "scale": 1.8, "y": 40 }, "who": "nova", "expr": "thinking", "line": "cut.opening.2" },
-      { "duration": 3000, "layers": ["stars", "moon", "ridge", "base"], "camera": { "scale": 1.4 }, "tween": { "scale": 1 }, "who": "sprout", "expr": "happy", "line": "cut.opening.3" },
-      { "duration": 2500, "layers": ["stars", "ridge", "base", "lights"], "who": "pip", "expr": "excited", "line": "cut.opening.4", "sound": "lightsOn" }
+      { "duration": 3600, "art": "opening.earth", "who": "nova", "expr": "neutral", "line": "cut.opening.1", "sound": "sting" },
+      { "duration": 3400, "art": "opening.moon", "who": "nova", "expr": "thinking", "line": "cut.opening.2" },
+      { "duration": 3200, "art": "opening.surface", "who": "sprout", "expr": "happy", "line": "cut.opening.3" },
+      { "duration": 3200, "art": "opening.lights", "who": "pip", "expr": "excited", "line": "cut.opening.4", "sound": "lightsOn" }
     ]
   },
   "arrival": {
     "shots": [
-      { "duration": 2800, "layers": ["stars", "ridge", "lander"], "camera": { "y": -30 }, "tween": { "y": 10 }, "who": "nova", "expr": "neutral", "line": "cut.arrival.1", "sound": "day" },
-      { "duration": 2500, "layers": ["stars", "ridge", "lander", "dust"], "who": "sprout", "expr": "happy", "line": "cut.arrival.2" },
-      { "duration": 2800, "layers": ["stars", "ridge", "base", "ramp"], "who": "pip", "expr": "excited", "line": "cut.arrival.3", "sound": "good" },
-      { "duration": 2200, "layers": ["stars", "ridge", "base", "lights"], "who": "nova", "expr": "happy", "line": "cut.arrival.4" }
+      { "duration": 3600, "art": "arrival.descent", "who": "nova", "expr": "neutral", "line": "cut.arrival.1", "sound": "day", "still": 0.6 },
+      { "duration": 3200, "art": "arrival.touchdown", "who": "sprout", "expr": "happy", "line": "cut.arrival.2", "sound": "zap", "still": 0.6 },
+      { "duration": 4200, "art": "arrival.ramp", "who": "pip", "expr": "excited", "line": "cut.arrival.3", "sound": "good", "still": 1 },
+      { "duration": 3000, "art": "arrival.base", "who": "nova", "expr": "happy", "line": "cut.arrival.4" }
     ]
   },
   "nightfall": {
     "shots": [
-      { "duration": 3000, "layers": ["stars", "ridge", "sun", "base"], "camera": { "x": 0 }, "tween": { "x": -20 }, "who": "nova", "expr": "thinking", "line": "cut.night.1", "sound": "night" },
-      { "duration": 3000, "layers": ["stars", "ridge", "base"], "who": "sprout", "expr": "worried", "line": "cut.night.2" },
-      { "duration": 3000, "layers": ["stars", "ridge", "base", "lights"], "who": "nova", "expr": "neutral", "line": "cut.night.3" },
-      { "duration": 2500, "layers": ["stars", "ridge", "base", "lights"], "who": "pip", "expr": "sleepy", "line": "cut.night.4", "sound": "chirp" }
+      { "duration": 3400, "art": "night.sunset", "who": "nova", "expr": "thinking", "line": "cut.night.1", "sound": "night", "still": 0.5 },
+      { "duration": 3400, "art": "night.shadows", "who": "sprout", "expr": "worried", "line": "cut.night.2", "still": 0.6 },
+      { "duration": 3200, "art": "night.battery", "who": "nova", "expr": "neutral", "line": "cut.night.3" },
+      { "duration": 3000, "art": "night.pip", "who": "pip", "expr": "sleepy", "line": "cut.night.4", "sound": "chirp" }
     ]
   },
   "rescue": {
     "shots": [
-      { "duration": 2800, "layers": ["stars", "ridge", "frost"], "who": "pip", "expr": "worried", "line": "cut.rescue.1", "sound": "radio" },
-      { "duration": 2800, "layers": ["stars", "ridge", "frost", "cart"], "who": "nova", "expr": "thinking", "line": "cut.rescue.2" },
-      { "duration": 2800, "layers": ["stars", "ridge", "cart", "crystal"], "who": "sprout", "expr": "excited", "line": "cut.rescue.3" },
-      { "duration": 2500, "layers": ["stars", "ridge", "base", "lights", "crystal"], "who": "pip", "expr": "happy", "line": "cut.rescue.4", "sound": "good" }
+      { "duration": 3200, "art": "rescue.dark", "who": "pip", "expr": "worried", "line": "cut.rescue.1", "sound": "radio" },
+      { "duration": 3200, "art": "rescue.frost", "who": "nova", "expr": "thinking", "line": "cut.rescue.2" },
+      { "duration": 3400, "art": "rescue.cart", "who": "sprout", "expr": "excited", "line": "cut.rescue.3", "still": 0.6 },
+      { "duration": 3200, "art": "rescue.tow", "who": "pip", "expr": "happy", "line": "cut.rescue.4", "sound": "good" }
     ]
   },
   "stormShelter": {
     "shots": [
-      { "duration": 2500, "layers": ["stars", "flare", "streaks", "base"], "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm" },
-      { "duration": 2500, "layers": ["stars", "streaks", "base", "shelter"], "who": "sprout", "expr": "worried", "line": "cut.storm.2" },
-      { "duration": 3000, "layers": ["stars", "base", "shelter", "lights"], "who": "nova", "expr": "happy", "line": "cut.storm.3" },
-      { "duration": 2500, "layers": ["stars", "base", "lights"], "who": "pip", "expr": "happy", "line": "cut.storm.4", "sound": "good" }
+      { "duration": 3200, "art": "storm.flare", "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm", "still": 0.6 },
+      { "duration": 3400, "art": "storm.shelter", "who": "sprout", "expr": "worried", "line": "cut.storm.2", "still": 0.35 },
+      { "duration": 3200, "art": "storm.inside", "who": "nova", "expr": "happy", "line": "cut.storm.3" },
+      { "duration": 3200, "art": "storm.pass", "who": "pip", "expr": "happy", "line": "cut.storm.4", "sound": "good", "still": 1 }
     ]
   },
   "stormWork": {
     "shots": [
-      { "duration": 2500, "layers": ["stars", "flare", "streaks", "base"], "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm" },
-      { "duration": 2500, "layers": ["stars", "streaks", "base", "sparks"], "who": "sprout", "expr": "worried", "line": "cut.storm.work" },
-      { "duration": 3000, "layers": ["stars", "base", "sparks"], "who": "nova", "expr": "neutral", "line": "cut.storm.panels" },
-      { "duration": 2500, "layers": ["stars", "base", "lights"], "who": "pip", "expr": "thinking", "line": "cut.storm.safe", "sound": "oops" }
+      { "duration": 3200, "art": "storm.flare", "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm", "still": 0.6 },
+      { "duration": 3200, "art": "storm.work", "who": "sprout", "expr": "worried", "line": "cut.storm.work", "sound": "zap" },
+      { "duration": 3200, "art": "storm.panels", "who": "nova", "expr": "neutral", "line": "cut.storm.panels" },
+      { "duration": 3000, "art": "storm.ok", "who": "pip", "expr": "thinking", "line": "cut.storm.safe", "sound": "oops" }
     ]
   },
   "discovery": {
     "shots": [
-      { "duration": 2800, "layers": ["stars", "ridge", "crystal"], "camera": { "scale": 1 }, "tween": { "scale": 1.3 }, "who": "pip", "expr": "thinking", "line": "cut.find.1", "sound": "radio" },
-      { "duration": 2800, "layers": ["stars", "ridge", "crystal"], "who": "sprout", "expr": "excited", "line": "cut.find.2", "sound": "sting" },
-      { "duration": 2800, "layers": ["stars", "base", "lights", "crystal"], "who": "nova", "expr": "happy", "line": "cut.find.3" },
-      { "duration": 2200, "layers": ["stars", "base", "lights"], "who": "sprout", "expr": "happy", "line": "cut.find.4", "sound": "good" }
+      { "duration": 3200, "art": "find.scan", "who": "pip", "expr": "thinking", "line": "cut.find.1", "sound": "radio" },
+      { "duration": 3200, "art": "find.glow", "who": "sprout", "expr": "excited", "line": "cut.find.2", "sound": "sting" },
+      { "duration": 3200, "art": "find.lab", "who": "nova", "expr": "happy", "line": "cut.find.3" },
+      { "duration": 3000, "art": "find.choice", "who": "sprout", "expr": "happy", "line": "cut.find.4", "sound": "good" }
     ]
   },
   "greenhouse": {
     "shots": [
-      { "duration": 2800, "layers": ["plants"], "who": "sprout", "expr": "happy", "line": "cut.green.1", "sound": "lightsOn" },
-      { "duration": 3000, "layers": ["plants"], "camera": { "scale": 1 }, "tween": { "scale": 1.15 }, "who": "sprout", "expr": "thinking", "line": "cut.green.2" },
-      { "duration": 3000, "layers": ["plants", "lights"], "who": "nova", "expr": "neutral", "line": "cut.green.3" },
-      { "duration": 2500, "layers": ["base", "plants", "lights"], "who": "sprout", "expr": "excited", "line": "cut.green.4", "sound": "good" }
+      { "duration": 3200, "art": "green.lights", "who": "sprout", "expr": "happy", "line": "cut.green.1", "sound": "lightsOn", "still": 1 },
+      { "duration": 3400, "art": "green.grow", "who": "sprout", "expr": "thinking", "line": "cut.green.2", "still": 1 },
+      { "duration": 3600, "art": "green.soil", "who": "nova", "expr": "neutral", "line": "cut.green.3", "still": 1 },
+      { "duration": 3000, "art": "green.plan", "who": "sprout", "expr": "excited", "line": "cut.green.4", "sound": "good" }
     ]
   },
   "rank": {
     "shots": [
-      { "duration": 3000, "layers": ["stars", "badge"], "camera": { "scale": 0.8 }, "tween": { "scale": 1.1 }, "who": "nova", "expr": "excited", "line": "cut.rank.1", "sound": "win" },
-      { "duration": 3000, "layers": ["stars", "badge"], "who": "sprout", "expr": "happy", "line": "cut.rank.2" },
-      { "duration": 3000, "layers": ["stars", "base", "badge"], "who": "pip", "expr": "excited", "line": "cut.rank.3", "sound": "sting" }
+      { "duration": 3200, "art": "rank.fly", "who": "nova", "expr": "excited", "line": "cut.rank.1", "sound": "win", "still": 1 },
+      { "duration": 3200, "art": "rank.shine", "who": "sprout", "expr": "happy", "line": "cut.rank.2" },
+      { "duration": 3200, "art": "rank.stars", "who": "pip", "expr": "excited", "line": "cut.rank.3", "sound": "sting", "still": 1 }
     ]
   },
   "endingComplete": {
     "shots": [
-      { "duration": 2800, "layers": ["stars", "base", "lights"], "who": "pip", "expr": "excited", "line": "cut.end.1", "sound": "win" },
-      { "duration": 3000, "layers": ["stars", "earth"], "camera": { "scale": 1.2 }, "tween": { "scale": 1 }, "who": "nova", "expr": "happy", "line": "cut.end.2" },
-      { "duration": 3000, "layers": ["stars", "earth"], "who": "sprout", "expr": "happy", "line": "cut.end.3" },
-      { "duration": 2500, "layers": ["stars", "earth"], "who": "nova", "expr": "neutral", "line": "cut.end.4" }
+      { "duration": 3200, "art": "end.cheer", "who": "pip", "expr": "excited", "line": "cut.end.1", "sound": "win" },
+      { "duration": 3600, "art": "end.lookup", "who": "nova", "expr": "happy", "line": "cut.end.2", "still": 1 },
+      { "duration": 3400, "art": "end.earth", "who": "sprout", "expr": "happy", "line": "cut.end.3" },
+      { "duration": 3800, "art": "end.rise", "who": "nova", "expr": "neutral", "line": "cut.end.4", "still": 1 }
     ]
   },
   "endingPaused": {
     "shots": [
-      { "duration": 2800, "layers": ["stars", "ridge", "ship"], "camera": { "y": 10 }, "tween": { "y": -40 }, "who": "nova", "expr": "neutral", "line": "cut.home.1", "sound": "home" },
-      { "duration": 2800, "layers": ["stars", "ridge", "ship"], "who": "sprout", "expr": "happy", "line": "cut.home.2" },
-      { "duration": 2800, "layers": ["stars", "earth"], "who": "pip", "expr": "happy", "line": "cut.home.3" },
-      { "duration": 2200, "layers": ["stars", "earth"], "who": "nova", "expr": "happy", "line": "cut.home.4" }
+      { "duration": 3600, "art": "home.liftoff", "who": "nova", "expr": "neutral", "line": "cut.home.1", "sound": "home", "still": 0.55 },
+      { "duration": 3200, "art": "home.wave", "who": "sprout", "expr": "happy", "line": "cut.home.2" },
+      { "duration": 3400, "art": "home.cruise", "who": "pip", "expr": "happy", "line": "cut.home.3", "still": 0.6 },
+      { "duration": 3000, "art": "home.plan", "who": "nova", "expr": "happy", "line": "cut.home.4" }
     ]
   }
 }

@@ -9,6 +9,7 @@ import { $, clear, h, setNewTabNote, sleep } from "./ui/dom.js";
 import { createAudio } from "./ui/audio.js";
 import { createModals, rescueCard, discoveryCard, stormCard, resultCard, reviewCard } from "./ui/modals.js";
 import { playCutscene } from "./ui/cutscene.js";
+import { mountArt } from "./ui/cutsceneArt.js";
 import { createDialogue } from "./ui/dialogue.js";
 import { createHud, LOW_BAR } from "./ui/hud.js";
 import { createJobsPanel, emptyPlan, planTotal } from "./ui/jobs.js";
@@ -19,6 +20,10 @@ import { renderTitle, renderSetup, renderMap, openJournal, openDataScreen, openT
 import { awardMission, dailySeed, isUnlocked, loadProgress, markSeen, resetProgress, saveProgress, verifiedFactIds } from "./ui/progress.js";
 import { renderEnd } from "./ui/endScreen.js";
 import { portrait, playerBadge } from "./ui/characters.js";
+
+// Which animated picture goes with each intro panel. Panels not listed here
+// keep their own small drawing.
+const INTRO_ART = { earth: "end.earth", moon: "end.rise", base: "green.plan" };
 
 const SETTINGS_KEY = "luna-crew-settings";
 const PLAYER_KEY = "luna-crew-player";
@@ -347,7 +352,10 @@ async function boot() {
     if (!dialogue) dialogue = createDialogue(dialogueRoot, { i18n, audio, nameOf });
     play.classList.add("is-intro");
     for (const panel of content.story.intro) {
-      clear(sceneRoot).append(h("div", { class: "intro-panel", html: introArt(panel.art) }));
+      const picture = INTRO_ART[panel.art];
+      const box = h("div", { class: "intro-panel", html: picture ? "" : introArt(panel.art) });
+      clear(sceneRoot).append(box);
+      if (picture) mountArt(box, picture, { reduced: settings.reduceMotion });
       await say(panel.lines, { skippable: true });
     }
     play.classList.remove("is-intro");
