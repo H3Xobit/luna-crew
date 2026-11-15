@@ -15,7 +15,8 @@ import { createJobsPanel, emptyPlan } from "./ui/jobs.js";
 import { createScene, introArt } from "./ui/scene.js";
 import { runRepair } from "./ui/repair.js";
 import { askQuiz, showQuizAnswer } from "./ui/quizView.js";
-import { renderTitle, renderSetup, openDataScreen, openTeachers, openSettings } from "./ui/screens.js";
+import { renderTitle, renderSetup, renderMap, openJournal, openDataScreen, openTeachers, openSettings } from "./ui/screens.js";
+import { awardMission, loadProgress, resetProgress, saveProgress, verifiedFactIds } from "./ui/progress.js";
 import { renderEnd } from "./ui/endScreen.js";
 import { portrait, playerBadge } from "./ui/characters.js";
 
@@ -103,6 +104,8 @@ async function boot() {
   let forceSeed = seedFromUrl();
   let sawNight = false;
   let sawGreenhouse = false;
+  let progress = loadProgress();
+  let currentMission = null;
   const demo = queryFlag("demo") === "1";
 
   async function cut(id) {
@@ -179,7 +182,7 @@ async function boot() {
 
   async function showTeachers() {
     audio.unlock();
-    await openTeachers(modals, { i18n, facts: content.factIndex, config: playConfig() });
+    await openTeachers(modals, { i18n, facts: content.factIndex, config: playConfig(), missions: content.missions?.missions || [] });
   }
 
   async function showSettings() {
@@ -238,7 +241,8 @@ async function boot() {
         writeJson(PLAYER_KEY, player);
         audio.unlock();
         audio.play("go");
-        startMission({ practice: player.practice, seed: forceSeed ?? randomSeed() });
+        if (content.missions?.missions?.length) showMap();
+        else startMission({ practice: player.practice, seed: forceSeed ?? randomSeed() });
       }
     });
   }
@@ -308,7 +312,27 @@ async function boot() {
     play.classList.remove("is-intro");
   }
 
-  async function startMission({ practice, seed, skipIntro = false }) {
+  function showMap() {
+    showScreen("title");
+    renderMap(screen, {
+      i18n,
+      missions: content.missions?.missions || [],
+      progress,
+      onPlay: (mission, seed) => {
+        currentMission = mission;
+        const chosen = Number.isFinite(seed) && seed > 0 ? seed : randomSeed();
+        startMission({ practice: false, seed: chosen, skipIntro: true, mission });
+      },
+      onJournal: () => openJournal(modals, { i18n, facts: content.factIndex, progress }),
+      onReset: () => {
+        progress = resetProgress();
+        showMap();
+      },
+      onHome: () => showTitle()
+    });
+  }
+
+  async function startMission({ practice, seed, skipIntro = false, mission = null }) {
     busy = true;
     lastSeed = seed;
     forceSeed = null;
@@ -324,14 +348,21 @@ async function boot() {
       events: stormInfo.source.events,
       label: stormInfo.source.label
     };
+    const overrides = { ...(content.config.overrides || {}) };
+    if (mission) {
+      if (mission.lunarDays) overrides.lunarDays = mission.lunarDays;
+      if (mission.nightRounds) overrides.nightRounds = mission.nightRounds;
+      if (mission.start) overrides.start = mission.start;
+      if (Array.isArray(mission.events)) overrides.events = mission.events;
+    }
     game = createGame({
       seed,
-      demo,
+      demo: mission ? false : demo,
       practice: Boolean(practice),
       stormData,
       cards: content.cards.cards,
       nasaChoice: content.nasaChoice,
-      config: content.config.overrides || {}
+      config: overrides
     });
     wirePlayUi(game.config);
     game.start();
@@ -390,6 +421,14 @@ async function boot() {
         }
         if (phase === "end") {
           const summary = game.summary();
+          if (currentMission) {
+            const result = awardMission(progress, currentMission, summary, verifiedFactIds(content.factIndex));
+            progress = result.progress;
+            saveProgress(progress);
+            summary.starReasons = result.earned.reasons;
+            summary.starCount = result.earned.count;
+            if (result.rankUp) await cut("rank");
+          }
           await cut(summary.status === "complete" ? "endingComplete" : "endingPaused");
           showEnd(summary);
           return;
@@ -583,8 +622,8 @@ async function boot() {
       config: game.config,
       player,
       nameOf,
-      onAgain: () => startMission({ practice: false, seed: randomSeed(), skipIntro: true }),
-      onSameSeed: () => startMission({ practice: false, seed: summary.seed, skipIntro: true }),
+      onAgain: () => (content.missions?.missions?.length ? showMap() : startMission({ practice: false, seed: randomSeed(), skipIntro: true })),
+      onSameSeed: () => startMission({ practice: false, seed: summary.seed, skipIntro: true, mission: currentMission }),
       onData: () => openData(),
       onHome: () => showTitle()
     });

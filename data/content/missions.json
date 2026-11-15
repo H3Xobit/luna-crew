@@ -1,0 +1,103 @@
+{
+  "missions": [
+    {
+      "id": "first-light",
+      "title": { "en": "First Light", "ja": "はじめての光" },
+      "goal": { "en": "Learn the four jobs in one lunar day.", "ja": "1日で、4つのしごとを覚えよう。" },
+      "lunarDays": 1,
+      "events": [],
+      "unlock": "start",
+      "star3": "finish",
+      "facts": ["lunar_day_length"],
+      "discuss": { "en": "Which job felt most important, and why were the weights different?", "ja": "どのしごとがいちばんたいせつだと感じた？重さはなぜちがう？" }
+    },
+    {
+      "id": "long-night",
+      "title": { "en": "The Long Night", "ja": "ながいよる" },
+      "goal": { "en": "The Sun is already down. Save power.", "ja": "太陽はもうない。電気をためよう。" },
+      "lunarDays": 1,
+      "nightRounds": [1, 2, 3, 4],
+      "events": [],
+      "unlock": "after",
+      "after": "first-light",
+      "star3": "nightPower",
+      "facts": ["lunar_day_length"],
+      "discuss": { "en": "Why does Power give only 1 per point at night?", "ja": "なぜよるの電気は、ポイント1つで1だけ？" }
+    },
+    {
+      "id": "ice-rescue",
+      "title": { "en": "Ice Rescue", "ja": "こおりのレスキュー" },
+      "goal": { "en": "Bring Pip's ice home. Ice can become water and air, and it costs power.", "ja": "ピップのこおりを持ち帰ろう。こおりは水と空気になるけど、電気がいる。" },
+      "lunarDays": 1,
+      "events": [{ "lunarDay": 1, "roundInDay": 1, "type": "rescue" }],
+      "unlock": "after",
+      "after": "long-night",
+      "star3": "sample",
+      "facts": ["lcross_water"],
+      "discuss": { "en": "What can ice give a Moon base that Earth gives us for free?", "ja": "こおりは、ちきゅうがただでくれる何を、月のきちにあたえる？" }
+    },
+    {
+      "id": "storm-watch",
+      "title": { "en": "Storm Watch", "ja": "あらしウォッチ" },
+      "goal": { "en": "A real DONKI storm is coming. Learn shelter and shielding.", "ja": "DONKIの本もののあらしが来る。シェルターとシールドを学ぼう。" },
+      "lunarDays": 1,
+      "events": [{ "lunarDay": 1, "roundInDay": 2, "type": "storm" }],
+      "unlock": "after",
+      "after": "ice-rescue",
+      "star3": "shelter",
+      "facts": ["flare_classes", "regolith_shield"],
+      "discuss": { "en": "When is shelter safer than keeping the work going?", "ja": "しごとをつづけるより、シェルターが安全なのはどんなとき？" }
+    },
+    {
+      "id": "moon-garden",
+      "title": { "en": "Moon Garden", "ja": "月のにわ" },
+      "goal": { "en": "Keep the greenhouse lights on and learn about plants in Moon soil.", "ja": "温室のライトをつけて、月の土のしょくぶつを学ぼう。" },
+      "lunarDays": 1,
+      "events": [],
+      "unlock": "after",
+      "after": "storm-watch",
+      "star3": "lights",
+      "facts": ["regolith_plants"],
+      "discuss": { "en": "Plants grew in Apollo soil, but how did they look?", "ja": "アポロの土でしょくぶつは育った。でもようすはどうだった？" }
+    },
+    {
+      "id": "full-mission",
+      "title": { "en": "Full Mission", "ja": "フルミッション" },
+      "goal": { "en": "Three lunar days. Everything together.", "ja": "月の3日間。全部まとめて。" },
+      "lunarDays": 3,
+      "events": null,
+      "unlock": "after",
+      "after": "moon-garden",
+      "star3": "shelter",
+      "facts": ["eclss_what", "donki_what"],
+      "discuss": { "en": "What does Earth give us that the base had to make?", "ja": "きちが作らなければならなかったもので、ちきゅうがくれるものは？" }
+    },
+    {
+      "id": "mission-day",
+      "title": { "en": "Mission of the Day", "ja": "きょうのミッション" },
+      "goal": { "en": "Today's seed uses the newest saved storm file, labeled honestly.", "ja": "きょうのシードは、いちばん新しい保存データ。ラベルは正直に出ます。" },
+      "lunarDays": 1,
+      "events": [{ "lunarDay": 1, "roundInDay": 1, "type": "storm" }],
+      "daily": true,
+      "unlock": "after",
+      "after": "full-mission",
+      "star3": "shelter",
+      "facts": ["donki_what"],
+      "discuss": { "en": "Was today's storm labeled updated, saved, or training?", "ja": "きょうのあらしのラベルは、更新、保存、それとも訓練？" }
+    },
+    {
+      "id": "challenge",
+      "title": { "en": "Challenge Mode", "ja": "チャレンジ" },
+      "goal": { "en": "Harder start numbers. Share the seed code.", "ja": "スタートがきびしい。シードコードを友だちにわたそう。" },
+      "lunarDays": 3,
+      "events": null,
+      "start": { "power": 45, "life": 55, "shield": 20, "missionPoints": 0 },
+      "chooseSeed": true,
+      "unlock": "after",
+      "after": "full-mission",
+      "star3": "bars",
+      "facts": ["water_98"],
+      "discuss": { "en": "Which bar ran lowest, and what would you change first?", "ja": "どのバーがいちばんへった？最初に何を変える？" }
+    }
+  ]
+}

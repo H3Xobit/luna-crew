@@ -40,7 +40,7 @@ export function createState(seed, config) {
     quizResult: null,
     storm: null,
     log: [],
-    stats: { quizAsked: 0, quizCorrect: 0, nasaShown: 0, nasaMatched: 0, askedEarth: 0 }
+    stats: { quizAsked: 0, quizCorrect: 0, nasaShown: 0, nasaMatched: 0, askedEarth: 0, repairs: 0 }
   };
 }
 

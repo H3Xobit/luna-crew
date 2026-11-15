@@ -63,7 +63,9 @@ export function mergeConfig(base, overrides) {
     if (!(key in result)) continue;
     if (isPlainObject(value) && isPlainObject(result[key])) {
       result[key] = mergeConfig(result[key], value);
-    } else if (typeof value === typeof result[key] && !isPlainObject(value)) {
+    } else if (Array.isArray(value) && Array.isArray(result[key])) {
+      result[key] = structuredClone(value);
+    } else if (typeof value === typeof result[key] && !isPlainObject(value) && !Array.isArray(value)) {
       result[key] = structuredClone(value);
     }
   }

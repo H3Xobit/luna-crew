@@ -337,5 +337,41 @@
   "cut.home.1": "かえりの船が、ゆっくり上がります。",
   "cut.home.2": "クルーが手をふります。だれもけがはしていません。",
   "cut.home.3": "みんな安全です。",
-  "cut.home.4": "新しい計画で、もういちど！"
+  "cut.home.4": "新しい計画で、もういちど！",
+
+  "map.title": "ミッションマップ",
+  "map.lead": "順番に遊ぼう。1つずつ学べる。フルミッションで全部まとまる。",
+  "map.play": "プレイ",
+  "map.locked": "その前のミッションをクリアしよう。",
+  "map.starCount": "スター {n} / 3",
+  "map.rank": "{rank}。いまのスター: {stars}。",
+  "map.badges": "バッジだな",
+  "map.earned": "獲得",
+  "map.badgeLocked": "まだ",
+  "map.journal": "かがくノート",
+  "map.reset": "記録をリセット",
+  "map.seed": "シードコード",
+  "map.daily": "きょうのシード {seed}。あらしのラベルで、更新・保存・訓練のどれかわかる。",
+
+  "rank.cadet": "カデット",
+  "rank.junior": "ジュニアプランナー",
+  "rank.planner": "ミッションプランナー",
+  "rank.senior": "シニアプランナー",
+  "rank.director": "フライトディレクター",
+
+  "badge.storm": "ストームスマート",
+  "badge.night": "ナイトセーバー",
+  "badge.water": "ウォーターウィザード",
+  "badge.green": "グリーンサム",
+  "badge.science": "サイエンススター",
+  "badge.careful": "ケアフルコマンダー",
+  "badge.fix": "クイックフィクサー",
+
+  "journal.title": "うちゅうかがくノート",
+  "journal.locked": "まだのカード",
+  "journal.hint": "これを教えるミッションをクリアすると開く。",
+  "journal.empty": "確認済みの事実がまだない。",
+
+  "teach.classTitle": "45分の授業",
+  "teach.classLead": "おすすめ順: はじめての光、ながいよる、こおりのレスキュー、あらしウォッチ、月のにわ、時間があればフルミッション。きょうのミッションとチャレンジは、フルミッションのあと。"
 }

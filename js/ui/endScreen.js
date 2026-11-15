@@ -44,6 +44,9 @@ export function renderEnd(root, { i18n, summary, story, config, player, nameOf, 
       summary.storm
         ? h("p", { class: "end-storm" }, [dataChip(i18n, summary.storm.label), " ", i18n.t("end.storm", { what: stormSummary(i18n, summary.storm) })])
         : null,
+      Number.isFinite(summary.starCount)
+        ? h("p", { class: "end-stars", text: i18n.t("map.starCount", { n: summary.starCount }) })
+        : null,
       h("p", { class: "small", text: i18n.t("end.seed", { seed: summary.seed }) }),
       h("div", { class: "end-actions" }, [
         h("button", { type: "button", class: "btn btn-primary", id: "play-again", text: i18n.t(complete ? "end.again" : "end.tryAgain"), onclick: onAgain }),

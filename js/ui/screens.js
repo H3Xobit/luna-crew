@@ -6,6 +6,7 @@ import { icon } from "./icons.js";
 import { portrait, playerBadge } from "./characters.js";
 import { dataChip } from "./modals.js";
 import { jobWeights } from "../engine/rules.js";
+import { dailySeed, isUnlocked, rankFor, totalStars } from "./progress.js";
 import { LANGUAGES } from "./i18n.js";
 
 const LANGUAGE_NAMES = { en: "English", ja: "\u65e5\u672c\u8a9e" };
@@ -204,7 +205,7 @@ function weightsTable(i18n, facts, config) {
   ]);
 }
 
-export function openTeachers(modals, { i18n, facts, config }) {
+export function openTeachers(modals, { i18n, facts, config, missions = [] }) {
   const toolkit = facts.get("csa_toolkit");
   const section = (titleKey, keys) => [h("h3", { text: i18n.t(titleKey) }), h("ul", { class: "plain-list" }, keys.map((key) => h("li", { text: i18n.t(key, { rounds: config.lunarDays * config.roundsPerDay, days: config.lunarDays }) })))];
   const body = [
@@ -221,7 +222,10 @@ export function openTeachers(modals, { i18n, facts, config }) {
           sourceLink(toolkit.source.url, `${toolkit.source.agency}: ${toolkit.source.name}`)
         ])
       : null,
-    ...section("teach.accessTitle", ["teach.access1", "teach.access2", "teach.access3"])
+    ...section("teach.accessTitle", ["teach.access1", "teach.access2", "teach.access3"]),
+    h("h3", { text: i18n.t("teach.classTitle") }),
+    h("p", { text: i18n.t("teach.classLead") }),
+    h("ol", { class: "plain-list" }, missions.map((mission) => h("li", { text: `${i18n.pick(mission.title)}: ${i18n.pick(mission.discuss)}` })))
   ];
   return modals.open({ title: i18n.t("teach.title"), tone: "data", wide: true, dismissible: true, body, actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }] });
 }
@@ -277,4 +281,79 @@ export function openSettings(modals, { i18n, settings, onChange }) {
     )
   ];
   return modals.open({ title: i18n.t("title.settings"), tone: "plain", dismissible: true, body, actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }] });
+}
+
+export function renderMap(root, { i18n, missions, progress, onPlay, onJournal, onReset, onHome }) {
+  const stars = totalStars(progress);
+  const rank = rankFor(stars);
+  const nodes = h("ol", { class: "mission-path" });
+  for (const mission of missions) {
+    const open = isUnlocked(mission, missions, progress);
+    const earned = progress.stars?.[mission.id] || 0;
+    const seedNote = mission.daily ? i18n.t("map.daily", { seed: dailySeed() }) : "";
+    const seedInput = mission.chooseSeed
+      ? h("input", { type: "number", class: "text-input seed-input", min: "1", max: "999999", value: "1234", "aria-label": i18n.t("map.seed") })
+      : null;
+    nodes.append(
+      h("li", { class: `mission-node${open ? "" : " is-locked"}` }, [
+        h("div", { class: "mission-card" }, [
+          h("h2", { text: i18n.pick(mission.title) }),
+          h("p", { text: open ? i18n.pick(mission.goal) : i18n.t("map.locked") }),
+          seedNote ? h("p", { class: "small", text: seedNote }) : null,
+          h("p", { class: "mission-stars", text: i18n.t("map.starCount", { n: earned }) }),
+          seedInput,
+          h("button", {
+            type: "button",
+            class: "btn btn-primary",
+            disabled: !open,
+            text: i18n.t("map.play"),
+            onclick: () => {
+              const seed = seedInput ? Number(seedInput.value) : mission.daily ? dailySeed() : null;
+              onPlay(mission, seed);
+            }
+          })
+        ])
+      ])
+    );
+  }
+  const badges = ["storm", "night", "water", "green", "science", "careful", "fix"].map((id) =>
+    h("li", { class: progress.badges?.includes(id) ? "is-earned" : "is-locked" }, [
+      h("strong", { text: i18n.t(`badge.${id}`) }),
+      h("span", { class: "small", text: progress.badges?.includes(id) ? i18n.t("map.earned") : i18n.t("map.badgeLocked") })
+    ])
+  );
+  clear(root).append(
+    h("div", { class: "title-card map-card" }, [
+      h("h1", { text: i18n.t("map.title") }),
+      h("p", { text: i18n.t("map.lead") }),
+      h("p", { class: "map-rank", text: i18n.t("map.rank", { rank: i18n.t(`rank.${rank.id}`), stars }) }),
+      nodes,
+      h("h2", { text: i18n.t("map.badges") }),
+      h("ul", { class: "badge-shelf" }, badges),
+      h("div", { class: "title-actions" }, [
+        h("button", { type: "button", class: "btn btn-choice", text: i18n.t("map.journal"), onclick: onJournal }),
+        h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("map.reset"), onclick: onReset }),
+        h("button", { type: "button", class: "btn btn-quiet", text: i18n.t("ui.home"), onclick: onHome })
+      ])
+    ])
+  );
+}
+
+export function openJournal(modals, { i18n, facts, progress }) {
+  const verified = [...facts.values()].filter((fact) => fact.status === "verified");
+  const cards = verified.map((fact) => {
+    const open = progress.journal?.includes(fact.id);
+    return h("article", { class: `journal-card${open ? "" : " is-locked"}` }, [
+      h("h3", { text: open ? i18n.pick(fact.text) : i18n.t("journal.locked") }),
+      open ? sourceLink(fact.source.url, fact.source.name) : h("p", { class: "small", text: i18n.t("journal.hint") })
+    ]);
+  });
+  return modals.open({
+    title: i18n.t("journal.title"),
+    tone: "data",
+    wide: true,
+    dismissible: true,
+    body: cards.length ? cards : [h("p", { text: i18n.t("journal.empty") })],
+    actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }]
+  });
 }

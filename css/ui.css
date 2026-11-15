@@ -1104,3 +1104,12 @@ html[data-contrast="high"] .dialogue-box {
   border-width: 2px;
   background: #0a0f22;
 }
+
+.mission-path { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.75rem; }
+.mission-card { padding: 0.8rem; border-radius: 16px; background: rgba(255, 255, 255, 0.05); }
+.mission-node.is-locked { opacity: 0.55; }
+.badge-shelf { list-style: none; padding: 0; display: grid; gap: 0.4rem; }
+.badge-shelf li { padding: 0.45rem 0.6rem; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.badge-shelf .is-locked { opacity: 0.55; }
+.journal-card { margin-bottom: 0.7rem; }
+.seed-input { max-width: 8rem; margin: 0.3rem 0; }

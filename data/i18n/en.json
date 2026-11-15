@@ -337,5 +337,41 @@
   "cut.home.1": "The return ship lifts off, nice and calm.",
   "cut.home.2": "The crew waves. Nobody is hurt.",
   "cut.home.3": "Everyone is safe.",
-  "cut.home.4": "Let's try a new plan!"
+  "cut.home.4": "Let's try a new plan!",
+
+  "map.title": "Mission Map",
+  "map.lead": "Play in order. Each mission teaches one idea. Full Mission puts them together.",
+  "map.play": "Play",
+  "map.locked": "Finish the mission before this one.",
+  "map.starCount": "Stars {n} / 3",
+  "map.rank": "{rank}. Stars so far: {stars}.",
+  "map.badges": "Badge shelf",
+  "map.earned": "Earned",
+  "map.badgeLocked": "Not yet",
+  "map.journal": "Science journal",
+  "map.reset": "Reset progress",
+  "map.seed": "Seed code",
+  "map.daily": "Today's seed {seed}. The storm label says if the file is updated, saved, or training.",
+
+  "rank.cadet": "Cadet",
+  "rank.junior": "Junior Planner",
+  "rank.planner": "Mission Planner",
+  "rank.senior": "Senior Planner",
+  "rank.director": "Flight Director",
+
+  "badge.storm": "Storm Smart",
+  "badge.night": "Night Saver",
+  "badge.water": "Water Wizard",
+  "badge.green": "Green Thumb",
+  "badge.science": "Science Star",
+  "badge.careful": "Careful Commander",
+  "badge.fix": "Quick Fixer",
+
+  "journal.title": "Space Science Journal",
+  "journal.locked": "Locked card",
+  "journal.hint": "Play the mission that teaches this, and the card opens.",
+  "journal.empty": "No checked facts are loaded yet.",
+
+  "teach.classTitle": "A 45-minute class",
+  "teach.classLead": "Suggested order: First Light, The Long Night, Ice Rescue, Storm Watch, Moon Garden, then Full Mission if time remains. Mission of the Day and Challenge unlock after Full Mission."
 }

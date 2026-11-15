@@ -8,6 +8,7 @@ const FILES = {
   cards: "data/content/cards.json",
   facts: "data/content/facts.json",
   cutscenes: "data/content/cutscenes.json",
+  missions: "data/content/missions.json",
   osdr: "data/osdr.json",
   radlab: "data/radlab.json"
 };

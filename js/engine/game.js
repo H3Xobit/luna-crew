@@ -158,6 +158,7 @@ export function createGame(options = {}) {
         state.panelsDamaged = false;
         state.repairQueued = false;
         fixed = true;
+        state.stats.repairs = (state.stats.repairs || 0) + 1;
       }
       emit("repair", { fixed });
       nextInQueue();
@@ -252,7 +253,17 @@ export function createGame(options = {}) {
         quizAsked: state.stats.quizAsked,
         sampleRecovered: state.sampleRecovered,
         storm: state.storm ? { ...state.storm } : null,
-        bars: { power: state.power, life: state.life, shield: state.shield }
+        bars: { power: state.power, life: state.life, shield: state.shield },
+        repairs: state.stats.repairs || 0,
+        log: state.log.map((row) => ({
+          isNight: row.isNight,
+          power: row.after.power,
+          life: row.after.life,
+          shield: row.after.shield,
+          eventType: row.eventType,
+          eventChoice: row.eventChoice,
+          lightsOn: row.lightsOn
+        }))
       };
     }
   };

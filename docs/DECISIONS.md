@@ -20,6 +20,12 @@ UI strings live in `data/i18n/en.json` and `ja.json`. Story, cards and facts car
 
 Plain ES modules, static hosting, Web Audio beeps, SVG scene. Easy to fork for a classroom or a GitHub Pages deploy.
 
+## Campaign saves on this browser only
+
+Missions reuse the same round engine. A mission may change the number of lunar days, which rounds are night, the start bars, and the event list. Full Mission and Challenge keep the normal three-day event list. Progress (stars, badges, journal, rank) is stored in localStorage under `luna-crew-progress`. Reset clears that key. No account and no player name is written there. The name stays in the older player settings key.
+
+Star 1 means the mission was completed. Star 2 means it was completed with Power, Life Support and Shield all above 25. Star 3 is the mission's learning goal (shelter, saved night power, ice sample, lights left on, or simply finishing the first lesson). If several briefing lines could apply, the game still uses the order in the weights section.
+
 ## Job weights are different on purpose
 
 Power, Life Support, Shield and Science are not equal. Power is 5 per point in daytime and 1 at night. Damaged panels halve that gain and round down, matching `applyJobs`. Life Support is 4 per point and spends 1 Power for every 2 points. Shield is 4 per point. Science is 10 Mission Points and does not fill a safety bar. A storm does not change the 4. It makes the Shield you already have matter N times more, because the shelter line is N times 20.
