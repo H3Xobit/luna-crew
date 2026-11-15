@@ -20,13 +20,13 @@
       {"duration": 6200, "art": "night.sunset", "who": "nova", "expr": "thinking", "line": "cut.night.1", "sound": "night", "still": 0.5},
       {"duration": 6200, "art": "night.shadows", "who": "sprout", "expr": "worried", "line": "cut.night.2", "still": 0.6},
       {"duration": 6200, "art": "night.battery", "who": "nova", "expr": "neutral", "line": "cut.night.3", "cues": [[0.3, "lightsOff"]]},
-      {"duration": 6200, "art": "night.pip", "who": "pip", "expr": "sleepy", "line": "cut.night.4", "sound": "chirp", "cues": [[0.25, "pipSleepy"]]}
+      {"duration": 6200, "art": "night.pip", "who": "pip", "expr": "sleepy", "line": "cut.night.4", "sound": "chirp"}
     ]
   },
   "rescue": {
     "shots": [
-      {"duration": 6200, "art": "rescue.dark", "who": "pip", "expr": "worried", "line": "cut.rescue.1", "sound": "radio", "cues": [[0.3, "pipSad"]]},
-      {"duration": 6200, "art": "rescue.frost", "who": "nova", "expr": "thinking", "line": "cut.rescue.2", "cues": [[0.1, "sparkle"], [0.45, "pipHappy"]]},
+      {"duration": 6200, "art": "rescue.dark", "who": "pip", "expr": "worried", "line": "cut.rescue.1", "sound": "radio"},
+      {"duration": 6200, "art": "rescue.frost", "who": "nova", "expr": "thinking", "line": "cut.rescue.2", "cues": [[0.1, "sparkle"]]},
       {"duration": 6200, "art": "rescue.cart", "who": "sprout", "expr": "excited", "line": "cut.rescue.3", "still": 0.6, "cues": [[0.05, "roll"], [0.5, "roll"]]},
       {"duration": 6200, "art": "rescue.tow", "who": "pip", "expr": "happy", "line": "cut.rescue.4", "sound": "good", "cues": [[0.1, "roll"], [0.55, "pipHappy"]]}
     ]
@@ -34,9 +34,9 @@
   "stormShelter": {
     "shots": [
       {"duration": 6200, "art": "storm.flare", "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm", "still": 0.6, "cues": [[0.14, "flare"]]},
-      {"duration": 6200, "art": "storm.shelter", "who": "sprout", "expr": "worried", "line": "cut.storm.2", "still": 0.35, "cues": [[0.1, "patter"], [0.5, "patter"], [0.6, "pipSad"]]},
+      {"duration": 6200, "art": "storm.shelter", "who": "sprout", "expr": "worried", "line": "cut.storm.2", "still": 0.35, "cues": [[0.1, "patter"], [0.5, "patter"]]},
       {"duration": 6200, "art": "storm.inside", "who": "nova", "expr": "happy", "line": "cut.storm.3", "cues": [[0.05, "patter"], [0.45, "patter"], [0.8, "patter"]]},
-      {"duration": 6200, "art": "storm.pass", "who": "pip", "expr": "happy", "line": "cut.storm.4", "sound": "good", "still": 1, "cues": [[0.4, "pipHappy"]]}
+      {"duration": 6200, "art": "storm.pass", "who": "pip", "expr": "happy", "line": "cut.storm.4", "sound": "good", "still": 1}
     ]
   },
   "stormWork": {
@@ -44,7 +44,7 @@
       {"duration": 6200, "art": "storm.flare", "who": "nova", "expr": "worried", "line": "cut.storm.1", "sound": "alarm", "still": 0.6, "cues": [[0.14, "flare"]]},
       {"duration": 6200, "art": "storm.work", "who": "sprout", "expr": "worried", "line": "cut.storm.work", "sound": "zap", "cues": [[0.3, "zap"], [0.6, "zap"], [0.85, "zap"]]},
       {"duration": 6200, "art": "storm.panels", "who": "nova", "expr": "neutral", "line": "cut.storm.panels", "cues": [[0.12, "zap"], [0.28, "zap"], [0.44, "zap"]]},
-      {"duration": 6200, "art": "storm.ok", "who": "pip", "expr": "thinking", "line": "cut.storm.safe", "sound": "oops", "cues": [[0.2, "pipThink"]]}
+      {"duration": 6200, "art": "storm.ok", "who": "pip", "expr": "thinking", "line": "cut.storm.safe", "sound": "oops"}
     ]
   },
   "discovery": {
@@ -52,7 +52,7 @@
       {"duration": 6200, "art": "find.scan", "who": "pip", "expr": "thinking", "line": "cut.find.1", "sound": "radio", "cues": [[0.05, "scan"], [0.5, "pipThink"]]},
       {"duration": 6200, "art": "find.glow", "who": "sprout", "expr": "excited", "line": "cut.find.2", "sound": "sting", "cues": [[0.1, "sparkle"], [0.55, "sparkle"]]},
       {"duration": 6200, "art": "find.lab", "who": "nova", "expr": "happy", "line": "cut.find.3", "cues": [[0.1, "radio"], [0.3, "radio"], [0.5, "win"]]},
-      {"duration": 6200, "art": "find.choice", "who": "sprout", "expr": "happy", "line": "cut.find.4", "sound": "good", "cues": [[0.3, "pipThink"]]}
+      {"duration": 6200, "art": "find.choice", "who": "sprout", "expr": "happy", "line": "cut.find.4", "sound": "good"}
     ]
   },
   "greenhouse": {
@@ -60,19 +60,19 @@
       {"duration": 6200, "art": "green.lights", "who": "sprout", "expr": "happy", "line": "cut.green.1", "sound": "lightsOn", "still": 1, "cues": [[0.5, "grow"]]},
       {"duration": 6200, "art": "green.grow", "who": "sprout", "expr": "thinking", "line": "cut.green.2", "still": 1, "cues": [[0.1, "grow"], [0.55, "grow"]]},
       {"duration": 6200, "art": "green.soil", "who": "nova", "expr": "neutral", "line": "cut.green.3", "still": 1},
-      {"duration": 6200, "art": "green.plan", "who": "sprout", "expr": "excited", "line": "cut.green.4", "sound": "good", "cues": [[0.4, "pipHappy"]]}
+      {"duration": 6200, "art": "green.plan", "who": "sprout", "expr": "excited", "line": "cut.green.4", "sound": "good"}
     ]
   },
   "rank": {
     "shots": [
       {"duration": 6000, "art": "rank.fly", "who": "nova", "expr": "excited", "line": "cut.rank.1", "sound": "win", "still": 1, "cues": [[0.0, "whoosh"], [0.5, "pop"]]},
-      {"duration": 6000, "art": "rank.shine", "who": "sprout", "expr": "happy", "line": "cut.rank.2", "cues": [[0.1, "sparkle"], [0.5, "pipHappy"]]},
+      {"duration": 6000, "art": "rank.shine", "who": "sprout", "expr": "happy", "line": "cut.rank.2", "cues": [[0.1, "sparkle"]]},
       {"duration": 6000, "art": "rank.stars", "who": "pip", "expr": "excited", "line": "cut.rank.3", "sound": "sting", "still": 1, "cues": [[0.12, "pop"], [0.24, "pop"], [0.36, "pop"], [0.48, "pop"], [0.6, "pop"]]}
     ]
   },
   "endingComplete": {
     "shots": [
-      {"duration": 6200, "art": "end.cheer", "who": "pip", "expr": "excited", "line": "cut.end.1", "sound": "win", "cues": [[0.35, "pipHappy"]]},
+      {"duration": 6200, "art": "end.cheer", "who": "pip", "expr": "excited", "line": "cut.end.1", "sound": "win"},
       {"duration": 6200, "art": "end.lookup", "who": "nova", "expr": "happy", "line": "cut.end.2", "still": 1},
       {"duration": 6200, "art": "end.earth", "who": "sprout", "expr": "happy", "line": "cut.end.3"},
       {"duration": 6200, "art": "end.rise", "who": "nova", "expr": "neutral", "line": "cut.end.4", "still": 1, "cues": [[0.3, "sparkle"]]}
@@ -83,7 +83,7 @@
       {"duration": 6200, "art": "home.liftoff", "who": "nova", "expr": "neutral", "line": "cut.home.1", "sound": "home", "still": 0.55, "cues": [[0.08, "engine"], [0.12, "whoosh"]]},
       {"duration": 6200, "art": "home.wave", "who": "sprout", "expr": "happy", "line": "cut.home.2", "cues": [[0.0, "engineShort"]]},
       {"duration": 6200, "art": "home.cruise", "who": "pip", "expr": "happy", "line": "cut.home.3", "still": 0.6},
-      {"duration": 6200, "art": "home.plan", "who": "nova", "expr": "happy", "line": "cut.home.4", "cues": [[0.32, "pop"], [0.4, "pipHappy"]]}
+      {"duration": 6200, "art": "home.plan", "who": "nova", "expr": "happy", "line": "cut.home.4", "cues": [[0.32, "pop"]]}
     ]
   }
 }

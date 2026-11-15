@@ -34,7 +34,7 @@ function addStyle() {
   document.head.append(style);
 }
 
-export function playCutscene(host, { id, script, i18n, audio, voice, reduced, nameOf }) {
+export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf }) {
   const scene = script?.[id];
   if (!scene || !Array.isArray(scene.shots) || scene.shots.length === 0) return Promise.resolve("missing");
 
@@ -67,7 +67,6 @@ export function playCutscene(host, { id, script, i18n, audio, voice, reduced, na
         if (paused) {
           pausedAt = performance.now();
           audio?.hush?.();
-          voice?.stop();
         } else {
           started += performance.now() - pausedAt;
         }
@@ -102,7 +101,6 @@ export function playCutscene(host, { id, script, i18n, audio, voice, reduced, na
       overlay.remove();
       audio?.stopHum?.();
       audio?.hush?.();
-      voice?.stop();
       if (previousFocus && typeof previousFocus.focus === "function" && document.contains(previousFocus)) {
         previousFocus.focus({ preventScroll: true });
       }
@@ -131,11 +129,8 @@ export function playCutscene(host, { id, script, i18n, audio, voice, reduced, na
       audio?.hush?.();
       if (shot.sound) audio?.play(shot.sound);
       cues = reduced ? [] : [...(shot.cues || [])].sort((a, b) => a[0] - b[0]);
-      if (shot.who === "pip") {
-        if (!reduced) setTimeout(() => !done && audio?.pipSay?.(line.textContent, shot.expr), 250);
-      } else {
-        voice?.speak(line.textContent, { lang: i18n.lang, who: shot.who || "nova" });
-      }
+      // Pip beeps on Pip's own shots only. Nobody else talks out loud.
+      if (shot.who === "pip" && !reduced) setTimeout(() => !done && audio?.pipSay?.(line.textContent, shot.expr), 250);
     }
 
     function goNext(fromUser) {

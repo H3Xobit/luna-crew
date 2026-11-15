@@ -208,8 +208,6 @@
   "settings.soundHint": "ブラウザで作るこうか音です。音声ファイルはありません。",
   "settings.music": "おんがく",
   "settings.musicHint": "ブラウザで作る、明るく楽しいおんがくです。「音」がオンのときに流れます。",
-  "settings.voice": "読み上げ",
-  "settings.voiceHint": "ノバとスプラウトはかせが、お使いの機器の声でお話を読みます。ピップは「ピポパ」と音で答えます。",
   "settings.motion": "動きをへらす",
   "settings.motionHint": "シーンと文字送りのアニメをへらします。",
   "settings.contrast": "ハイコントラスト",

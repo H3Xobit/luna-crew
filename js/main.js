@@ -7,7 +7,6 @@ import { buildSources } from "./data/sources.js";
 import { createI18n, loadDictionaries, detectLanguage } from "./ui/i18n.js";
 import { $, clear, h, setNewTabNote, sleep } from "./ui/dom.js";
 import { createAudio } from "./ui/audio.js";
-import { createVoice } from "./ui/voice.js";
 import { createModals, rescueCard, discoveryCard, stormCard, resultCard, reviewCard } from "./ui/modals.js";
 import { playCutscene } from "./ui/cutscene.js";
 import { mountArt } from "./ui/cutsceneArt.js";
@@ -34,7 +33,6 @@ const DEFAULT_SETTINGS = {
   langChosen: false,
   sound: true,
   music: true,
-  voice: true,
   reduceMotion: false,
   highContrast: false,
   textSize: "normal"
@@ -97,7 +95,6 @@ async function boot() {
   const i18n = createI18n(dictionaries, startLang);
   const settings = { ...DEFAULT_SETTINGS, ...stored, lang: startLang, langChosen: Boolean(stored.langChosen) };
   const audio = createAudio({ enabled: settings.sound, music: settings.music });
-  const voice = createVoice({ enabled: settings.voice });
   const modals = createModals(modalRoot, { i18n, audio });
 
   let player = readJson(PLAYER_KEY, {
@@ -127,7 +124,6 @@ async function boot() {
       script: content.cutscenes,
       i18n,
       audio,
-      voice,
       reduced: settings.reduceMotion,
       nameOf
     });
@@ -165,7 +161,6 @@ async function boot() {
     document.documentElement.dataset.text = settings.textSize;
     audio.setEnabled(settings.sound);
     audio.setMusic(settings.music);
-    voice.setEnabled(settings.voice);
     setNewTabNote(i18n.t("ui.newTab"));
     writeJson(SETTINGS_KEY, settings);
     document.title = i18n.pick(content.config.title);
@@ -326,7 +321,7 @@ async function boot() {
       onAsk: () => askEarth(),
       onGo: (plan) => submitPlan(plan)
     });
-    dialogue = createDialogue(dialogueRoot, { i18n, audio, voice, nameOf });
+    dialogue = createDialogue(dialogueRoot, { i18n, audio, nameOf });
     paintCrewRail(null);
   }
 
@@ -356,7 +351,7 @@ async function boot() {
 
   async function runIntro() {
     showScreen("play");
-    if (!dialogue) dialogue = createDialogue(dialogueRoot, { i18n, audio, voice, nameOf });
+    if (!dialogue) dialogue = createDialogue(dialogueRoot, { i18n, audio, nameOf });
     play.classList.add("is-intro");
     for (const panel of content.story.intro) {
       const picture = INTRO_ART[panel.art];

@@ -31,23 +31,6 @@ test("every cutscene is 8 to 30 seconds, has subtitles and uses real sounds", as
   }
 });
 
-test("read-aloud picks western female voices and never speaks for Pip", async () => {
-  const { castVoices, createVoice } = await import("../js/ui/voice.js");
-  const v = (name, lang) => ({ name, lang });
-  const device = [
-    v("Microsoft Heera - English (India)", "en-IN"),
-    v("Microsoft David - English (United States)", "en-US"),
-    v("Google US English", "en-US"),
-    v("Google UK English Female", "en-GB"),
-    v("Microsoft Ana Online (Natural) - English (United States)", "en-US")
-  ];
-  const cast = castVoices(device, "en");
-  assert.equal(cast.nova.name, "Google US English");
-  assert.equal(cast.sprout.name, "Google UK English Female");
-  assert.equal(castVoices([v("Microsoft Heera - English (India)", "en-IN")], "en").nova, null);
-  assert.equal(createVoice().speak("Beep", { who: "pip" }), false);
-});
-
 test("Pip's droid phrases are short, varied and never empty", async () => {
   const { createAudio } = await import("../js/ui/audio.js");
   const audio = createAudio({ enabled: false });

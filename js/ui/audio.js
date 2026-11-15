@@ -107,10 +107,15 @@ const SOUNDS = {
 };
 
 // ------------------------------------------------------------------- Pip
-// Pip never says words. Pip talks like a little astromech droid: whistles
-// that slide up and down, fast warbling trills and quick bursts of blips.
-// Every phrase is made fresh, so Pip never says the same thing twice.
-// A note with "vib" wobbles its pitch "vib" times a second by "depth" Hz.
+// Pip never says words. Pip talks like a small astromech droid: fast
+// "bibbidi" chatter, whistles that swoop up and down with a slightly metallic
+// edge, quick warbles, and a falling scream when Pip is scared. Every phrase
+// is made fresh, so Pip never says the same thing twice.
+//
+// Extra note options used here:
+//   curve: pitch shape over the note, as multipliers of f (smoothly joined)
+//   fm: [ratio, index] adds a second wave that gives the metal "droid" edge
+//   vib, depth: fast pitch wobble, vib times a second, depth Hz wide
 
 const PIP_MOODS = {
   pipHappy: { mood: "happy" },
@@ -122,86 +127,103 @@ const PIP_MOODS = {
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
+const V = 0.085;
 
 // The pieces a droid phrase is built from. Each returns notes starting at 0.
 const PARTS = {
-  // a clean whistle that slides
-  whistle(up, high = 1) {
-    const f = rand(1100, 2000) * high;
-    const d = rand(0.09, 0.2);
-    return [
-      { f, to: f * (up ? rand(1.4, 1.9) : rand(0.5, 0.7)), d, type: "sine", v: 0.085, a: 0.008 },
-      { f: f * 2, to: f * 2 * (up ? 1.6 : 0.6), d, type: "sine", v: 0.012, a: 0.008 }
-    ];
-  },
-  // the famous warble: a fast wobble on a sliding tone
-  trill(up) {
-    const f = rand(1400, 2300);
-    const d = rand(0.16, 0.34);
-    return [{ f, to: f * (up ? 1.25 : 0.75), d, type: "sine", v: 0.08, a: 0.01, vib: rand(22, 34), depth: rand(260, 420) }];
-  },
-  // quick blips, like typing on a tiny keyboard
-  burst(n = 5) {
+  // fast burbling chatter: tiny notes hopping between two pitches
+  chatter(n = 8) {
     const notes = [];
+    const low = rand(1300, 1900);
+    const high = low * rand(1.35, 1.7);
     let at = 0;
     for (let i = 0; i < n; i += 1) {
-      const f = rand(1500, 3200);
-      notes.push({ f, to: f * rand(0.9, 1.15), d: rand(0.035, 0.06), type: pickOne(["sine", "square"]), v: 0.05, a: 0.008, at });
-      at += rand(0.045, 0.07);
+      const f = (i % 2 ? high : low) * rand(0.94, 1.08);
+      const d = rand(0.028, 0.045);
+      notes.push({ f, curve: [1, rand(0.9, 1.15)], d, type: "sine", v: V * 0.85, a: 0.005, fm: [1.5, 0.12], at });
+      at += d * rand(0.85, 1.05);
     }
     return notes;
   },
-  // a low "boop" with a little buzz
-  boop() {
-    const f = rand(480, 700);
+  // a swooping whistle: up, down, or up-then-down
+  whoop(shape = "up") {
+    const f = rand(1100, 2000);
+    const d = rand(0.12, 0.24);
+    const curve =
+      shape === "up" ? [1, 1.15, 1.7, 2.1] : shape === "down" ? [1.9, 1.6, 1.05, 0.8] : shape === "hump" ? [1, 1.9, 1.7, 0.9] : [1.6, 0.85, 1.0, 1.9];
+    return [{ f, curve, d, type: "sine", v: V, a: 0.008, fm: [1.0, 0.18] }];
+  },
+  // the famous warble: a very fast wobble on a sliding tone
+  trill(up = true) {
+    const f = rand(1500, 2300);
+    const d = rand(0.18, 0.32);
+    return [{ f, curve: up ? [1, 1.1, 1.35] : [1.3, 1.1, 0.85], d, type: "sine", v: V * 0.9, a: 0.01, vib: rand(32, 46), depth: rand(320, 560) }];
+  },
+  // two clear beeps, like "bee-boo"
+  beeps() {
+    const f = rand(1800, 2600);
+    const g = f * pickOne([0.66, 0.75, 1.33, 1.5]);
     return [
-      { f, to: f * rand(0.8, 1.2), d: rand(0.08, 0.14), type: "square", v: 0.03, a: 0.006 },
-      { f, to: f * 0.9, d: 0.12, type: "sine", v: 0.05, a: 0.006 }
+      { f, curve: [1, 1.02], d: 0.075, type: "sine", v: V, a: 0.006, fm: [2.0, 0.1] },
+      { f: g, curve: [1, 0.97], d: 0.09, type: "sine", v: V, a: 0.006, fm: [2.0, 0.1], at: 0.1 }
     ];
   },
-  // a sad slide down with a slow wobble
-  droop() {
-    const f = rand(1300, 1700);
-    return [{ f, to: f * 0.35, d: rand(0.45, 0.65), type: "sine", v: 0.075, a: 0.02, vib: 7, depth: 60 }];
-  },
-  // a question: low, then a whistle that rises at the end
+  // a question: a low beep, then a whistle that shoots up at the end
   ask() {
-    const f = rand(700, 900);
+    const f = rand(900, 1200);
     return [
-      { f, to: f * 1.05, d: 0.11, type: "sine", v: 0.06, a: 0.008 },
-      { f: f * 1.3, to: f * 2.6, d: 0.24, type: "sine", v: 0.08, a: 0.01, at: 0.16 }
+      { f, curve: [1, 0.96], d: 0.08, type: "sine", v: V * 0.8, a: 0.006 },
+      { f: f * 1.2, curve: [1, 1.05, 1.5, 2.6], d: 0.26, type: "sine", v: V, a: 0.01, fm: [1.0, 0.15], at: 0.13 }
     ];
   },
-  // a sleepy, slow, low hum
+  // the scared scream: high, wobbling, falling fast
+  scream() {
+    const f = rand(2600, 3200);
+    return [{ f, curve: [1, 0.95, 0.6, 0.25], d: rand(0.5, 0.7), type: "sine", v: V * 0.8, a: 0.015, vib: 18, depth: 160, fm: [1.0, 0.2] }];
+  },
+  // a grumpy buzz
+  blat() {
+    const f = rand(180, 240);
+    return [{ f, curve: [1, 0.9], d: rand(0.16, 0.24), type: "sine", v: V * 0.7, a: 0.01, fm: [1.41, 3.2] }];
+  },
+  // a slow, sleepy, falling hum
   yawn() {
-    const f = rand(520, 680);
-    return [{ f, to: f * 0.55, d: rand(0.6, 0.8), type: "sine", v: 0.06, a: 0.08, vib: 4, depth: 25 }];
+    const f = rand(700, 900);
+    return [{ f, curve: [1, 1.15, 0.8, 0.5], d: rand(0.7, 0.9), type: "sine", v: V * 0.6, a: 0.08, vib: 5, depth: 30 }];
   }
 };
 
 const RECIPES = {
-  happy: [["whistle", true], ["burst"], ["trill", true], ["whistle", false], ["boop"], ["whistle", true]],
-  excited: [["burst", 7], ["trill", true], ["whistle", true, 1.25], ["burst", 4], ["trill", true]],
-  sad: [["droop"], ["boop"], ["droop"]],
-  think: [["boop"], ["burst", 3], ["ask"]],
-  sleepy: [["yawn"], ["boop"], ["yawn"]]
+  happy: [["chatter", 8], ["whoop", "up"], ["beeps"], ["trill", true], ["whoop", "hump"], ["chatter", 6]],
+  excited: [["chatter", 12], ["trill", true], ["whoop", "up"], ["chatter", 9], ["whoop", "hump"]],
+  sad: [["scream"], ["blat"], ["whoop", "down"]],
+  think: [["beeps"], ["chatter", 5], ["ask"]],
+  sleepy: [["yawn"], ["beeps"], ["yawn"]]
 };
 
-// size is roughly how many syllables Pip "says" (a longer line, a longer phrase).
+// What each mood ends on, so the phrase "lands" like a sentence.
+const ENDINGS = { happy: ["whoop", "up"], excited: ["trill", true], sad: ["whoop", "down"], think: ["ask"], sleepy: ["yawn"] };
+
+// size is roughly how many "words" Pip says (a longer line, a longer phrase).
 function droidPhrase(mood = "happy", size = 3) {
   const recipe = RECIPES[mood] || RECIPES.happy;
-  const count = Math.max(2, Math.min(mood === "sad" || mood === "sleepy" ? 3 : 6, Math.round(size)));
+  const most = mood === "sad" || mood === "sleepy" ? 3 : 5;
+  const count = Math.max(2, Math.min(most, Math.round(size)));
   const notes = [];
   let at = 0;
+  let last = "";
   for (let i = 0; i < count; i += 1) {
-    const [part, ...args] = i === count - 1 && (mood === "happy" || mood === "excited") ? ["whistle", true, 1.2] : pickOne(recipe);
-    const piece = PARTS[part](...args);
+    let choice = i === count - 1 ? ENDINGS[mood] || ENDINGS.happy : pickOne(recipe);
+    if (choice[0] === last && i !== count - 1) choice = pickOne(recipe);
+    last = choice[0];
+    const [part, ...args] = choice;
     let end = 0;
-    for (const note of piece) {
+    for (const note of PARTS[part](...args)) {
       notes.push({ ...note, at: at + (note.at || 0) });
       end = Math.max(end, (note.at || 0) + note.d);
     }
-    at += end + rand(0.03, 0.09);
+    // droids talk in quick bursts with tiny gaps
+    at += end + rand(0.02, 0.07);
   }
   return notes;
 }
@@ -251,6 +273,20 @@ const TUNES = [
 
 // Rhythm of the marimba: which steps of the bar play a chord note.
 const MARIMBA = [0, 2, 3, 5, 6];
+
+// A smooth pitch line through the curve points, for setValueCurveAtTime.
+function pitchCurve(f, points) {
+  const steps = 48;
+  const out = new Float32Array(steps);
+  for (let i = 0; i < steps; i += 1) {
+    const x = (i / (steps - 1)) * (points.length - 1);
+    const k = Math.min(points.length - 2, Math.floor(x));
+    const t = x - k;
+    const ease = t * t * (3 - 2 * t);
+    out[i] = Math.max(40, f * (points[k] + (points[k + 1] - points[k]) * ease));
+  }
+  return out;
+}
 
 export const SOUND_NAMES = [...Object.keys(SOUNDS), ...Object.keys(PIP_MOODS)];
 
@@ -313,8 +349,23 @@ export function createAudio({ enabled = true, music = true, AudioContextClass, l
     } else {
       source = ctx.createOscillator();
       source.type = note.type;
-      source.frequency.setValueAtTime(note.f, start);
-      if (note.to) source.frequency.exponentialRampToValueAtTime(note.to, start + note.d);
+      if (note.curve) {
+        source.frequency.setValueCurveAtTime(pitchCurve(note.f, note.curve), start, note.d);
+      } else {
+        source.frequency.setValueAtTime(note.f, start);
+        if (note.to) source.frequency.exponentialRampToValueAtTime(note.to, start + note.d);
+      }
+      if (note.fm) {
+        const [ratio, index] = note.fm;
+        const mod = ctx.createOscillator();
+        const amount = ctx.createGain();
+        if (note.curve) mod.frequency.setValueCurveAtTime(pitchCurve(note.f * ratio, note.curve), start, note.d);
+        else mod.frequency.value = note.f * ratio;
+        amount.gain.value = note.f * index;
+        mod.connect(amount).connect(source.frequency);
+        mod.start(start);
+        mod.stop(start + note.d + 0.05);
+      }
       if (note.vib) {
         wobble = ctx.createOscillator();
         const depth = ctx.createGain();
@@ -499,7 +550,7 @@ export function createAudio({ enabled = true, music = true, AudioContextClass, l
     stopHum() {},
     // Pip "says" a line in droid beeps. Longer lines get longer phrases.
     pipSay(text, expr) {
-      const size = 2 + Math.min(4, String(text || "").length / 22);
+      const size = 2 + Math.min(3, String(text || "").length / 25);
       return playNotes(droidPhrase(pipMood(expr), size));
     },
     play(name) {

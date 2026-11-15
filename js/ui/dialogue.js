@@ -16,7 +16,7 @@ const TARGETS = {
 
 const TYPE_MS = 22;
 
-export function createDialogue(root, { i18n, audio, voice, nameOf }) {
+export function createDialogue(root, { i18n, audio, nameOf }) {
   const face = h("div", { class: "dialogue-portrait" });
   const name = h("div", { class: "dialogue-name" });
   const typed = h("p", { class: "dialogue-text", "aria-hidden": "true" });
@@ -101,11 +101,8 @@ export function createDialogue(root, { i18n, audio, voice, nameOf }) {
       factBox.hidden = true;
     }
     setSpotlight(line.target);
-    // Nova and Dr. Sprout read their line aloud. Pip never says words: Pip
-    // answers in droid beeps, and the words stay on screen.
-    voice?.stop();
-    if (who === "pip") speaking = Boolean(audio.pipSay?.(text, line.expr));
-    else speaking = Boolean(voice?.speak(text, { lang: i18n.lang, who }));
+    // Nobody reads aloud. Pip "talks" in droid beeps; the words stay on screen.
+    speaking = who === "pip" ? Boolean(audio.pipSay?.(text, line.expr)) : false;
     return type(text);
   }
 
@@ -125,7 +122,6 @@ export function createDialogue(root, { i18n, audio, voice, nameOf }) {
       function close(how) {
         clearInterval(timer);
         finishTyping = null;
-        voice?.stop();
         speaking = false;
         setSpotlight(null);
         root.hidden = true;

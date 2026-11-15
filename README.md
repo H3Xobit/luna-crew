@@ -15,7 +15,7 @@ Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronau
 
 Demo tip: add `?demo=1` to the URL to bring the storm earlier for a short talk.
 
-Sound effects and music are made in the browser with WebAudio (no audio files), and read-aloud uses the device's built-in speech voice.
+Sound effects, Pip's droid beeps and the music are made in the browser with WebAudio. There are no audio files and no voices.
 
 ## Run locally
 
