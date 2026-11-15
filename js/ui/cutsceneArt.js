@@ -33,13 +33,39 @@ const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const outBack = (t) => 1 + 2.70158 * (t - 1) ** 3 + 1.70158 * (t - 1) ** 2;
 const n = (v) => Number(v).toFixed(2);
 
+// Writes are skipped when the value did not change, so parts that stand still
+// are never painted again.
 function T(el, x = 0, y = 0, s = 1, r = 0, sy = null) {
   if (!el) return;
-  el.setAttribute("transform", `translate(${n(x)} ${n(y)}) rotate(${n(r)}) scale(${n(s)}${sy === null ? "" : ` ${n(sy)}`})`);
+  if (el.camera) {
+    el.camera(x, y, s);
+    return;
+  }
+  if (el.cxLayer) {
+    const move = `translate(${((x / W) * 100).toFixed(3)}%, ${((y / H) * 100).toFixed(3)}%) rotate(${r.toFixed(2)}deg)`;
+    if (el.cxMove !== move) {
+      el.cxMove = move;
+      el.cxLayer.style.transform = move;
+    }
+    const size = `scale(${n(s)}${sy === null ? "" : ` ${n(sy)}`})`;
+    if (el.cxT !== size) {
+      el.cxT = size;
+      el.setAttribute("transform", size);
+    }
+    return;
+  }
+  const value = `translate(${n(x)} ${n(y)}) rotate(${n(r)}) scale(${n(s)}${sy === null ? "" : ` ${n(sy)}`})`;
+  if (el.cxT === value) return;
+  el.cxT = value;
+  el.setAttribute("transform", value);
 }
 
 function O(el, value) {
-  if (el) el.setAttribute("opacity", n(clamp01(value)));
+  if (!el) return;
+  const text = n(clamp01(value));
+  if (el.cxO === text) return;
+  el.cxO = text;
+  el.setAttribute("opacity", text);
 }
 
 // Zoom the whole picture around a point, with an optional slide.
@@ -49,7 +75,7 @@ function cam(q, scale, cx = W / 2, cy = H / 2, dx = 0, dy = 0) {
 
 // ------------------------------------------------------------------- defs
 
-export const DEFS = `<style>.cx-tw{animation:cx-twinkle 2.6s ease-in-out infinite}@keyframes cx-twinkle{50%{opacity:.15}}@media (prefers-reduced-motion:reduce){.cx-tw{animation:none}}</style><defs>
+export const DEFS = `<style>.cx-tw{animation:cx-twinkle 4.2s ease-in-out infinite}@keyframes cx-twinkle{50%{opacity:.2}}@media (prefers-reduced-motion:reduce){.cx-tw{animation:none}}</style><defs>
 <linearGradient id="cxSpace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02030a"/><stop offset="0.55" stop-color="#070c24"/><stop offset="1" stop-color="#121a42"/></linearGradient>
 <radialGradient id="cxOcean" cx="0.36" cy="0.32" r="0.8"><stop offset="0" stop-color="#58b4ff"/><stop offset="0.45" stop-color="#1f74dc"/><stop offset="0.8" stop-color="#0c3f9a"/><stop offset="1" stop-color="#06225c"/></radialGradient>
 <radialGradient id="cxAtmo" cx="0.5" cy="0.5" r="0.5"><stop offset="0.80" stop-color="#58b8ff" stop-opacity="0"/><stop offset="0.87" stop-color="#7fd0ff" stop-opacity="0.6"/><stop offset="1" stop-color="#58b8ff" stop-opacity="0"/></radialGradient>
@@ -84,19 +110,20 @@ export const DEFS = `<style>.cx-tw{animation:cx-twinkle 2.6s ease-in-out infinit
 
 // -------------------------------------------------------------------- sky
 
-function stars(seed, count = 150, y0 = 0, y1 = H) {
+function stars(seed, count = 150, y0 = 0, y1 = H, twinkle = true) {
   const r = mulberry(seed);
   let out = "";
+  let blink = "";
   for (let i = 0; i < count; i += 1) {
     const x = r() * W;
     const y = y0 + r() * (y1 - y0);
     const rad = 0.7 + r() * r() * 2.6;
     const alpha = 0.35 + r() * 0.65;
     const color = i % 11 === 0 ? "#ffe9c2" : i % 7 === 0 ? "#cfe3ff" : "#ffffff";
-    const twinkle = i % 5 === 0 ? ` class="cx-tw" style="animation-delay:${n(r() * 3)}s"` : "";
-    out += `<circle${twinkle} cx="${n(x)}" cy="${n(y)}" r="${n(rad)}" fill="${color}" opacity="${n(alpha)}"/>`;
+    if (twinkle && i % 6 === 0) blink += `<circle class="cx-tw" style="animation-delay:${n(r() * 4)}s" cx="${n(x)}" cy="${n(y)}" r="${n(rad + 0.4)}" fill="${color}" opacity="${n(alpha)}"/>`;
+    else out += `<circle cx="${n(x)}" cy="${n(y)}" r="${n(rad)}" fill="${color}" opacity="${n(alpha)}"/>`;
   }
-  return `<g>${out}</g>`;
+  return `<g>${out}</g>${blink ? `<g data-solo="1">${blink}</g>` : ""}`;
 }
 
 function sky(seed = 7, count = 150) {
@@ -192,13 +219,14 @@ function earth(key, r, lon = null) {
   );
 }
 
-// lon is the longitude in the middle of the disc. Lower it over time and the
-// land moves to the right, the way Earth really turns.
-function spin(q, key, r, lon, drift = 0) {
+// lon is the longitude in the middle of the disc. `turn` grows with time, so
+// the land keeps sliding to the right the way Earth really turns, and the
+// clouds drift a little faster than the land.
+function spin(q, key, r, lon, turn = 0) {
   const width = 4 * r;
   const wrap = (v) => ((v % width) + width) % width;
-  T(q(`${key}-map`), -r - wrap(((lon + 90) / 360) * width), 0);
-  T(q(`${key}-cl`), -r - wrap(((lon + 90) / 360) * width + drift * r), 0);
+  T(q(`${key}-map`), -r - wrap(((lon - turn * 130 + 90) / 360) * width), 0);
+  T(q(`${key}-cl`), -r - wrap(((lon - turn * 190 + 90) / 360) * width), 0);
 }
 
 function moonDisc(key, r) {
@@ -250,7 +278,7 @@ function ground() {
 }
 
 function dusk(opacity = 0) {
-  return `<rect data-a="dusk" width="${W}" height="${H}" fill="url(#cxDusk)" opacity="${opacity}"/>`;
+  return `<rect data-a="dusk" data-solo="1" width="${W}" height="${H}" fill="url(#cxDusk)" opacity="${opacity}"/>`;
 }
 
 // ------------------------------------------------------------------- base
@@ -391,7 +419,7 @@ function landerCabin(faces = false) {
 
 function lander(key, { engine = true } = {}) {
   return (
-    `<g data-a="${key}">` +
+    `<g data-a="${key}" data-solo="1">` +
     (engine ? `<g transform="translate(0 -66)">${flame(`${key}-flame`, 1)}</g>` : "") +
     landerStage() +
     `<g transform="translate(0 -206)">${landerCabin()}</g>` +
@@ -447,7 +475,7 @@ function pip(key, expr = "happy", extra = "") {
   const light = expr === "worried" ? "#ff5c8a" : expr === "sleepy" ? "#8aa0b8" : "#5ee08a";
   const wheel = (x, i) => `<g transform="translate(${x} 104)"><g data-a="${key}-w${i}"><circle r="11" fill="#555c80" stroke="${INK}" stroke-width="2.5"/><path d="M-7 0 H7 M0 -7 V7" stroke="#cfd6ea" stroke-width="2.5" stroke-linecap="round"/></g></g>`;
   return (
-    `<g data-a="${key}"><g transform="translate(-60 -115)">` +
+    `<g data-a="${key}" data-solo="1"><g transform="translate(-60 -115)">` +
     `<ellipse cx="60" cy="117" rx="54" ry="7" fill="#05060f" opacity="0.3"/>` +
     `<path d="M60 22 V10" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>` +
     `<circle data-a="${key}-led" cx="60" cy="8" r="5" fill="${light}" stroke="${INK}" stroke-width="2.5"/>` +
@@ -474,7 +502,7 @@ const PIP_ICE = `<g transform="translate(60 4)"><ellipse cx="0" cy="6" rx="26" r
 // A small astronaut. Boots rest on y = 0. accent is the suit stripe color.
 function astro(key, accent = "#ff9f43") {
   return (
-    `<g data-a="${key}">` +
+    `<g data-a="${key}" data-solo="1">` +
     `<ellipse cx="0" cy="2" rx="40" ry="7" fill="#05060f" opacity="0.28"/>` +
     `<rect x="-30" y="-106" width="60" height="62" rx="12" fill="#aeb6cc" stroke="${INK}" stroke-width="4"/>` +
     `<g transform="translate(-13 -40)"><g data-a="${key}-l0"><rect x="-10" y="0" width="20" height="40" rx="9" fill="#eef1f8" stroke="${INK}" stroke-width="4"/><rect x="-12" y="28" width="26" height="13" rx="6" fill="#59607a" stroke="${INK}" stroke-width="3"/></g></g>` +
@@ -521,7 +549,7 @@ function streaks(key, count = 26, seed = 5) {
     const len = 60 + r() * 120;
     out += `<path data-a="${key}${i}" d="M0 0 l${n(len)} ${n(len * 0.55)}" stroke="#ffe08a" stroke-width="${n(2 + r() * 3)}" stroke-linecap="round" opacity="${n(0.45 + r() * 0.5)}"/>`;
   }
-  return `<g data-a="${key}">${out}</g>`;
+  return `<g data-a="${key}" data-solo="1">${out}</g>`;
 }
 
 function rain(q, key, count, t, seed = 5, yStop = 0) {
@@ -555,7 +583,7 @@ function confetti(key, count = 46, seed = 11) {
         : `<circle r="${s / 2.4}" fill="${c}"/>`;
     out += `<g data-a="${key}${i}">${piece}</g>`;
   }
-  return `<g>${out}</g>`;
+  return `<g data-solo="1">${out}</g>`;
 }
 
 function fall(q, key, count, t, seed = 11) {
@@ -593,7 +621,7 @@ function cart(key) {
 
 function medal(key) {
   return (
-    `<g data-a="${key}">` +
+    `<g data-a="${key}" data-solo="1">` +
     `<path d="M-54 -40 L-96 150 L-52 128 L-30 170 L0 20 Z" fill="#ff5c8a" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>` +
     `<path d="M54 -40 L96 150 L52 128 L30 170 L0 20 Z" fill="#4fd1ff" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>` +
     `<circle r="130" fill="url(#cxMedal)" stroke="${INK}" stroke-width="8"/>` +
@@ -608,7 +636,7 @@ function medal(key) {
 function rays(key, count = 14, length = 900) {
   let out = "";
   for (let i = 0; i < count; i += 1) out += `<path d="M0 0 L-46 ${-length} L46 ${-length} Z" fill="#ffd166" opacity="0.16" transform="rotate(${(360 / count) * i})"/>`;
-  return `<g data-a="${key}">${out}</g>`;
+  return `<g data-a="${key}" data-solo="1">${out}</g>`;
 }
 
 // --------------------------------------------------------------- the shots
@@ -621,7 +649,7 @@ export const SCENES = {
     build: () => wrap(sky(1, 190) + `<g transform="translate(1330 170)">${moonDisc("m", 44)}</g><g transform="translate(800 470)">${earth("e", 310)}</g>`),
     frame(q, p, t) {
       cam(q, lerp(1, 1.14, easeInOut(p)), 800, 470);
-      spin(q, "e", 310, lerp(142, 118, p), t * 0.03);
+      spin(q, "e", 310, 135, t * 0.03);
     }
   },
   "opening.moon": {
@@ -632,7 +660,7 @@ export const SCENES = {
           `<g transform="translate(800 520)">${moonDisc("m", 330)}<g data-a="ring" transform="translate(0 286)"><circle r="20" fill="none" stroke="#ffd166" stroke-width="5"/></g><circle cx="0" cy="286" r="46" fill="url(#cxWarm)"/><circle cx="0" cy="286" r="8" fill="#fff7c2"/></g>`
       ),
     frame(q, p, t) {
-      cam(q, lerp(1, 1.55, easeInOut(p)), 800, 820);
+      cam(q, lerp(1, 1.3, easeInOut(p)), 800, 820);
       spin(q, "e", 74, 130, t * 0.03);
       const pulse = (t % 1.2) / 1.2;
       T(q("ring"), 0, 286, 1 + pulse * 2.4);
@@ -706,7 +734,7 @@ export const SCENES = {
       flicker(q, "ship-flame", t, power * lerp(1, 0.55, down));
       O(q("glow"), power * 0.7);
       blowDust(q, "d", 14, 800, GY, seg(p, 0.18, 1));
-      cam(q, 1.12, 800, 600, Math.sin(t * 38) * 5 * power * down, 0);
+      cam(q, 1.12, 800, 600, Math.sin(t * 13) * 4 * power * down, Math.sin(t * 17) * 3 * power * down);
       spin(q, "e", 58, 119, t * 0.03);
     }
   },
@@ -769,7 +797,7 @@ export const SCENES = {
   "night.sunset": {
     build: () =>
       wrap(
-        sky(5, 150) + `<g data-a="sun"><circle r="330" fill="url(#cxSun)"/><circle r="64" fill="#fffbe6"/></g>` + ground() +
+        sky(5, 150) + `<g data-a="sun" data-solo="1"><circle r="330" fill="url(#cxSun)"/><circle r="64" fill="#fffbe6"/></g>` + ground() +
           `<g transform="translate(900 ${GY})"><g data-a="shadow"><path d="M-200 4 L900 76 L900 8 L190 -4 Z" fill="url(#cxFadeR)"/></g></g>` +
           base(900) + dusk(0) + baseLights(900)
       ),
@@ -785,12 +813,12 @@ export const SCENES = {
   "night.shadows": {
     build: () =>
       wrap(
-        sky(5, 150) + `<g data-a="sun"><circle r="300" fill="url(#cxSun)"/></g>` + ground() + base(700, 1.25) +
-          `<path data-a="sweep" d="M-1700 420 L0 420 L260 900 L-1700 900 Z" fill="#070a1c" opacity="0.72"/>` + dusk(0.45) + baseLights(700, 1.25)
+        sky(5, 150) + `<g data-a="sun" data-solo="1"><circle r="300" fill="url(#cxSun)"/></g>` + ground() + base(700, 1.25) +
+          `<path data-a="sweep" data-solo="1" d="M-1700 420 L0 420 L260 900 L-1700 900 Z" fill="#070a1c" opacity="0.72"/>` + dusk(0.45) + baseLights(700, 1.25)
       ),
     frame(q, p) {
       const e = easeInOut(p);
-      cam(q, 1.25, 1250, 600);
+      cam(q, lerp(1.18, 1.26, easeInOut(p)), 1250, 600);
       T(q("sun"), 300, lerp(600, 720, e));
       O(q("sun"), 1 - e);
       T(q("sweep"), lerp(300, 1750, e), 0);
@@ -824,7 +852,7 @@ export const SCENES = {
           [0, 1, 2].map((i) => `<path data-a="z${i}" d="M-14 -12 H14 L-14 12 H14" fill="none" stroke="#cfe3ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`).join("")
       ),
     frame(q, p, t) {
-      cam(q, lerp(1.25, 1.5, easeInOut(p)), 1090, 640);
+      cam(q, lerp(1.15, 1.3, easeInOut(p)), 1090, 640);
       O(q("wins"), 0.9 + 0.1 * Math.sin(t * 2));
       O(q("ghglow"), 0.8);
       T(q("pip"), 1110, GY + 70 + Math.sin(t * 2) * 3, 1.5, Math.sin(t * 1.4) * 2);
@@ -888,7 +916,7 @@ export const SCENES = {
           `<path d="M0 320 C150 300 260 320 330 360 C560 480 900 700 1180 800" fill="none" stroke="#aeb3c8" stroke-width="5" opacity="0.6"/>` +
           dots.map(([x, y], i) => `<g data-a="mk${i}" opacity="0.15"><circle cx="${x}" cy="${y + 26}" r="34" fill="url(#cxWarm)"/><circle cx="${x}" cy="${y + 26}" r="7" fill="#fff7c2"/></g>`).join("") +
           `<g transform="translate(1330 868) scale(1.25)">${pip("pip", "happy", PIP_ICE)}</g>` +
-          `<g data-a="cartpos"><g transform="translate(60 -50) rotate(4)">${headlight("beam", 380, 110)}</g>${cart("cart")}</g>`
+          `<g data-a="cartpos" data-solo="1"><g transform="translate(60 -50) rotate(4)">${headlight("beam", 380, 110)}</g>${cart("cart")}</g>`
       );
     },
     frame(q, p, t) {
@@ -908,7 +936,7 @@ export const SCENES = {
       wrap(
         sky(10, 170) + `<g transform="translate(330 190)">${earth("e", 58)}</g>` + ground() + base(1230, 0.8) + dusk(0.62) + baseLights(1230, 0.8) +
           `<path data-a="rope" d="M0 0 H10" stroke="#cfd6ea" stroke-width="5" stroke-linecap="round"/>` +
-          pip("pip", "happy", PIP_ICE) + `<g data-a="cartpos"><g transform="translate(60 -50)">${headlight("beam", 360, 100)}</g>${cart("cart")}</g>`
+          pip("pip", "happy", PIP_ICE) + `<g data-a="cartpos" data-solo="1"><g transform="translate(60 -50)">${headlight("beam", 360, 100)}</g>${cart("cart")}</g>`
       ),
     frame(q, p, t) {
       const e = easeInOut(p);
@@ -943,7 +971,7 @@ export const SCENES = {
           `<g transform="translate(1560 1420)">${moonDisc("m", 720)}</g>`
       ),
     frame(q, p, t) {
-      cam(q, 1.04, 380, 330, Math.sin(t * 40) * 6 * (1 - seg(p, 0.3, 0.6)) * seg(p, 0.15, 0.3), 0);
+      cam(q, lerp(1.04, 1.1, easeInOut(p)), 380, 330, Math.sin(t * 12) * 5 * (1 - seg(p, 0.3, 0.6)) * seg(p, 0.15, 0.3), 0);
       T(q("rays"), 0, 0, 1 + 0.06 * Math.sin(t * 3), t * 8);
       const burst = easeOut(seg(p, 0.15, 0.5));
       T(q("loop"), 0, 0, lerp(0.2, 1.25, burst));
@@ -1053,7 +1081,7 @@ export const SCENES = {
           streaks("s", 28, 6)
       ),
     frame(q, p, t) {
-      cam(q, 1.06, 900, 600, Math.sin(t * 31) * 3, 0);
+      cam(q, lerp(1.04, 1.1, easeInOut(p)), 900, 600);
       rain(q, "s", 28, t, 6);
       O(q("wins"), 1);
       O(q("ghglow"), 0.8);
@@ -1097,7 +1125,7 @@ export const SCENES = {
         sky(14, 190) + `<g transform="translate(300 190)">${earth("e", 62)}</g>` + ground() + base(700, 1.05) + baseLights(700, 1.05) +
           `<g transform="translate(700 ${GY}) scale(1.05)">${[-140, 62].map((x, i) => bust(x + 34, -97, 15, i ? "#5ee08a" : "#ff9f43") + `<g transform="translate(${x + 62} -76)"><g data-a="hand${i}"><rect x="-5" y="-24" width="10" height="26" rx="5" fill="#eef1f8" stroke="${INK}" stroke-width="3"/></g></g>`).join("")}</g>` +
           pip("pip", "thinking") +
-          `<g data-a="tool"><circle r="46" fill="#101733" stroke="#7fe3ff" stroke-width="5"/><path d="M-18 18 L10 -10" stroke="#cfd6ea" stroke-width="10" stroke-linecap="round"/><path d="M6 -24 A16 16 0 1 0 24 -6 L12 -8 L8 -12 Z" fill="#cfd6ea" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/></g>`
+          `<g data-a="tool" data-solo="1"><circle r="46" fill="#101733" stroke="#7fe3ff" stroke-width="5"/><path d="M-18 18 L10 -10" stroke="#cfd6ea" stroke-width="10" stroke-linecap="round"/><path d="M6 -24 A16 16 0 1 0 24 -6 L12 -8 L8 -12 Z" fill="#cfd6ea" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/></g>`
       ),
     frame(q, p, t) {
       cam(q, lerp(1.04, 1.12, easeInOut(p)), 1000, 600);
@@ -1124,7 +1152,7 @@ export const SCENES = {
           pip("pip", "thinking", `<circle cx="104" cy="40" r="7" fill="#7dffb0" stroke="${INK}" stroke-width="2.5"/>`)
       ),
     frame(q, p, t) {
-      cam(q, lerp(1.12, 1.32, easeInOut(p)), 860, 760);
+      cam(q, lerp(1.1, 1.26, easeInOut(p)), 860, 760);
       T(q("pip"), 480, GY + 110, 1.5);
       T(q("fan"), 0, 0, 1, Math.sin(t * 2.4) * 9);
       O(q("fan"), 0.65 + 0.2 * Math.sin(t * 12));
@@ -1285,20 +1313,20 @@ export const SCENES = {
 
   // --------------------------------------------------------------- rank
   "rank.fly": {
-    build: () => wrap(sky(18, 200) + `<g transform="translate(800 420)">${rays("rays")}${medal("medal")}</g>` + rankSparkles()),
+    build: () => wrap(sky(18, 200) + rays("rays") + medal("medal") + rankSparkles()),
     frame(q, p, t) {
       const e = outBack(seg(p, 0, 0.55));
-      T(q("medal"), lerp(520, 0, easeOut(seg(p, 0, 0.55))), lerp(-640, 0, easeOut(seg(p, 0, 0.55))), Math.max(0.02, e), lerp(-200, 0, easeOut(seg(p, 0, 0.55))));
-      T(q("rays"), 0, 0, seg(p, 0.4, 0.7), t * 14);
+      T(q("medal"), 800 + lerp(520, 0, easeOut(seg(p, 0, 0.55))), 420 + lerp(-640, 0, easeOut(seg(p, 0, 0.55))), Math.max(0.02, e), lerp(-200, 0, easeOut(seg(p, 0, 0.55))));
+      T(q("rays"), 800, 420, Math.max(0.01, easeOut(seg(p, 0.4, 0.7))), t * 14);
       for (let i = 0; i < 10; i += 1) { twinkle(q, `rs${i}`, t, i * 1.1, 4); O(q(`rs${i}`), seg(p, 0.5, 0.65) * (0.3 + 0.7 * Math.abs(Math.sin(t * 4 + i)))); }
     }
   },
   "rank.shine": {
     build: () =>
-      wrap(sky(18, 200) + `<g transform="translate(800 330)">${rays("rays")}${medal("medal")}</g>` + rankSparkles() + astro("a1", "#ff9f43") + astro("a2", "#5ee08a") + pip("pip", "excited")),
+      wrap(sky(18, 200) + rays("rays") + medal("medal") + rankSparkles() + astro("a1", "#ff9f43") + astro("a2", "#5ee08a") + pip("pip", "excited")),
     frame(q, p, t) {
-      T(q("medal"), 0, Math.sin(t * 2) * 8, 1.25 + 0.04 * Math.sin(t * 4));
-      T(q("rays"), 0, 0, 1, t * 14);
+      T(q("medal"), 800, 330 + Math.sin(t * 2) * 8, 1.25);
+      T(q("rays"), 800, 330, 1, t * 14);
       q("medal-shine")?.setAttribute("transform", `translate(${n(lerp(-420, 420, (t * 0.6) % 1))} 0) rotate(20)`);
       for (let i = 0; i < 10; i += 1) twinkle(q, `rs${i}`, t, i * 1.1, 4);
       T(q("a1"), 470, 850 + hop(t, 6, 60), 1.5);
@@ -1311,15 +1339,15 @@ export const SCENES = {
   "rank.stars": {
     build: () =>
       wrap(
-        sky(18, 200) + `<g transform="translate(800 400)">${rays("rays")}${medal("medal")}</g>` +
+        sky(18, 200) + rays("rays") + medal("medal") +
           [0, 1, 2, 3, 4].map((i) => {
             const a = (-150 + i * 30) * (Math.PI / 180);
             return `<g transform="translate(${n(800 + Math.cos(a) * 380)} ${n(430 + Math.sin(a) * 330)})"><g data-a="star${i}"><path d="M0 -44 L13 -14 L45 -12 L20 8 L28 40 L0 22 L-28 40 L-20 8 L-45 -12 L-13 -14 Z" fill="#ffd166" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/></g></g>`;
           }).join("") + confetti("c", 46, 11)
       ),
     frame(q, p, t) {
-      T(q("medal"), 0, Math.sin(t * 2) * 8, 1.2);
-      T(q("rays"), 0, 0, 1, t * 14);
+      T(q("medal"), 800, 400 + Math.sin(t * 2) * 8, 1.2);
+      T(q("rays"), 800, 400, 1, t * 14);
       q("medal-shine")?.setAttribute("transform", `translate(${n(lerp(-420, 420, (t * 0.6) % 1))} 0) rotate(20)`);
       for (let i = 0; i < 5; i += 1) T(q(`star${i}`), 0, 0, Math.max(0.01, outBack(seg(p, 0.08 + i * 0.12, 0.26 + i * 0.12))), Math.sin(t * 3 + i) * 10);
       fall(q, "c", 46, t, 11);
@@ -1350,7 +1378,7 @@ export const SCENES = {
   "end.lookup": {
     build: () =>
       wrap(
-        `<rect y="-700" width="${W}" height="${H + 700}" fill="url(#cxSpace)"/>${stars(19, 180)}<g transform="translate(0 -700)">${stars(20, 200, 0, 700)}</g>` +
+        `<rect y="-700" width="${W}" height="${H + 700}" fill="url(#cxSpace)"/>${stars(19, 180)}<g transform="translate(0 -700)">${stars(20, 200, 0, 700, false)}</g>` +
           `<g transform="translate(800 -330)">${earth("e", 210)}</g>` + ground() + base(820, 0.95) + dusk(0.25) + baseLights(820, 0.95) +
           astro("a1", "#ff9f43") + astro("a2", "#5ee08a") + pip("pip", "happy")
       ),
@@ -1362,7 +1390,7 @@ export const SCENES = {
       T(q("a2"), 640, GY + 120, 1.3);
       T(q("a1-a1"), 0, 0, 1, -140);
       T(q("pip"), 1090, GY + 120, 1.4, -8);
-      spin(q, "e", 210, lerp(140, 128, p), t * 0.03);
+      spin(q, "e", 210, 134, t * 0.03);
     }
   },
   "end.earth": {
@@ -1370,20 +1398,20 @@ export const SCENES = {
       wrap(sky(21, 200) + `<g data-a="glint" transform="translate(520 250)"><circle r="260" fill="url(#cxSun)" opacity="0.5"/></g><g transform="translate(800 470)">${earth("e", 340)}</g>`),
     frame(q, p, t) {
       cam(q, lerp(1.12, 1, easeInOut(p)), 800, 470);
-      spin(q, "e", 340, lerp(150, 124, p), t * 0.04);
+      spin(q, "e", 340, 140, t * 0.03);
       O(q("glint"), 0.35 + 0.15 * Math.sin(t * 2));
     }
   },
   "end.rise": {
     build: () =>
       wrap(
-        sky(22, 210) + `<g data-a="rise">${`<g>${earth("e", 230)}</g>`}</g>` +
+        sky(22, 210) + `<g data-a="rise" data-solo="1">${`<g>${earth("e", 230)}</g>`}</g>` +
           `<path d="M-200 900 C200 640 1400 640 1800 900 Z" fill="url(#cxGround)"/><path d="M-200 900 C200 640 1400 640 1800 900" fill="none" stroke="#f4f5fa" stroke-width="5" opacity="0.6"/>` +
           crater(520, 800, 120) + crater(1080, 830, 150) + crater(820, 760, 60)
       ),
     frame(q, p, t) {
       T(q("rise"), 800, lerp(760, 380, easeOut(p)));
-      spin(q, "e", 230, lerp(140, 126, p), t * 0.04);
+      spin(q, "e", 230, 135, t * 0.03);
     }
   },
 
@@ -1394,7 +1422,7 @@ export const SCENES = {
         sky(23, 170) + `<g transform="translate(1270 180)">${earth("e", 62)}</g>` + ground() + base(1220, 0.6) + baseLights(1220, 0.6) +
           `<ellipse data-a="glow" cx="620" cy="${GY + 20}" rx="300" ry="54" fill="url(#cxWarm)" opacity="0"/>` +
           `<g transform="translate(620 ${GY + 20})">${landerStage()}</g>` +
-          `<g data-a="cab"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}</g>` + dustPuffs("d", 12)
+          `<g data-a="cab" data-solo="1"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}</g>` + dustPuffs("d", 12)
       ),
     frame(q, p, t) {
       const up = easeIn(seg(p, 0.15, 1));
@@ -1409,8 +1437,8 @@ export const SCENES = {
   "home.wave": {
     build: () =>
       wrap(
-        `<rect width="${W}" height="${H}" fill="url(#cxSpace)"/><g data-a="st0">${stars(24, 150)}<g transform="translate(0 ${-H})">${stars(24, 150)}</g></g>` +
-          `<g data-a="cab"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}` +
+        `<rect width="${W}" height="${H}" fill="url(#cxSpace)"/><g data-a="st0" data-solo="1">${stars(24, 150, 0, H, false)}<g transform="translate(0 ${-H})">${stars(24, 150, 0, H, false)}</g></g>` +
+          `<g data-a="cab" data-solo="1"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}` +
           `<g transform="translate(-22 -62)"><g data-a="h0"><rect x="-4" y="-18" width="8" height="20" rx="4" fill="#eef1f8" stroke="${INK}" stroke-width="2.5"/></g></g>` +
           `<g transform="translate(58 -62)"><g data-a="h1"><rect x="-4" y="-18" width="8" height="20" rx="4" fill="#eef1f8" stroke="${INK}" stroke-width="2.5"/></g></g></g>`
       ),
@@ -1427,7 +1455,7 @@ export const SCENES = {
       wrap(
         sky(25, 200) + `<g transform="translate(1180 320)">${earth("e", 190)}</g><g transform="translate(60 1180)">${moonDisc("m", 560)}</g>` +
           `<path data-a="trail" d="M330 700 Q620 420 930 420" fill="none" stroke="#fff3c4" stroke-width="6" stroke-linecap="round" stroke-dasharray="4 22" opacity="0.8"/>` +
-          `<g data-a="cab"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}</g>`
+          `<g data-a="cab" data-solo="1"><g transform="translate(0 6)">${flame("cab-flame", 0.7)}</g>${landerCabin(true)}</g>`
       ),
     frame(q, p, t) {
       const e = easeInOut(p);
@@ -1438,7 +1466,7 @@ export const SCENES = {
       flicker(q, "cab-flame", t, 0.9);
       q("trail")?.setAttribute("stroke-dashoffset", n(-t * 40));
       O(q("trail"), 0.3 + 0.5 * e);
-      spin(q, "e", 190, lerp(140, 128, p), t * 0.03);
+      spin(q, "e", 190, 134, t * 0.03);
     }
   },
   "home.plan": {
@@ -1446,7 +1474,7 @@ export const SCENES = {
       wrap(
         sky(26, 190) + `<g transform="translate(1100 220)">${earth("e", 96)}</g>` + sparkle("ship", 960, 300, 16, "#fff3c4") + ground() + base(420, 0.8) + dusk(0.3) + baseLights(420, 0.8) +
           pip("pip", "happy") +
-          `<g data-a="idea"><circle r="70" fill="url(#cxWarm)"/><path d="M-22 -8 A22 22 0 1 1 22 -8 Q22 8 12 18 H-12 Q-22 8 -22 -8 Z" fill="#ffe29a" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/><rect x="-11" y="20" width="22" height="12" rx="4" fill="#aeb6cc" stroke="${INK}" stroke-width="4"/></g>`
+          `<g data-a="idea" data-solo="1"><circle r="70" fill="url(#cxWarm)"/><path d="M-22 -8 A22 22 0 1 1 22 -8 Q22 8 12 18 H-12 Q-22 8 -22 -8 Z" fill="#ffe29a" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/><rect x="-11" y="20" width="22" height="12" rx="4" fill="#aeb6cc" stroke="${INK}" stroke-width="4"/></g>`
       ),
     frame(q, p, t) {
       cam(q, lerp(1, 1.08, easeInOut(p)), 1000, 600);
@@ -1457,7 +1485,7 @@ export const SCENES = {
       const pop = outBack(seg(p, 0.3, 0.5));
       T(q("idea"), 1010, GY - 130 + Math.sin(t * 3) * 6, Math.max(0.01, pop));
       O(q("idea"), seg(p, 0.3, 0.36));
-      spin(q, "e", 96, lerp(140, 130, p), t * 0.03);
+      spin(q, "e", 96, 134, t * 0.03);
     }
   }
 };
@@ -1492,7 +1520,7 @@ function greenhouseRoom(count, pipe) {
     `<rect width="${W}" height="${H}" fill="#241036"/>` +
     `<path d="M120 900 V330 Q120 60 800 60 Q1480 60 1480 330 V900 Z" fill="#2f1848" stroke="${INK}" stroke-width="8"/>` +
     `<clipPath id="cxClip-win"><path d="M560 160 H1040 Q1080 160 1080 200 V330 H520 V200 Q520 160 560 160 Z"/></clipPath>` +
-    `<g clip-path="url(#cxClip-win)"><rect x="520" y="160" width="560" height="170" fill="#03040c"/>${stars(33, 60, 150, 340)}<g transform="translate(960 250)">${earth("e", 40)}</g></g>` +
+    `<g clip-path="url(#cxClip-win)"><rect x="520" y="160" width="560" height="170" fill="#03040c"/>${stars(33, 60, 150, 340, false)}<g transform="translate(960 250)">${earth("e", 40)}</g></g>` +
     `<path d="M560 160 H1040 Q1080 160 1080 200 V330 H520 V200 Q520 160 560 160 Z" fill="none" stroke="${INK}" stroke-width="7"/>` +
     `<ellipse data-a="wash" cx="800" cy="560" rx="760" ry="420" fill="url(#cxPink)" opacity="0"/>` +
     `<rect x="230" y="372" width="1140" height="30" rx="14" fill="#3a2a52" stroke="${INK}" stroke-width="6"/>` +
@@ -1523,42 +1551,149 @@ export function artMarkup(name) {
   return retag(DEFS + (scene ? scene.build() : ""), `a${copies}`);
 }
 
-// Put one animated scene inside any element. It plays once over `seconds`,
-// then keeps its small idle motion. It stops by itself when it leaves the page.
-export function mountArt(host, name, { reduced = false, seconds = 6, still = 0.8, className = "intro-art" } = {}) {
-  const scene = SCENES[name];
-  if (!scene || typeof document === "undefined") return null;
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  svg.setAttribute("class", className);
-  svg.setAttribute("aria-hidden", "true");
-  svg.innerHTML = artMarkup(name);
-  host.append(svg);
+// ------------------------------------------------------------- the stage
+// A scene is cut into stacked layers, one small SVG each:
+//   - things that never move (sky, ground) are painted once,
+//   - things that move get their own layer, so only they are painted again,
+//   - the camera is a CSS transform on the whole stack, which the browser
+//     moves without painting anything.
+// This is what keeps the motion smooth on slow laptops and phones.
+
+const NS = "http://www.w3.org/2000/svg";
+const LAYER_STYLE = "position:absolute;left:0;top:0;width:100%;height:100%;display:block;overflow:visible;transform-origin:0 0;will-change:transform;pointer-events:none";
+
+// Sample moments used to learn which parts of a scene really move.
+const PROBES = [[0, 0], [0.2, 0.9], [0.45, 2.3], [0.7, 3.4], [1, 5.1]];
+
+// How fast the small loops (hops, waves, wheels) run. 1 is full speed.
+export const CALM = 0.72;
+
+export function buildStage(name, { className = "" } = {}) {
+  const scene = SCENES[name] || null;
+  const el = document.createElement("div");
+  el.className = className ? `cx-stage ${className}` : "cx-stage";
+  el.setAttribute("aria-hidden", "true");
+  el.style.cssText = "position:relative;aspect-ratio:16/9;overflow:hidden;background:#02030a;contain:paint";
+  const camera = document.createElement("div");
+  camera.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0;will-change:transform";
+  el.append(camera);
+
+  const source = document.createElementNS(NS, "svg");
+  source.innerHTML = artMarkup(name);
+
+  // Gradients and the star twinkle live in one tiny SVG that every layer uses.
+  const shared = document.createElementNS(NS, "svg");
+  shared.setAttribute("width", "0");
+  shared.setAttribute("height", "0");
+  shared.style.cssText = "position:absolute;width:0;height:0";
+  for (const node of [...source.children]) {
+    if (node.tagName === "style" || node.tagName === "defs") shared.append(node);
+  }
+  el.prepend(shared);
+
   const parts = new Map();
-  for (const node of svg.querySelectorAll("[data-a]")) parts.set(node.getAttribute("data-a"), node);
+  for (const node of source.querySelectorAll("[data-a]")) parts.set(node.getAttribute("data-a"), node);
   const q = (key) => parts.get(key) || null;
-  const draw = (p, t) => {
+  const group = parts.get("cam") || null;
+  const items = group ? [...group.children] : [...source.children];
+
+  // While probing, the camera only reports how far this shot zooms in.
+  let zoom = 1;
+  parts.set("cam", { camera: (x, y, scale) => (zoom = Math.max(zoom, scale)) });
+
+  // Play a few sample moments and see which top-level pieces change at all.
+  // Pieces that never change are "still" and get painted once.
+  const moved = new Set();
+  if (scene) {
     try {
-      scene.frame(q, p, t);
+      let before = null;
+      for (const [p, t] of PROBES) {
+        scene.frame(q, p, t);
+        const now = items.map((node) => node.outerHTML);
+        if (before) now.forEach((text, i) => text !== before[i] && moved.add(items[i]));
+        before = now;
+      }
+    } catch (error) {
+      console.error("art probe failed", name, error);
+    }
+  }
+  for (const node of parts.values()) {
+    delete node.cxT;
+    delete node.cxO;
+  }
+
+  const kindOf = (node) => (node.hasAttribute("data-solo") ? "solo" : moved.has(node) ? "moving" : "still");
+  let layer = null;
+  let layerKind = "";
+  for (const node of items) {
+    const kind = kindOf(node);
+    if (!layer || kind === "solo" || layerKind === "solo" || kind !== layerKind) {
+      layer = document.createElementNS(NS, "svg");
+      layer.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      layer.setAttribute("preserveAspectRatio", "none");
+      layer.style.cssText = LAYER_STYLE;
+      camera.append(layer);
+      layerKind = kind;
+    }
+    layer.append(node);
+    // A piece alone on its layer is moved by the compositor, not repainted.
+    if (kind === "solo" && node.hasAttribute("data-a")) {
+      node.removeAttribute("transform");
+      node.cxLayer = layer;
+    }
+  }
+
+  // The layers are painted at the biggest zoom the shot uses and scaled down
+  // from there, so a zoomed-in picture stays sharp.
+  const big = Math.min(1.35, Math.max(1, zoom));
+  camera.style.width = `${(big * 100).toFixed(2)}%`;
+  camera.style.height = `${(big * 100).toFixed(2)}%`;
+  let lastCamera = "";
+  parts.set("cam", {
+    camera(x, y, scale) {
+      const value = `translate(${((x / W / big) * 100).toFixed(3)}%, ${((y / H / big) * 100).toFixed(3)}%) scale(${(scale / big).toFixed(4)})`;
+      if (value === lastCamera) return;
+      lastCamera = value;
+      camera.style.transform = value;
+    }
+  });
+
+  parts.get("cam").camera(0, 0, 1);
+  let alive = Boolean(scene);
+  function draw(p, seconds) {
+    if (!alive) return false;
+    try {
+      scene.frame(q, Math.max(0, Math.min(1, p)), seconds * CALM);
       return true;
     } catch (error) {
+      alive = false;
       console.error("art frame failed", name, error);
       return false;
     }
-  };
+  }
+  return { el, draw, layers: camera.children.length };
+}
+
+// Put one animated scene inside any element. It plays once over `seconds`,
+// then keeps its small idle motion. It stops by itself when it leaves the page.
+export function mountArt(host, name, { reduced = false, seconds = 9, still = 0.8, className = "intro-art" } = {}) {
+  if (!SCENES[name] || typeof document === "undefined") return null;
+  const stage = buildStage(name, { className });
+  host.append(stage.el);
   if (reduced) {
-    draw(still, still * seconds);
-    return svg;
+    stage.draw(still, still * seconds);
+    return stage.el;
   }
   const started = performance.now();
   const step = (now) => {
-    if (!svg.isConnected) return;
+    if (!stage.el.isConnected) return;
     const t = Math.max(0, now - started) / 1000;
-    if (draw(Math.min(1, t / seconds), t)) requestAnimationFrame(step);
+    const p = Math.min(1, t / seconds);
+    if (stage.draw(1 - (1 - p) * (1 - p), t)) requestAnimationFrame(step);
   };
-  draw(0, 0);
+  stage.draw(0, 0);
   requestAnimationFrame(step);
-  return svg;
+  return stage.el;
 }
 
 // A small still Earth for the game sky. Goes inside another SVG.
@@ -1572,7 +1707,7 @@ export function skyEarth(cx, cy, r, lon = 128) {
 export function titleBanner() {
   const body =
     `<rect width="1320" height="120" fill="url(#cxSpace)"/>` +
-    `<g transform="scale(0.825 0.5)">${stars(77, 150, 0, 240)}</g>` +
+    `<g transform="scale(0.825 0.5)">${stars(77, 150, 0, 240, false)}</g>` +
     `<g transform="translate(830 54)">${earth("tb", 34, 128)}</g>` +
     `<path d="M-20 120 C300 92 900 96 1340 112 L1340 120 Z" fill="url(#cxGround)"/>` +
     `<path d="M-20 120 C300 92 900 96 1340 112" fill="none" stroke="#f4f5fa" stroke-width="2" opacity="0.6"/>` +

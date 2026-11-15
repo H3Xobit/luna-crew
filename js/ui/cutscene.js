@@ -4,16 +4,15 @@
 
 import { h } from "./dom.js";
 import { portrait } from "./characters.js";
-import { SCENES, STAGE, artMarkup } from "./cutsceneArt.js";
+import { buildStage } from "./cutsceneArt.js";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-const FADE_MS = 260;
+const FADE_MS = 380;
 const TAP_GUARD_MS = 450;
 
 const STYLE = `
 .cutscene-stage { background: #02030a; }
 .cutscene-camera { width: min(100%, calc((100vh - 200px) * 16 / 9)); min-width: min(100%, 320px); aspect-ratio: 16 / 9; transform: none; }
-.cutscene-svg { width: 100%; height: 100%; display: block; background: #02030a; border-radius: 14px; }
+.cutscene-camera .cx-stage { width: 100%; height: 100%; border-radius: 14px; }
 .cutscene.is-still .cx-tw { animation: none; }
 `;
 
@@ -42,8 +41,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
   return new Promise((resolve) => {
     addStyle();
     let index = 0;
-    let art = null;
-    let parts = new Map();
+    let picture = null;
     const previousFocus = document.activeElement;
     let started = performance.now();
     let paused = false;
@@ -53,12 +51,6 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
 
     const stage = h("div", { class: "cutscene-stage" });
     const camera = h("div", { class: "cutscene-camera" });
-    const svg = document.createElementNS(SVG_NS, "svg");
-    svg.setAttribute("viewBox", `0 0 ${STAGE.width} ${STAGE.height}`);
-    svg.setAttribute("class", "cutscene-svg");
-    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-    svg.setAttribute("aria-hidden", "true");
-    camera.append(svg);
     const who = h("strong", { class: "cutscene-who" });
     const line = h("p", { class: "cutscene-line" });
     const face = h("span", { class: "cutscene-face" });
@@ -82,8 +74,6 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     ]);
     stage.append(camera);
     stage.addEventListener("click", () => goNext(true));
-
-    const q = (name) => parts.get(name) || null;
 
     function onKey(event) {
       if (event.key === "Escape") {
@@ -112,30 +102,13 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     }
 
     function mount(shot) {
-      art = SCENES[shot.art] || null;
-      parts = new Map();
-      try {
-        svg.innerHTML = artMarkup(shot.art);
-        for (const node of svg.querySelectorAll("[data-a]")) parts.set(node.getAttribute("data-a"), node);
-      } catch (error) {
-        art = null;
-        svg.innerHTML = "";
-        console.error("cutscene art failed", shot.art, error);
-      }
+      picture = buildStage(shot.art);
+      picture.el.style.opacity = reduced ? "1" : "0";
+      camera.replaceChildren(picture.el);
       const speaker = shot.who ? nameOf(shot.who) : "";
       who.textContent = speaker ? `${speaker}: ` : "";
       line.textContent = shot.line ? i18n.t(shot.line) : "";
       face.innerHTML = shot.who ? portrait(shot.who, shot.expr || "neutral", { title: speaker }) : "";
-    }
-
-    function draw(p, seconds) {
-      if (!art) return;
-      try {
-        art.frame(q, p, seconds);
-      } catch (error) {
-        console.error("cutscene frame failed", error);
-        art = null;
-      }
     }
 
     function show(shot) {
@@ -143,11 +116,9 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       mount(shot);
       if (reduced) {
         const still = Number.isFinite(shot.still) ? shot.still : 0.8;
-        draw(still, still * (shotHold(shot, line.textContent) / 1000));
-        svg.style.opacity = "1";
+        picture.draw(still, still * (shotHold(shot, line.textContent) / 1000));
       } else {
-        draw(0, 0);
-        svg.style.opacity = "0";
+        picture.draw(0, 0);
       }
       if (shot.sound) audio?.play(shot.sound);
     }
@@ -170,8 +141,11 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
         const shot = scene.shots[index];
         const duration = shotHold(shot, line.textContent);
         const elapsed = Math.max(0, now - started);
-        draw(Math.min(1, elapsed / duration), elapsed / 1000);
-        svg.style.opacity = String(Math.min(1, elapsed / FADE_MS, Math.max(0.35, (duration - elapsed) / FADE_MS + 0.35)));
+        picture.draw(elapsed / duration, elapsed / 1000);
+        // Fade in from black, fade back to black: one clean cut between shots.
+        const fade = Math.min(1, elapsed / FADE_MS, Math.max(0, (duration - elapsed) / FADE_MS));
+        const shown = fade.toFixed(2);
+        if (picture.el.style.opacity !== shown) picture.el.style.opacity = shown;
         if (elapsed >= duration) goNext(false);
       }
       frame = requestAnimationFrame(tick);
