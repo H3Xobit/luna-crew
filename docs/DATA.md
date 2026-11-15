@@ -4,6 +4,8 @@ The browser never calls NASA APIs directly. Scripts in `scripts/` fetch and save
 
 ## Files
 
+Verified facts and Mission Cards, with the page that was checked, are in `data/content/facts.json` and `data/content/cards.json`. A line with `TODO_SOURCE` is not shown. The journal unlocks a fact only after the player meets it in a mission.
+
 | File | Source | Role in play |
 | --- | --- | --- |
 | `data/latest.json` | NASA DONKI (weekly refresh) | Preferred storm list. Label: **NASA data updated …** |

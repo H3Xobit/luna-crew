@@ -8,8 +8,9 @@ Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronau
 
 1. Open the site (or run it locally, below).
 2. Pick a language, then **Start mission**.
-3. Choose a call sign and helmet color. Leave **practice** on the first time.
-4. Share 10 work points each round across Power, Life Support, Shield and Science.
+3. Choose a call sign and helmet color.
+4. On the Mission Map, play the lessons in order. Full Mission is the three-day game.
+5. Share 10 work points each round across Power, Life Support, Shield and Science. Press **Why?** to see that round's weight.
 5. Watch for solar storms, Pip’s rescue, and a science discovery. After each lunar day, read a planner review and a Mission Card.
 
 Demo tip: add `?demo=1` to the URL to bring the storm earlier for a short talk.

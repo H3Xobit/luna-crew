@@ -5,6 +5,32 @@
 **Team:** Maja Madi
 **Languages:** English, Japanese
 
+## High-Level Summary
+
+Kids plan a small Moon base, one work-point choice at a time. The jobs do not weigh the same: Power is strong in the day and weak at night, Life Support makes air and water but spends power, Shield matters more when a saved NASA storm arrives, and Science earns learning points without filling the safety bars. If a bar hits zero, the crew goes home safe.
+
+## Detailed Description
+
+The game is a static page. English and Japanese. A mission map unlocks eight lessons, from a one-day tutorial to the full three-day mission, a daily storm seed, and a harder challenge. Stars, ranks and a science journal stay in the browser. Cutscenes can be skipped. Reduced motion shows still frames. Every shown fact has a checked https source. Storms are labeled updated, saved, or training. This build never says the data is live.
+
+## NASA Data
+
+- DONKI flares and particle events in `data/latest.json` and `data/storms.json` drive the storm card, including the date and class when the event is real.
+- OSDR study OSD-476 (plants in Apollo lunar soil) is saved in `data/osdr.json` and supports the greenhouse fact.
+- RadLab: one ISS dose-rate reading is saved in `data/radlab.json` and can appear on the storm card when the file is usable.
+
+## Space Agency Partner Data
+
+The Canadian Space Agency food-production toolkit is a checked partner page behind the classroom food fact. It is marked Partner on the Real NASA Data screen.
+
+## References
+
+Source links live next to each verified fact and Mission Card in `data/content/facts.json` and `data/content/cards.json`, and on the Real NASA Data screen.
+
+## 30-second demo
+
+Open `?demo=1`. Start, pick a call sign, then open Full Mission only if it is unlocked, or play First Light and point at the briefing line and a Why? button. For the storm, use Storm Watch or `?demo=1` on a fresh full run from the end screen's same seed after unlocking. Show the storm card date, the NASA's Choice review, and a rank-up if stars cross a rank.
+
 ## One-sentence pitch
 
 Kids plan a Moon base for three lunar days, meet a solar storm built from saved NASA data, and see why Earth is the best base we will ever have.

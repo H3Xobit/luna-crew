@@ -37,6 +37,18 @@ Story beats for rescue and discovery are made up for play. Storm dates and sourc
 1. **Planner review**: your choice next to how real planners talk about the same risk. Not a score.
 2. **Mission Card**: one sourced question. A correct answer adds 1 work point next round. A miss comes back later.
 
+## Missions, stars and ranks
+
+After crew setup, the Mission Map opens. Missions unlock in order. Full Mission is the three-day game. Mission of the Day and Challenge unlock after that.
+
+| Stars | Meaning |
+| --- | --- |
+| 1 | Finished with every safety bar above zero. |
+| 2 | Finished with Power, Life Support and Shield all above 25. |
+| 3 | The lesson goal: finish, shelter, keep night power at 30 or more, bring the ice home, or leave the lights on. |
+
+Ranks from total stars: Cadet, Junior Planner, Mission Planner, Senior Planner, Flight Director. Badges and journal cards are saved in this browser. Reset progress clears them. No account is used.
+
 ## Modes
 
 - **Practice**: one guided round, then the real mission with fresh bars.
