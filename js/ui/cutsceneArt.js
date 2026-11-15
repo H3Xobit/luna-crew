@@ -1566,7 +1566,7 @@ const LAYER_STYLE = "position:absolute;left:0;top:0;width:100%;height:100%;displ
 const PROBES = [[0, 0], [0.2, 0.9], [0.45, 2.3], [0.7, 3.4], [1, 5.1]];
 
 // How fast the small loops (hops, waves, wheels) run. 1 is full speed.
-export const CALM = 0.72;
+export const CALM = 0.6;
 
 export function buildStage(name, { className = "" } = {}) {
   const scene = SCENES[name] || null;

@@ -34,7 +34,7 @@ function addStyle() {
   document.head.append(style);
 }
 
-export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf }) {
+export function playCutscene(host, { id, script, i18n, audio, voice, reduced, nameOf }) {
   const scene = script?.[id];
   if (!scene || !Array.isArray(scene.shots) || scene.shots.length === 0) return Promise.resolve("missing");
 
@@ -42,6 +42,7 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
     addStyle();
     let index = 0;
     let picture = null;
+    let cues = [];
     const previousFocus = document.activeElement;
     let started = performance.now();
     let paused = false;
@@ -63,8 +64,13 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       onclick: () => {
         paused = !paused;
         pause.textContent = i18n.t(paused ? "cut.play" : "cut.pause");
-        if (paused) pausedAt = performance.now();
-        else started += performance.now() - pausedAt;
+        if (paused) {
+          pausedAt = performance.now();
+          audio?.hush?.();
+          voice?.stop();
+        } else {
+          started += performance.now() - pausedAt;
+        }
       }
     });
     const overlay = h("div", { class: reduced ? "cutscene is-still" : "cutscene", role: "dialog", "aria-modal": "true", "aria-label": i18n.t("cut.label") }, [
@@ -95,6 +101,8 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       document.removeEventListener("keydown", onKey);
       overlay.remove();
       audio?.stopHum?.();
+      audio?.hush?.();
+      voice?.stop();
       if (previousFocus && typeof previousFocus.focus === "function" && document.contains(previousFocus)) {
         previousFocus.focus({ preventScroll: true });
       }
@@ -120,7 +128,10 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
       } else {
         picture.draw(0, 0);
       }
+      audio?.hush?.();
       if (shot.sound) audio?.play(shot.sound);
+      cues = reduced ? [] : [...(shot.cues || [])].sort((a, b) => a[0] - b[0]);
+      voice?.speak(line.textContent, { lang: i18n.lang, who: shot.who || "nova" });
     }
 
     function goNext(fromUser) {
@@ -142,6 +153,8 @@ export function playCutscene(host, { id, script, i18n, audio, reduced, nameOf })
         const duration = shotHold(shot, line.textContent);
         const elapsed = Math.max(0, now - started);
         picture.draw(elapsed / duration, elapsed / 1000);
+        // Sound effects placed at a moment in the shot, as [when 0..1, name].
+        while (cues.length && elapsed / duration >= cues[0][0]) audio?.play(cues.shift()[1]);
         // Fade in from black, fade back to black: one clean cut between shots.
         const fade = Math.min(1, elapsed / FADE_MS, Math.max(0, (duration - elapsed) / FADE_MS));
         const shown = fade.toFixed(2);

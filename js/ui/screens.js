@@ -268,6 +268,8 @@ export function openSettings(modals, { i18n, settings, onChange }) {
       modals.close("changed");
     }),
     toggle("sound", "settings.sound", "settings.soundHint"),
+    toggle("music", "settings.music", "settings.musicHint"),
+    toggle("voice", "settings.voice", "settings.voiceHint"),
     toggle("reduceMotion", "settings.motion", "settings.motionHint"),
     toggle("highContrast", "settings.contrast", "settings.contrastHint"),
     h("p", { class: "field-label", text: i18n.t("settings.text") }),

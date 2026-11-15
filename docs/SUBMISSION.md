@@ -11,7 +11,7 @@ Kids plan a small Moon base, one work-point choice at a time. The jobs do not we
 
 ## Detailed Description
 
-The game is a static page. English and Japanese. A mission map unlocks eight lessons, from a one-day tutorial to the full three-day mission, a daily storm seed, and a harder challenge. Stars, ranks and a science journal stay in the browser. Cutscenes can be skipped. Reduced motion shows still frames. Every shown fact has a checked https source. Storms are labeled updated, saved, or training. This build never says the data is live.
+The game is a static page. English and Japanese. A mission map unlocks eight lessons, from a one-day tutorial to the full three-day mission, a daily storm seed, and a harder challenge. Stars, ranks and a science journal stay in the browser. Cutscenes can be skipped. Reduced motion shows still frames. Every shown fact has a checked https source. Storms are labeled updated, saved, or training. This build never says the data is live. Sound effects and music are made in the browser with WebAudio (no audio files), and read-aloud uses the device's built-in speech voice.
 
 ## NASA Data
 

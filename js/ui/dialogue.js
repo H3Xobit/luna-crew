@@ -16,7 +16,7 @@ const TARGETS = {
 
 const TYPE_MS = 22;
 
-export function createDialogue(root, { i18n, audio, nameOf }) {
+export function createDialogue(root, { i18n, audio, voice, nameOf }) {
   const face = h("div", { class: "dialogue-portrait" });
   const name = h("div", { class: "dialogue-name" });
   const typed = h("p", { class: "dialogue-text", "aria-hidden": "true" });
@@ -37,6 +37,7 @@ export function createDialogue(root, { i18n, audio, nameOf }) {
   let timer = null;
   let finishTyping = null;
   let spotlight = null;
+  let speaking = false;
 
   function setSpotlight(target) {
     if (spotlight) spotlight.classList.remove("spotlight");
@@ -71,7 +72,7 @@ export function createDialogue(root, { i18n, audio, nameOf }) {
       timer = setInterval(() => {
         shown += 1;
         typed.textContent = chars.slice(0, shown).join("");
-        if (shown % 3 === 1) audio.play("talk");
+        if (shown % 3 === 1 && !speaking) audio.play("talk");
         if (shown >= chars.length) finishTyping();
       }, TYPE_MS);
     });
@@ -100,6 +101,9 @@ export function createDialogue(root, { i18n, audio, nameOf }) {
       factBox.hidden = true;
     }
     setSpotlight(line.target);
+    // Read the line aloud when the read-aloud voice is on. Pip chirps first.
+    if (who === "pip") audio.play(line.expr === "worried" ? "pipSad" : line.expr === "thinking" ? "pipThink" : "pipHappy");
+    speaking = Boolean(voice?.speak(text, { lang: i18n.lang, who }));
     return type(text);
   }
 
@@ -119,6 +123,8 @@ export function createDialogue(root, { i18n, audio, nameOf }) {
       function close(how) {
         clearInterval(timer);
         finishTyping = null;
+        voice?.stop();
+        speaking = false;
         setSpotlight(null);
         root.hidden = true;
         document.body.classList.remove("dialogue-open");

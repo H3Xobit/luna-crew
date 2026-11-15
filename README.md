@@ -15,6 +15,8 @@ Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronau
 
 Demo tip: add `?demo=1` to the URL to bring the storm earlier for a short talk.
 
+Sound effects and music are made in the browser with WebAudio (no audio files), and read-aloud uses the device's built-in speech voice.
+
 ## Run locally
 
 Needs Node 20+ only for tests and data scripts. Playing uses any static file server.
