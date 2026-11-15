@@ -106,49 +106,159 @@ const SOUNDS = {
   patter: [0, 0.13, 0.31, 0.44, 0.68, 0.85, 1.1, 1.32].map((at, i) => ({ f: 1800 + (i % 3) * 500, d: 0.05, type: "noise", filter: "bandpass", v: 0.09, at }))
 };
 
-// Pip talks in little robot chirps. Each call makes a new, slightly different
-// phrase, so Pip never says the same thing twice.
+// ------------------------------------------------------------------- Pip
+// Pip never says words. Pip talks like a little astromech droid: whistles
+// that slide up and down, fast warbling trills and quick bursts of blips.
+// Every phrase is made fresh, so Pip never says the same thing twice.
+// A note with "vib" wobbles its pitch "vib" times a second by "depth" Hz.
+
 const PIP_MOODS = {
-  pipHappy: { count: 6, low: 900, high: 2400, step: 0.085, lift: 1.35 },
-  pipSad: { count: 4, low: 420, high: 900, step: 0.16, lift: 0.7 },
-  pipThink: { count: 3, low: 700, high: 1500, step: 0.2, lift: 1.5 },
-  pipSleepy: { count: 2, low: 380, high: 620, step: 0.42, lift: 0.6 }
+  pipHappy: { mood: "happy" },
+  pipExcited: { mood: "excited" },
+  pipSad: { mood: "sad" },
+  pipThink: { mood: "think" },
+  pipSleepy: { mood: "sleepy" }
 };
 
-function pipPhrase(mood) {
+const rand = (a, b) => a + Math.random() * (b - a);
+const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
+
+// The pieces a droid phrase is built from. Each returns notes starting at 0.
+const PARTS = {
+  // a clean whistle that slides
+  whistle(up, high = 1) {
+    const f = rand(1100, 2000) * high;
+    const d = rand(0.09, 0.2);
+    return [
+      { f, to: f * (up ? rand(1.4, 1.9) : rand(0.5, 0.7)), d, type: "sine", v: 0.085, a: 0.008 },
+      { f: f * 2, to: f * 2 * (up ? 1.6 : 0.6), d, type: "sine", v: 0.012, a: 0.008 }
+    ];
+  },
+  // the famous warble: a fast wobble on a sliding tone
+  trill(up) {
+    const f = rand(1400, 2300);
+    const d = rand(0.16, 0.34);
+    return [{ f, to: f * (up ? 1.25 : 0.75), d, type: "sine", v: 0.08, a: 0.01, vib: rand(22, 34), depth: rand(260, 420) }];
+  },
+  // quick blips, like typing on a tiny keyboard
+  burst(n = 5) {
+    const notes = [];
+    let at = 0;
+    for (let i = 0; i < n; i += 1) {
+      const f = rand(1500, 3200);
+      notes.push({ f, to: f * rand(0.9, 1.15), d: rand(0.035, 0.06), type: pickOne(["sine", "square"]), v: 0.05, a: 0.008, at });
+      at += rand(0.045, 0.07);
+    }
+    return notes;
+  },
+  // a low "boop" with a little buzz
+  boop() {
+    const f = rand(480, 700);
+    return [
+      { f, to: f * rand(0.8, 1.2), d: rand(0.08, 0.14), type: "square", v: 0.03, a: 0.006 },
+      { f, to: f * 0.9, d: 0.12, type: "sine", v: 0.05, a: 0.006 }
+    ];
+  },
+  // a sad slide down with a slow wobble
+  droop() {
+    const f = rand(1300, 1700);
+    return [{ f, to: f * 0.35, d: rand(0.45, 0.65), type: "sine", v: 0.075, a: 0.02, vib: 7, depth: 60 }];
+  },
+  // a question: low, then a whistle that rises at the end
+  ask() {
+    const f = rand(700, 900);
+    return [
+      { f, to: f * 1.05, d: 0.11, type: "sine", v: 0.06, a: 0.008 },
+      { f: f * 1.3, to: f * 2.6, d: 0.24, type: "sine", v: 0.08, a: 0.01, at: 0.16 }
+    ];
+  },
+  // a sleepy, slow, low hum
+  yawn() {
+    const f = rand(520, 680);
+    return [{ f, to: f * 0.55, d: rand(0.6, 0.8), type: "sine", v: 0.06, a: 0.08, vib: 4, depth: 25 }];
+  }
+};
+
+const RECIPES = {
+  happy: [["whistle", true], ["burst"], ["trill", true], ["whistle", false], ["boop"], ["whistle", true]],
+  excited: [["burst", 7], ["trill", true], ["whistle", true, 1.25], ["burst", 4], ["trill", true]],
+  sad: [["droop"], ["boop"], ["droop"]],
+  think: [["boop"], ["burst", 3], ["ask"]],
+  sleepy: [["yawn"], ["boop"], ["yawn"]]
+};
+
+// size is roughly how many syllables Pip "says" (a longer line, a longer phrase).
+function droidPhrase(mood = "happy", size = 3) {
+  const recipe = RECIPES[mood] || RECIPES.happy;
+  const count = Math.max(2, Math.min(mood === "sad" || mood === "sleepy" ? 3 : 6, Math.round(size)));
   const notes = [];
-  const kinds = ["sine", "square", "triangle"];
   let at = 0;
-  for (let i = 0; i < mood.count; i += 1) {
-    const last = i === mood.count - 1;
-    const f = mood.low + Math.random() * (mood.high - mood.low);
-    const bend = last ? mood.lift : Math.random() < 0.5 ? 1.3 : 0.78;
-    const d = mood.step * (0.6 + Math.random() * 0.5) * (last ? 1.6 : 1);
-    const type = kinds[Math.floor(Math.random() * kinds.length)];
-    notes.push({ f, to: f * bend, d, type, v: type === "square" ? 0.035 : 0.07, at });
-    at += mood.step * (0.8 + Math.random() * 0.4);
+  for (let i = 0; i < count; i += 1) {
+    const [part, ...args] = i === count - 1 && (mood === "happy" || mood === "excited") ? ["whistle", true, 1.2] : pickOne(recipe);
+    const piece = PARTS[part](...args);
+    let end = 0;
+    for (const note of piece) {
+      notes.push({ ...note, at: at + (note.at || 0) });
+      end = Math.max(end, (note.at || 0) + note.d);
+    }
+    at += end + rand(0.03, 0.09);
   }
   return notes;
 }
 
-// Calm space music: four slow chords and a few soft bell notes.
+// The mood that goes with a face expression.
+export function pipMood(expr) {
+  if (expr === "excited") return "excited";
+  if (expr === "worried") return "sad";
+  if (expr === "thinking") return "think";
+  if (expr === "sleepy") return "sleepy";
+  return "happy";
+}
+
+// ------------------------------------------------------------------ music
+// Light, bouncy music: a plucky bass, a marimba playing the chords and a
+// little xylophone tune over the top, with a soft shaker. C major, 104 BPM.
+
+const BEAT = 60 / 104;
+const STEP = BEAT / 2;
+const BAR = BEAT * 4;
+const mtof = (m) => 440 * 2 ** ((m - 69) / 12);
+
+// C, G, A minor, F: bass note and the three chord notes.
 const CHORDS = [
-  [130.81, 164.81, 196.0, 246.94],
-  [110.0, 130.81, 164.81, 196.0],
-  [87.31, 130.81, 174.61, 220.0],
-  [98.0, 146.83, 196.0, 246.94]
+  { bass: 36, notes: [60, 64, 67] },
+  { bass: 43, notes: [59, 62, 67] },
+  { bass: 45, notes: [60, 64, 69] },
+  { bass: 41, notes: [60, 65, 69] }
 ];
-const BELLS = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5];
-const BAR = 6;
+
+// The tune, 8 steps per bar, as notes above C5 (null is a rest). Two
+// four-bar tunes take turns so it does not get boring.
+const TUNES = [
+  [
+    [4, null, 7, null, 12, 11, 12, null],
+    [11, null, 7, null, 2, null, 7, null],
+    [9, null, 12, null, 16, 14, 12, null],
+    [9, null, 5, 7, 9, null, null, null]
+  ],
+  [
+    [12, null, 11, 9, 7, null, 4, null],
+    [2, 4, 7, null, 11, null, 7, null],
+    [9, 7, 4, null, 9, null, 12, null],
+    [5, null, 9, null, 7, null, null, null]
+  ]
+];
+
+// Rhythm of the marimba: which steps of the bar play a chord note.
+const MARIMBA = [0, 2, 3, 5, 6];
 
 export const SOUND_NAMES = [...Object.keys(SOUNDS), ...Object.keys(PIP_MOODS)];
 
-export function createAudio({ enabled = true, music = true, AudioContextClass } = {}) {
+export function createAudio({ enabled = true, music = true, AudioContextClass, lookahead = 1.2 } = {}) {
   const Ctor = AudioContextClass || globalThis.AudioContext || globalThis.webkitAudioContext;
   let context = null;
   let on = Boolean(enabled);
   let musicOn = Boolean(music);
-  let hum = null;
   let sfx = null;
   let noise = null;
   let song = null;
@@ -179,8 +289,8 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
     return noise;
   }
 
-  function tone(ctx, note, out) {
-    const start = ctx.currentTime + (note.at || 0);
+  function tone(ctx, note, out, base = ctx.currentTime) {
+    const start = base + (note.at || 0);
     const attack = Math.min(note.a || 0.012, note.d * 0.8);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, start);
@@ -189,6 +299,7 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
     if (note.hold) gain.gain.setValueAtTime(note.v, start + Math.max(attack, note.d - note.hold));
     gain.gain.exponentialRampToValueAtTime(0.0001, start + note.d);
     let source;
+    let wobble = null;
     if (note.type === "noise") {
       source = ctx.createBufferSource();
       source.buffer = noiseBuffer(ctx);
@@ -204,6 +315,15 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
       source.type = note.type;
       source.frequency.setValueAtTime(note.f, start);
       if (note.to) source.frequency.exponentialRampToValueAtTime(note.to, start + note.d);
+      if (note.vib) {
+        wobble = ctx.createOscillator();
+        const depth = ctx.createGain();
+        wobble.frequency.value = note.vib;
+        depth.gain.value = note.depth || 50;
+        wobble.connect(depth).connect(source.frequency);
+        wobble.start(start);
+        wobble.stop(start + note.d + 0.05);
+      }
       source.connect(gain);
     }
     gain.connect(out);
@@ -211,39 +331,62 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
     source.stop(start + note.d + 0.05);
   }
 
+  // One plucked note: quick attack, quick fade. Used by the music.
+  function pluck(ctx, out, at, freq, type, level, length) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, at);
+    gain.gain.exponentialRampToValueAtTime(level, at + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, at + length);
+    osc.connect(gain).connect(out);
+    osc.start(at);
+    osc.stop(at + length + 0.02);
+  }
+
+  function shaker(ctx, out, at, level) {
+    const src = ctx.createBufferSource();
+    src.buffer = noiseBuffer(ctx);
+    const filter = ctx.createBiquadFilter();
+    filter.type = "highpass";
+    filter.frequency.value = 7000;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, at);
+    gain.gain.exponentialRampToValueAtTime(level, at + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.05);
+    src.connect(filter).connect(gain).connect(out);
+    src.start(at, Math.random());
+    src.stop(at + 0.07);
+  }
+
   function scheduleBar(ctx, at, index) {
     const out = song.out;
-    for (const f of CHORDS[index % CHORDS.length]) {
-      for (const [mult, type, level] of [[1, "sine", 0.03], [2.003, "triangle", 0.008]]) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.value = f * mult;
-        gain.gain.setValueAtTime(0.0001, at);
-        gain.gain.linearRampToValueAtTime(level, at + 2.2);
-        gain.gain.setValueAtTime(level, at + BAR - 1);
-        gain.gain.linearRampToValueAtTime(0.0001, at + BAR + 2.4);
-        osc.connect(gain).connect(out);
-        osc.start(at);
-        osc.stop(at + BAR + 2.5);
-      }
+    const chord = CHORDS[index % 4];
+    const tune = TUNES[Math.floor(index / 4) % 2][index % 4];
+    // The tune rests every fourth round, so it does not play forever.
+    const sing = Math.floor(index / 8) % 4 !== 3;
+    // bass: on the beat, with a hop up to the fifth
+    const bass = [[0, chord.bass], [2, chord.bass + 7], [4, chord.bass], [6, chord.bass + 12]];
+    for (const [step, m] of bass) pluck(ctx, out, at + step * STEP, mtof(m), "triangle", 0.09, 0.28);
+    // marimba: chord notes in a bouncy rhythm
+    MARIMBA.forEach((step, i) => {
+      const f = mtof(chord.notes[i % 3]);
+      pluck(ctx, out, at + step * STEP, f, "sine", 0.05, 0.32);
+      pluck(ctx, out, at + step * STEP, f * 4, "sine", 0.008, 0.08);
+    });
+    // xylophone tune, an octave up, with a soft echo
+    if (sing) {
+      tune.forEach((n, step) => {
+        if (n === null) return;
+        const when = at + step * STEP;
+        const f = mtof(72 + n);
+        pluck(ctx, out, when, f, "triangle", 0.05, 0.35);
+        pluck(ctx, song.echo, when, f, "sine", 0.025, 0.3);
+      });
     }
-    const bells = 2 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < bells; i += 1) {
-      const when = at + 0.4 + Math.random() * (BAR - 1.2);
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = BELLS[Math.floor(Math.random() * BELLS.length)];
-      gain.gain.setValueAtTime(0.0001, when);
-      gain.gain.exponentialRampToValueAtTime(0.03, when + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, when + 2.2);
-      osc.connect(gain);
-      gain.connect(out);
-      gain.connect(song.echo);
-      osc.start(when);
-      osc.stop(when + 2.3);
-    }
+    // shaker on the off-beats
+    for (let step = 1; step < 8; step += 2) shaker(ctx, out, at + step * STEP, 0.02);
   }
 
   function startMusic() {
@@ -253,25 +396,25 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
       if (!ctx) return;
       const out = ctx.createGain();
       out.gain.setValueAtTime(0.0001, ctx.currentTime);
-      out.gain.linearRampToValueAtTime(0.55, ctx.currentTime + 2);
+      out.gain.linearRampToValueAtTime(0.75, ctx.currentTime + 1.5);
       out.connect(ctx.destination);
       const echo = ctx.createDelay(1);
       const feedback = ctx.createGain();
-      echo.delayTime.value = 0.42;
-      feedback.gain.value = 0.32;
+      echo.delayTime.value = STEP * 3;
+      feedback.gain.value = 0.25;
       echo.connect(feedback).connect(echo);
       echo.connect(out);
       song = { out, echo, next: ctx.currentTime + 0.1, bar: 0, timer: null };
       const pump = () => {
         if (!song) return;
-        while (song.next < ctx.currentTime + 1.5) {
+        while (song.next < ctx.currentTime + lookahead) {
           scheduleBar(ctx, song.next, song.bar);
           song.next += BAR;
           song.bar += 1;
         }
       };
       pump();
-      song.timer = setInterval(pump, 500);
+      song.timer = setInterval(pump, 300);
     } catch {
       song = null;
     }
@@ -308,6 +451,19 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
     }
   }
 
+  function playNotes(notes) {
+    if (!on || !notes) return false;
+    try {
+      const ctx = ensure();
+      if (!ctx) return false;
+      const out = bus(ctx);
+      for (const note of notes) tone(ctx, note, out);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   return {
     get enabled() {
       return on;
@@ -338,41 +494,21 @@ export function createAudio({ enabled = true, music = true, AudioContextClass } 
     startMusic,
     stopMusic,
     hush,
-    startHum() {
-      if (!on || hum) return;
-      try {
-        const ctx = ensure();
-        if (!ctx) return;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.value = 82;
-        gain.gain.value = 0.012;
-        osc.connect(gain).connect(ctx.destination);
-        osc.start();
-        hum = { osc, gain };
-      } catch {
-        hum = null;
-      }
-    },
-    stopHum() {
-      if (!hum) return;
-      try { hum.osc.stop(); } catch { /* already stopped */ }
-      hum = null;
+    // Kept for older callers. The low drone during cutscenes was removed.
+    startHum() {},
+    stopHum() {},
+    // Pip "says" a line in droid beeps. Longer lines get longer phrases.
+    pipSay(text, expr) {
+      const size = 2 + Math.min(4, String(text || "").length / 22);
+      return playNotes(droidPhrase(pipMood(expr), size));
     },
     play(name) {
-      if (!on) return false;
-      const notes = SOUNDS[name] || (PIP_MOODS[name] ? pipPhrase(PIP_MOODS[name]) : null);
-      if (!notes) return false;
-      try {
-        const ctx = ensure();
-        if (!ctx) return false;
-        const out = bus(ctx);
-        for (const note of notes) tone(ctx, note, out);
-        return true;
-      } catch {
-        return false;
-      }
-    }
+      if (SOUNDS[name]) return playNotes(SOUNDS[name]);
+      if (PIP_MOODS[name]) return playNotes(droidPhrase(PIP_MOODS[name].mood, 3));
+      return false;
+    },
+    // For the preview tool and tests: the notes of one droid phrase.
+    droidNotes: droidPhrase,
+    playNotes
   };
 }

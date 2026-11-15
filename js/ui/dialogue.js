@@ -101,9 +101,11 @@ export function createDialogue(root, { i18n, audio, voice, nameOf }) {
       factBox.hidden = true;
     }
     setSpotlight(line.target);
-    // Read the line aloud when the read-aloud voice is on. Pip chirps first.
-    if (who === "pip") audio.play(line.expr === "worried" ? "pipSad" : line.expr === "thinking" ? "pipThink" : "pipHappy");
-    speaking = Boolean(voice?.speak(text, { lang: i18n.lang, who }));
+    // Nova and Dr. Sprout read their line aloud. Pip never says words: Pip
+    // answers in droid beeps, and the words stay on screen.
+    voice?.stop();
+    if (who === "pip") speaking = Boolean(audio.pipSay?.(text, line.expr));
+    else speaking = Boolean(voice?.speak(text, { lang: i18n.lang, who }));
     return type(text);
   }
 
