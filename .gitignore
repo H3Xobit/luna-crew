@@ -4,3 +4,10 @@ node_modules/
 .DS_Store
 coverage/
 *.log
+.vscode/
+.idea/
+*.zip
+*.patch
+luna-crew-*/
+*.pem
+*.key

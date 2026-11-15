@@ -2,7 +2,7 @@
 
 ## Classroom first
 
-Three lunar days keep a class period short. Practice mode teaches the panel once. Demo mode moves the storm earlier so a five-minute talk still shows the NASA label.
+Three lunar days keep a class period short. The first mission teaches the panel once. Demo mode moves the storm earlier so a five-minute talk still shows the NASA label.
 
 ## Honest data, clear fiction
 
