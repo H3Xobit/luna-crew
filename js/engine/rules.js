@@ -250,6 +250,11 @@ export function resolveRound(state, allocation, config) {
   next.power = clamp(next.power, config.bars.min, config.bars.max);
   next.life = clamp(next.life, config.bars.min, config.bars.max);
   next.shield = clamp(next.shield, config.bars.min, config.bars.max);
+  if (config.harvest && next.round >= totalRounds(config)) {
+    const allOn = next.log.every((row) => row.lightsOn) && next.lightsOn;
+    next.harvest = allOn ? "greens" : "small";
+    if (allOn) next.life = clamp(next.life + config.harvestLife, config.bars.min, config.bars.max);
+  }
   next.missionPoints = Math.max(0, Math.round(next.missionPoints));
 
   const after = snapshotBars(next);

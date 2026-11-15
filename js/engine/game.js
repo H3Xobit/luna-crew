@@ -256,6 +256,7 @@ export function createGame(options = {}) {
         sampleRecovered: state.sampleRecovered,
         storm: state.storm ? { ...state.storm } : null,
         bars: { power: state.power, life: state.life, shield: state.shield },
+        harvest: state.harvest || null,
         repairs: state.stats.repairs || 0,
         log: state.log.map((row) => ({
           isNight: row.isNight,

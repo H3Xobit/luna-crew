@@ -158,7 +158,8 @@
       "after": "storm-watch",
       "star3": "lights",
       "facts": [
-        "regolith_plants"
+        "regolith_plants",
+        "veggie_food"
       ],
       "discuss": {
         "en": "Plants grew in Apollo soil, but how did they look?",
@@ -171,7 +172,8 @@
       "outro": {
         "en": "You finished {days}. The crew is safe.",
         "ja": "{days}が終わって、クルーはぶじです。"
-      }
+      },
+      "harvest": true
     },
     {
       "id": "full-mission",

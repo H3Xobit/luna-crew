@@ -103,7 +103,7 @@
         "name": "Moon's South Pole is Full of Mystery, Science, Intrigue",
         "agency": "NASA",
         "url": "https://www.nasa.gov/humans-in-space/moons-south-pole-is-full-of-mystery-science-intrigue/",
-        "accessed": "2026-11-14"
+        "accessed": "2026-11-15"
       }
     },
     {
@@ -178,7 +178,7 @@
         "name": "Growing Plants in Space",
         "agency": "NASA",
         "url": "https://www.nasa.gov/exploration-research-and-technology/growing-plants-in-space/",
-        "accessed": "2026-11-14"
+        "accessed": "2026-11-15"
       }
     },
     {
@@ -223,7 +223,7 @@
         "name": "Archway for Radiation and Micrometeorite Occurrence Resistance (NASA Tech Briefs, December 2012)",
         "agency": "NASA",
         "url": "https://ntrs.nasa.gov/citations/20130009378",
-        "accessed": "2026-11-14"
+        "accessed": "2026-11-15"
       }
     },
     {
@@ -298,7 +298,52 @@
         "name": "Moonlight",
         "agency": "NASA",
         "url": "https://science.nasa.gov/moon/moonlight/",
-        "accessed": "2026-11-14"
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "apollo_1972",
+      "status": "verified",
+      "text": {
+        "en": "In August 1972, big solar storms happened between Apollo 16 and Apollo 17. No crew was on the Moon. NASA calls it a near miss.",
+        "ja": "1972年8月、アポロ16号と17号のあいだに、大きな太陽のあらしがありました。月にはクルーはいませんでした。NASAは、これをあやういすれちがいとよんでいます。"
+      },
+      "usedFor": "Quiz card",
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "orion_shelter",
+      "status": "verified",
+      "text": {
+        "en": "On the Orion spacecraft, the crew can build a storm shelter from stowage bags.",
+        "ja": "オリオン宇宙船では、クルーが収納バッグで、あらしのシェルターを作れます。"
+      },
+      "usedFor": "Planner review, quiz card",
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "regolith_pile",
+      "status": "verified",
+      "text": {
+        "en": "On the Moon, astronauts could pile lunar soil over their shelters.",
+        "ja": "月では、宇宙飛行士がシェルターの上に月の土を積むことができます。"
+      },
+      "usedFor": "Planner review, quiz card",
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
       }
     }
   ]

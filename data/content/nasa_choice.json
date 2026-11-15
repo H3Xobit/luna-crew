@@ -11,8 +11,12 @@
         "ja": "太陽のあらしのあいだ、クルーをシェルターにひなんさせました。"
       },
       "planners": {
-        "en": "Real planners put crew safety first. When a strong solar storm comes, the crew moves to the best shielded place and the work waits.",
-        "ja": "本もののプランナーは、クルーのあんぜんをいちばんにかんがえます。つよい太陽のあらしが来たら、いちばんまもられた場しょにうつって、しごとはあとまわしにします。"
+        "en": "Real planners put crew safety first. When a strong solar storm comes, the crew moves to the best shielded place and the work waits. On Orion, the crew can build a shelter from stowage bags.",
+        "ja": "本もののプランナーは、クルーのあんぜんをいちばんにかんがえます。つよい太陽のあらしが来たら、いちばんまもられた場しょにうつって、しごとはあとまわしにします。 オリオンでは、収納バッグでシェルターを作れます。"
+      },
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon"
       }
     },
     {
@@ -95,8 +99,12 @@
         "ja": "この月の一日は、ずっとシールドがうすいままでした。"
       },
       "planners": {
-        "en": "Planners build protection before they need it. You cannot pile up dirt once the storm has arrived.",
-        "ja": "プランナーは、ひつようになるまえに、まもりをつくっておきます。あらしが来てからでは、土をつむ時間がありません。"
+        "en": "Planners build protection before they need it. You cannot pile up dirt once the storm has arrived. On the Moon, astronauts could pile lunar soil over a shelter.",
+        "ja": "プランナーは、ひつようになるまえに、まもりをつくっておきます。あらしが来てからでは、土をつむ時間がありません。 月では、シェルターの上に月の土を積むことができます。"
+      },
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon"
       }
     },
     {

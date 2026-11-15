@@ -16,10 +16,10 @@ export function planTotal(plan) {
 }
 
 const WHY_FACT = {
-  power: "lunar_day_length",
-  life: "eclss_what",
-  shield: "regolith_shield",
-  science: "regolith_plants"
+  power: ["lunar_day_length", "long_shadows"],
+  life: ["eclss_what"],
+  shield: ["regolith_shield"],
+  science: ["regolith_plants"]
 };
 
 export function hintText(i18n, job, state, config) {
@@ -149,15 +149,22 @@ export function createJobsPanel(root, { i18n, audio, config, facts, modals, onCh
   }
 
   function factLine(job) {
-    const fact = facts?.get?.(WHY_FACT[job]);
-    if (!fact || fact.status !== "verified") return null;
-    return h("p", { class: "why-fact" }, [
-      h("span", { class: "fact-tag", text: i18n.t("fact.real") }),
-      " ",
-      i18n.pick(fact.text),
-      " ",
-      sourceLink(fact.source.url, fact.source.name)
-    ]);
+    const ids = WHY_FACT[job] || [];
+    const shown = ids.map((id) => facts?.get?.(id)).filter((fact) => fact && fact.status === "verified");
+    if (shown.length === 0) return null;
+    return h(
+      "div",
+      { class: "why-facts" },
+      shown.map((fact) =>
+        h("p", { class: "why-fact" }, [
+          h("span", { class: "fact-tag", text: i18n.t("fact.real") }),
+          " ",
+          i18n.pick(fact.text),
+          " ",
+          sourceLink(fact.source.url, fact.source.name)
+        ])
+      )
+    );
   }
 
   function left() {

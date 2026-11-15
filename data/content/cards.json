@@ -9,9 +9,18 @@
         "ja": "ちきゅうの人を、つよい太陽のあらしからまもっているのは、なに？"
       },
       "options": [
-        { "en": "Earth's air and magnetic field", "ja": "ちきゅうの空気とじしゃくの力" },
-        { "en": "The light of the Moon", "ja": "月の光" },
-        { "en": "Rain clouds", "ja": "雨ぐも" }
+        {
+          "en": "Earth's air and magnetic field",
+          "ja": "ちきゅうの空気とじしゃくの力"
+        },
+        {
+          "en": "The light of the Moon",
+          "ja": "月の光"
+        },
+        {
+          "en": "Rain clouds",
+          "ja": "雨ぐも"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -33,9 +42,18 @@
         "ja": "いちばんつよい太陽フレアにつかう文字は、どれ？"
       },
       "options": [
-        { "en": "X", "ja": "X" },
-        { "en": "A", "ja": "A" },
-        { "en": "C", "ja": "C" }
+        {
+          "en": "X",
+          "ja": "X"
+        },
+        {
+          "en": "A",
+          "ja": "A"
+        },
+        {
+          "en": "C",
+          "ja": "C"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -57,9 +75,18 @@
         "ja": "2009 年、NASA の LCROSS は、月のくらいクレーターでなにを見つけた？"
       },
       "options": [
-        { "en": "Water ice", "ja": "水のこおり" },
-        { "en": "A warm lake", "ja": "あたたかいみずうみ" },
-        { "en": "Green plants", "ja": "みどりのしょくぶつ" }
+        {
+          "en": "Water ice",
+          "ja": "水のこおり"
+        },
+        {
+          "en": "A warm lake",
+          "ja": "あたたかいみずうみ"
+        },
+        {
+          "en": "Green plants",
+          "ja": "みどりのしょくぶつ"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -81,9 +108,18 @@
         "ja": "うちゅうステーションでは、クルーの水をどのくらい、もういちどつかえる？"
       },
       "options": [
-        { "en": "About 98 percent", "ja": "やく 98 パーセント" },
-        { "en": "About 50 percent", "ja": "やく 50 パーセント" },
-        { "en": "About 10 percent", "ja": "やく 10 パーセント" }
+        {
+          "en": "About 98 percent",
+          "ja": "やく 98 パーセント"
+        },
+        {
+          "en": "About 50 percent",
+          "ja": "やく 50 パーセント"
+        },
+        {
+          "en": "About 10 percent",
+          "ja": "やく 10 パーセント"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -105,9 +141,18 @@
         "ja": "うちゅうステーションでは、さんそをどうやって作っている？"
       },
       "options": [
-        { "en": "By splitting water with electricity", "ja": "電気で水を分ける" },
-        { "en": "By burning rocket fuel", "ja": "ロケットのねんりょうをもやす" },
-        { "en": "By melting rocks", "ja": "岩をとかす" }
+        {
+          "en": "By splitting water with electricity",
+          "ja": "電気で水を分ける"
+        },
+        {
+          "en": "By burning rocket fuel",
+          "ja": "ロケットのねんりょうをもやす"
+        },
+        {
+          "en": "By melting rocks",
+          "ja": "岩をとかす"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -129,9 +174,18 @@
         "ja": "うちゅうひこうしが、うちゅうのはたけ「ベジー」でそだてて食べたものは？"
       },
       "options": [
-        { "en": "Lettuce", "ja": "レタス" },
-        { "en": "Bananas", "ja": "バナナ" },
-        { "en": "Rice", "ja": "お米" }
+        {
+          "en": "Lettuce",
+          "ja": "レタス"
+        },
+        {
+          "en": "Bananas",
+          "ja": "バナナ"
+        },
+        {
+          "en": "Rice",
+          "ja": "お米"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -153,9 +207,18 @@
         "ja": "うちゅうのはたけ「ベジー」は、どうしてピンク色に光るの？"
       },
       "options": [
-        { "en": "Plants use mostly red and blue light", "ja": "しょくぶつが赤と青の光をたくさんつかうから" },
-        { "en": "The walls are painted pink", "ja": "かべがピンク色だから" },
-        { "en": "The Sun looks pink in space", "ja": "うちゅうでは太陽がピンクに見えるから" }
+        {
+          "en": "Plants use mostly red and blue light",
+          "ja": "しょくぶつが赤と青の光をたくさんつかうから"
+        },
+        {
+          "en": "The walls are painted pink",
+          "ja": "かべがピンク色だから"
+        },
+        {
+          "en": "The Sun looks pink in space",
+          "ja": "うちゅうでは太陽がピンクに見えるから"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -177,9 +240,18 @@
         "ja": "かがくしゃが、アポロがもちかえった月の土でしょくぶつをそだてました。どうなった？"
       },
       "options": [
-        { "en": "They grew, but slowly and with stress", "ja": "そだったけれど、ゆっくりで元気がなかった" },
-        { "en": "They grew faster than on Earth", "ja": "ちきゅうよりはやくそだった" },
-        { "en": "No seed sprouted at all", "ja": "ひとつもめが出なかった" }
+        {
+          "en": "They grew, but slowly and with stress",
+          "ja": "そだったけれど、ゆっくりで元気がなかった"
+        },
+        {
+          "en": "They grew faster than on Earth",
+          "ja": "ちきゅうよりはやくそだった"
+        },
+        {
+          "en": "No seed sprouted at all",
+          "ja": "ひとつもめが出なかった"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -201,9 +273,18 @@
         "ja": "きちをほうしゃせんからまもるには、月の土がどのくらいのあつさでひつよう？"
       },
       "options": [
-        { "en": "About 3 meters", "ja": "やく 3 メートル" },
-        { "en": "About 3 centimeters", "ja": "やく 3 センチメートル" },
-        { "en": "About 3 kilometers", "ja": "やく 3 キロメートル" }
+        {
+          "en": "About 3 meters",
+          "ja": "やく 3 メートル"
+        },
+        {
+          "en": "About 3 centimeters",
+          "ja": "やく 3 センチメートル"
+        },
+        {
+          "en": "About 3 kilometers",
+          "ja": "やく 3 キロメートル"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -225,9 +306,18 @@
         "ja": "でんぱが、ちきゅうから月にとどくまで、どのくらいかかる？"
       },
       "options": [
-        { "en": "A little over 1 second", "ja": "1 びょうとすこし" },
-        { "en": "About 1 hour", "ja": "やく 1 時間" },
-        { "en": "About 1 day", "ja": "やく 1 日" }
+        {
+          "en": "A little over 1 second",
+          "ja": "1 びょうとすこし"
+        },
+        {
+          "en": "About 1 hour",
+          "ja": "やく 1 時間"
+        },
+        {
+          "en": "About 1 day",
+          "ja": "やく 1 日"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -249,9 +339,18 @@
         "ja": "NASA のアルテミスけいかくがめざしているのは、月のどのあたり？"
       },
       "options": [
-        { "en": "The area near the South Pole", "ja": "南きょくの近く" },
-        { "en": "The middle of the side we see", "ja": "ちきゅうから見えるがわのまんなか" },
-        { "en": "The equator", "ja": "せきどう" }
+        {
+          "en": "The area near the South Pole",
+          "ja": "南きょくの近く"
+        },
+        {
+          "en": "The middle of the side we see",
+          "ja": "ちきゅうから見えるがわのまんなか"
+        },
+        {
+          "en": "The equator",
+          "ja": "せきどう"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -273,9 +372,18 @@
         "ja": "月の南きょくの近くの、いちばんくらいクレーターは、どのくらいさむくなる？"
       },
       "options": [
-        { "en": "About minus 203 degrees Celsius", "ja": "やくマイナス 203 ど" },
-        { "en": "About minus 20 degrees Celsius", "ja": "やくマイナス 20 ど" },
-        { "en": "About 0 degrees Celsius", "ja": "やく 0 ど" }
+        {
+          "en": "About minus 203 degrees Celsius",
+          "ja": "やくマイナス 203 ど"
+        },
+        {
+          "en": "About minus 20 degrees Celsius",
+          "ja": "やくマイナス 20 ど"
+        },
+        {
+          "en": "About 0 degrees Celsius",
+          "ja": "やく 0 ど"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -297,9 +405,18 @@
         "ja": "月のひるとよるは、どのくらい？"
       },
       "options": [
-        { "en": "About two Earth weeks each", "ja": "それぞれちきゅうのやく 2 しゅうかん" },
-        { "en": "About two hours each", "ja": "それぞれやく 2 時間" },
-        { "en": "About two years each", "ja": "それぞれやく 2 年" }
+        {
+          "en": "About two Earth weeks each",
+          "ja": "それぞれちきゅうのやく 2 しゅうかん"
+        },
+        {
+          "en": "About two hours each",
+          "ja": "それぞれやく 2 時間"
+        },
+        {
+          "en": "About two years each",
+          "ja": "それぞれやく 2 年"
+        }
       ],
       "answer": 0,
       "explain": {
@@ -311,6 +428,105 @@
         "agency": "NASA",
         "url": "https://science.nasa.gov/moon/moonlight/",
         "accessed": "2026-11-14"
+      }
+    },
+    {
+      "id": "card_apollo_1972",
+      "status": "verified",
+      "q": {
+        "en": "When did big solar storms fall between Apollo 16 and Apollo 17?",
+        "ja": "アポロ16号と17号のあいだの大きな太陽のあらしは、いつ？"
+      },
+      "options": [
+        {
+          "en": "August 1972",
+          "ja": "1972年8月"
+        },
+        {
+          "en": "July 1969",
+          "ja": "1969年7月"
+        },
+        {
+          "en": "December 2022",
+          "ja": "2022年12月"
+        }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "The storms were a near miss. No crew was on the Moon then.",
+        "ja": "あやういすれちがいでした。そのとき、月にクルーはいませんでした。"
+      },
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "card_orion_shelter",
+      "status": "verified",
+      "q": {
+        "en": "What can an Orion crew use to build a storm shelter?",
+        "ja": "オリオンのクルーは、何であらしのシェルターを作れる？"
+      },
+      "options": [
+        {
+          "en": "Stowage bags",
+          "ja": "収納バッグ"
+        },
+        {
+          "en": "A paper umbrella",
+          "ja": "紙のかさ"
+        },
+        {
+          "en": "Nothing on the ship",
+          "ja": "船の中には何もない"
+        }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "The crew can stack stowage bags into a dense shelter.",
+        "ja": "収納バッグを積んで、しっかりしたシェルターにできます。"
+      },
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "card_regolith_pile",
+      "status": "verified",
+      "q": {
+        "en": "What could astronauts pile over a shelter on the Moon?",
+        "ja": "月のシェルターの上に、宇宙飛行士は何を積める？"
+      },
+      "options": [
+        {
+          "en": "Lunar soil",
+          "ja": "月の土"
+        },
+        {
+          "en": "Ocean water",
+          "ja": "海の水"
+        },
+        {
+          "en": "Earth trees",
+          "ja": "ちきゅうの木"
+        }
+      ],
+      "answer": 0,
+      "explain": {
+        "en": "Moon soil is already there, so it can cover a shelter.",
+        "ja": "月の土はそこにあるので、シェルターをおおうことができます。"
+      },
+      "source": {
+        "name": "How NASA Will Protect Astronauts From Space Radiation at the Moon",
+        "agency": "NASA",
+        "url": "https://science.nasa.gov/science-research/heliophysics/how-nasa-will-protect-astronauts-from-space-radiation-at-the-moon",
+        "accessed": "2026-11-15"
       }
     }
   ]

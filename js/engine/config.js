@@ -38,6 +38,8 @@ export const config = {
   },
   nasa: { nightLowPower: 30, lifeLowPower: 25, lowShield: 40, maxLines: 2 },
   quiz: { bonusPoints: 1 },
+  harvest: false,
+  harvestLife: 10,
   events: [
     { lunarDay: 1, roundInDay: 1, type: "rescue" },
     { lunarDay: 2, roundInDay: 2, type: "storm" },

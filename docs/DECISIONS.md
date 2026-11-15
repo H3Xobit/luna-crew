@@ -20,6 +20,12 @@ UI strings live in `data/i18n/en.json` and `ja.json`. Story, cards and facts car
 
 Plain ES modules, static hosting, Web Audio beeps, SVG scene. Easy to fork for a classroom or a GitHub Pages deploy.
 
+## Radiation comparison is not the storm
+
+The storm card shows one saved DosTel1 reading from 2022. The sentence does not call that day "normal", because the saved file does not say the day was normal. It says the number is not a reading of the storm on the card.
+
+The 3 meter Moon-soil line stays, because the NASA Tech Brief opened on 2026-11-15 says a thickness of roughly 3 m protects even during solar flares. The August 1972, Orion stowage-bag, and lunar-soil shelter lines come from the NASA heliophysics page opened the same day.
+
 ## Storms come from one pool
 
 `data/latest.json` and `data/storms.json` are combined. Each event keeps the honest label of the file it came from. Latest wins when the id is in both. Mission of the Day uses only the latest file. Storm Watch uses a level 2 storm. Other missions roll about 50 percent level 2, 35 percent level 3 and 15 percent level 4, and fall back when a level is missing. `?demo=1` with no seed shows the archive's strongest flare. The daily mission seed uses the player's local calendar date, not UTC.

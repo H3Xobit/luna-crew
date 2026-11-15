@@ -305,7 +305,11 @@ export function reviewCard(modals, { i18n, review }) {
   const items = review.lines.map((line) =>
     h("div", { class: "review-pair" }, [
       h("div", { class: "review-you" }, [h("h3", { text: i18n.t("review.you") }), h("p", { text: i18n.pick(line.you) })]),
-      h("div", { class: "review-planners" }, [h("h3", { text: i18n.t("review.planners") }), h("p", { text: i18n.pick(line.planners) })])
+      h("div", { class: "review-planners" }, [
+        h("h3", { text: i18n.t("review.planners") }),
+        h("p", { text: i18n.pick(line.planners) }),
+        line.source?.url ? sourceLink(line.source.url, line.source.name) : null
+      ])
     ])
   );
   return modals.open({

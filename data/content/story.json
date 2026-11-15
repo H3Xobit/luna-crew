@@ -739,5 +739,27 @@
         "ja": "このレッスンではあらしが来ることがあります。シールドがあると、しごとをつづけられます。"
       }
     }
+  },
+  "harvest": {
+    "greens": [
+      {
+        "who": "sprout",
+        "expr": "excited",
+        "text": {
+          "en": "The lights stayed on. We harvested leafy greens. Life Support goes up by 10.",
+          "ja": "ライトはつけたままでした。はっぱのやさいを収穫しました。せいめいいじが10上がります。"
+        }
+      }
+    ],
+    "small": [
+      {
+        "who": "sprout",
+        "expr": "thinking",
+        "text": {
+          "en": "The plants stayed small. They need the lights on every round.",
+          "ja": "植物は小さいままです。毎ラウンド、ライトが必要です。"
+        }
+      }
+    ]
   }
 }

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   config,
+  mergeConfig,
   createState,
   availablePoints,
   validateAllocation,
@@ -104,6 +105,27 @@ test("topJob and lowestBar helpers", () => {
   state.life = 40;
   state.shield = 20;
   assert.equal(lowestBar(state), "power");
+});
+
+test("a harvest adds 10 Life Support only when the lights stayed on", () => {
+  const base = mergeConfig(config, { lunarDays: 1, roundsPerDay: 1, nightRounds: [] });
+  const withHarvest = mergeConfig(base, { harvest: true });
+  const plan = { power: 2, life: 0, shield: 0, science: 0 };
+  const lit = () => {
+    const state = createState(1, withHarvest);
+    state.round = 1;
+    state.lightsOn = true;
+    return state;
+  };
+  const dark = lit();
+  dark.lightsOn = false;
+  const yes = resolveRound(lit(), plan, withHarvest);
+  const noHarvest = resolveRound(lit(), plan, base);
+  const small = resolveRound(dark, plan, withHarvest);
+  assert.equal(yes.state.harvest, "greens");
+  assert.equal(small.state.harvest, "small");
+  assert.equal(yes.state.life, Math.min(config.bars.max, noHarvest.state.life + config.harvestLife));
+  assert.ok(small.state.life < yes.state.life);
 });
 
 test("damaged panels halve power gain", () => {

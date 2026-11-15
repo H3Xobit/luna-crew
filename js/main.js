@@ -471,6 +471,7 @@ async function boot() {
       if (mission.nightRounds) overrides.nightRounds = mission.nightRounds;
       if (mission.start) overrides.start = mission.start;
       if (Array.isArray(mission.events)) overrides.events = mission.events;
+      if (mission.harvest) overrides.harvest = true;
     }
     game = createGame({
       seed,
@@ -542,6 +543,16 @@ async function boot() {
             saveProgress(progress);
             if (result.rankUp) await playSeen("rank");
           } else saveProgress(progress);
+          if (summary.harvest === "greens") {
+            await say(content.story.harvest.greens, { skippable: true });
+            const fact = content.factIndex.get("veggie_food");
+            if (fact?.status === "verified" && !progress.journal.includes("veggie_food")) {
+              progress = { ...progress, journal: [...progress.journal, "veggie_food"] };
+              saveProgress(progress);
+            }
+          } else if (summary.harvest === "small") {
+            await say(content.story.harvest.small, { skippable: true });
+          }
           await playSeen(summary.status === "complete" ? "endingComplete" : "endingPaused");
           showEnd(summary);
           return;
