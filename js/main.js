@@ -318,6 +318,7 @@ async function boot() {
       i18n,
       missions: content.missions?.missions || [],
       progress,
+      demo,
       onPlay: (mission, seed) => {
         currentMission = mission;
         const chosen = Number.isFinite(seed) && seed > 0 ? seed : randomSeed();
@@ -357,7 +358,7 @@ async function boot() {
     }
     game = createGame({
       seed,
-      demo: mission ? false : demo,
+      demo: demo && (!mission || mission.id === "full-mission"),
       practice: Boolean(practice),
       stormData,
       cards: content.cards.cards,

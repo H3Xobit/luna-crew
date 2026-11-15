@@ -283,12 +283,12 @@ export function openSettings(modals, { i18n, settings, onChange }) {
   return modals.open({ title: i18n.t("title.settings"), tone: "plain", dismissible: true, body, actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }] });
 }
 
-export function renderMap(root, { i18n, missions, progress, onPlay, onJournal, onReset, onHome }) {
+export function renderMap(root, { i18n, missions, progress, demo = false, onPlay, onJournal, onReset, onHome }) {
   const stars = totalStars(progress);
   const rank = rankFor(stars);
   const nodes = h("ol", { class: "mission-path" });
   for (const mission of missions) {
-    const open = isUnlocked(mission, missions, progress);
+    const open = demo || isUnlocked(mission, missions, progress);
     const earned = progress.stars?.[mission.id] || 0;
     const seedNote = mission.daily ? i18n.t("map.daily", { seed: dailySeed() }) : "";
     const seedInput = mission.chooseSeed
