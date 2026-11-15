@@ -2,7 +2,7 @@
 
 A junior astronaut mission trainer for kids. You are the Mission Planner for a small Moon base: share work points, keep Power, Life Support and Shield above zero, and learn why Earth is a special home.
 
-Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronaut Mission Trainer** (Challenge 03). English and Japanese. Runs in the browser with no install.
+Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronaut Mission Trainer**. English and Japanese. Runs in the browser with no install.
 
 ## Play
 
@@ -10,8 +10,8 @@ Built for the NASA Space Apps Challenge 2026 challenge **Build a Junior Astronau
 2. Pick a language, then **Start mission**.
 3. Choose a call sign and helmet color.
 4. On the Mission Map, play the lessons in order. Full Mission is the three-day game.
-5. Share 10 work points each round across Power, Life Support, Shield and Science. Press **Why?** to see that round's weight.
-5. Watch for solar storms, Pip’s rescue, and a science discovery. After each lunar day, read a planner review and a Mission Card.
+5. Share 10 work points each round across Power, Life Support, Shield and Science. Press **?** to see that round's weight.
+6. Watch for solar storms, Pip's rescue, and a science discovery. After each lunar day, read a planner review and a Mission Card.
 
 Demo tip: add `?demo=1` to the URL to bring the storm earlier for a short talk.
 

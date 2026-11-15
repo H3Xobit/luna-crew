@@ -26,7 +26,7 @@ Greenhouse lights: on grows plants and Life Support but uses Power; off saves Po
 ## Events
 
 - **Rescue Pip**: spend points now to save an ice sample, or wait and lose the sample plus points next round.
-- **Solar storm**: shelter (jobs pause) or keep working if the dirt shield is thick enough. Strong storms can damage panels.
+- **Solar storm**: shelter (jobs pause) or keep working. Keeping working always damages the panels. Shelter damages them only at storm level 3 or more.
 - **Discovery**: study a find for Mission Points and a Life Support cost, or skip and stay focused on the base.
 - **Repair**: tap glowing panel spots before the timer ends.
 
