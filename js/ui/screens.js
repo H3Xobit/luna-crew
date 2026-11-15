@@ -5,6 +5,7 @@ import { h, clear, sourceLink } from "./dom.js";
 import { icon } from "./icons.js";
 import { portrait, playerBadge } from "./characters.js";
 import { dataChip } from "./modals.js";
+import { jobWeights } from "../engine/rules.js";
 import { LANGUAGES } from "./i18n.js";
 
 const LANGUAGE_NAMES = { en: "English", ja: "\u65e5\u672c\u8a9e" };
@@ -172,11 +173,43 @@ export function openDataScreen(modals, { i18n, sources }) {
   return modals.open({ title: i18n.t("data.title"), tone: "data", wide: true, dismissible: true, body, actions: [{ id: "close", label: i18n.t("ui.close"), kind: "primary" }] });
 }
 
+function weightsTable(i18n, facts, config) {
+  const day = jobWeights({ isNight: false, life: 70, panelsDamaged: false }, config);
+  const rows = [
+    ["power", i18n.t("teach.w.power", day.power), i18n.t("teach.w.powerChanges"), "lunar_day_length"],
+    ["life", i18n.t("teach.w.life", day.life), i18n.t("teach.w.lifeChanges"), "eclss_what"],
+    ["shield", i18n.t("teach.w.shield", { gain: day.shield.perPoint, line: day.shield.linePerLevel }), i18n.t("teach.w.shieldChanges", { gain: day.shield.perPoint }), "regolith_shield"],
+    ["science", i18n.t("teach.w.science", day.science), i18n.t("teach.w.scienceChanges"), "regolith_plants"]
+  ];
+  return h("div", { class: "weights-wrap" }, [
+    h("h3", { text: i18n.t("teach.weightsTitle") }),
+    h("p", { text: i18n.t("teach.weightsLead") }),
+    h("table", { class: "weights-table" }, [
+      h("thead", {}, [
+        h("tr", {}, ["teach.colJob", "teach.colWeight", "teach.colChanges", "teach.colWhy"].map((key) => h("th", { text: i18n.t(key) })))
+      ]),
+      h("tbody", {}, rows.map(([job, weight, changes, factId]) => {
+        const fact = facts?.get?.(factId);
+        const why = fact && fact.status === "verified"
+          ? sourceLink(fact.source.url, i18n.pick(fact.text))
+          : h("span", { text: i18n.t(`why.reason.${job}`) });
+        return h("tr", {}, [
+          h("th", { text: i18n.t(`job.${job}.name`) }),
+          h("td", { text: weight }),
+          h("td", { text: changes }),
+          h("td", {}, [why])
+        ]);
+      }))
+    ])
+  ]);
+}
+
 export function openTeachers(modals, { i18n, facts, config }) {
   const toolkit = facts.get("csa_toolkit");
   const section = (titleKey, keys) => [h("h3", { text: i18n.t(titleKey) }), h("ul", { class: "plain-list" }, keys.map((key) => h("li", { text: i18n.t(key, { rounds: config.lunarDays * config.roundsPerDay, days: config.lunarDays }) })))];
   const body = [
     h("p", { text: i18n.t("teach.lead") }),
+    weightsTable(i18n, facts, config),
     ...section("teach.learnTitle", ["teach.learn1", "teach.learn2", "teach.learn3", "teach.learn4"]),
     ...section("teach.useTitle", ["teach.use1", "teach.use2", "teach.use3", "teach.use4"]),
     ...section("teach.realTitle", ["teach.real1", "teach.real2", "teach.real3"]),

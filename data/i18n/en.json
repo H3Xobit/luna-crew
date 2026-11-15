@@ -243,5 +243,52 @@
   "label.saved": "Saved NASA data from {date}",
   "label.training": "Training alert (not real data)",
 
-  "fact.real": "Real science"
+  "fact.real": "Real science",
+
+  "why.button": "Why?",
+  "why.hide": "Hide",
+  "why.whenDay": " (daytime)",
+  "why.whenNight": " (at night)",
+  "why.powerNow": "Power: {n} per point{when}.",
+  "why.powerDamaged": "Broken panels cut the gain in half, rounded down.",
+  "why.powerAlso": "Daytime is {day} per point. At night it is {night} per point.",
+  "why.powerChanges": "Sunlight and broken panels.",
+  "why.lifeNow": "Life Support: {n} per point. Every {per} points also use 1 Power.",
+  "why.lifeChanges": "This weight stays the same. Greenhouse lights change Life Support on their own.",
+  "why.shieldNow": "Shield: {n} per point.",
+  "why.shieldStorm": "Storm level {level}: you need {line} Shield. That is {level} times a line of {base}.",
+  "why.shieldChanges": "A storm makes the Shield you already have matter more. The points per Shield stay the same.",
+  "why.scienceNow": "Science: {n} Mission Points per point. It does not fill Power, Life Support or Shield.",
+  "why.scienceChanges": "Nothing changes this weight.",
+  "why.changes": "What changes it",
+  "why.reason.power": "Night on the Moon lasts a long time, so the power you save has to last.",
+  "why.reason.life": "Air and water do not arrive by themselves. The crew has to make them.",
+  "why.reason.shield": "Moon dirt piled on a roof can help block a solar storm.",
+  "why.reason.science": "Science earns points for learning. It does not keep the lights, air or roof up.",
+
+  "brief.night": "No sunlight: Power only gives {n} per point. Use what you saved.",
+  "brief.storm": "Storm level {n}: Shield matters {n} times more.",
+  "brief.panels": "Repair the panels to get full power.",
+  "brief.life": "Crew needs air, water and food.",
+  "brief.ahead": "Plan for the night ahead.",
+
+  "storm.fromNasa": "Storm level {n}, from NASA DONKI flare class {cls} on {date}.",
+  "storm.fromSep": "Storm level {n}, from a NASA DONKI particle event on {date}.",
+  "storm.matters": "Your Shield matters {n} times more this round.",
+
+
+  "teach.weightsTitle": "How the game works",
+  "teach.weightsLead": "Power, Life Support, Shield and Science do not have equal weights. These are the numbers the game uses.",
+  "teach.colJob": "Job",
+  "teach.colWeight": "Weight per point",
+  "teach.colChanges": "What changes it",
+  "teach.colWhy": "Why",
+  "teach.w.power": "{day} Power in daytime. {night} Power at night. Damaged panels cut the gain in half, rounded down.",
+  "teach.w.powerChanges": "Day or night, and broken panels.",
+  "teach.w.life": "{perPoint} Life Support, and 1 Power for every {powerCostPer} points.",
+  "teach.w.lifeChanges": "The weight stays the same. Greenhouse lights add or remove Life Support on their own.",
+  "teach.w.shield": "{gain} Shield. A storm of level N needs N times {line} Shield.",
+  "teach.w.shieldChanges": "Storm level. Each point still adds {gain} Shield.",
+  "teach.w.science": "{perPoint} Mission Points. Science does not fill the safety bars.",
+  "teach.w.scienceChanges": "Nothing changes this weight."
 }

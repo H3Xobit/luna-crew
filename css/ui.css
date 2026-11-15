@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  min-height: 2.75rem;
+  min-height: 3rem;
   padding: 0.65rem 1.1rem;
   border-radius: 999px;
   font-weight: 800;
@@ -44,7 +44,7 @@
 
 .btn-seg {
   border-radius: 999px;
-  min-height: 2.4rem;
+  min-height: 3rem;
   padding: 0.4rem 0.9rem;
   background: rgba(255, 255, 255, 0.06);
   border: 2px solid transparent;
@@ -406,6 +406,46 @@
 
 .crew-rail .portrait { width: 48px; height: auto; }
 
+.briefing {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.85rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--sun) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sun) 40%, transparent);
+}
+
+.brief-text { margin: 0; font-weight: 800; }
+
+.brief-icons { display: inline-flex; gap: 0.2rem; flex: none; }
+.brief-icons svg,
+.why-icons svg { width: 1.35rem; height: 1.35rem; }
+
+.why-button { margin-top: 0.35rem; align-self: start; }
+.why-body { margin-top: 0.4rem; }
+.why-now, .why-changes, .why-reason, .why-fact { margin: 0.25rem 0; }
+.why-changes { display: flex; gap: 0.35rem; align-items: flex-start; }
+.art-label {
+  display: inline-block;
+  margin: 0.4rem 0;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.weights-wrap { overflow-x: auto; margin-bottom: 1rem; }
+.weights-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.weights-table th,
+.weights-table td {
+  border: 1px solid color-mix(in srgb, var(--paper) 22%, transparent);
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+  vertical-align: top;
+}
+
 .jobs {
   display: grid;
   gap: 0.7rem;
@@ -441,7 +481,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0.55rem;
-  align-items: center;
+  align-items: start;
   padding: 0.55rem;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
@@ -463,8 +503,8 @@
 }
 
 .step {
-  width: 2.3rem;
-  height: 2.3rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   font-size: 1.25rem;

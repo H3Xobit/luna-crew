@@ -20,6 +20,12 @@ UI strings live in `data/i18n/en.json` and `ja.json`. Story, cards and facts car
 
 Plain ES modules, static hosting, Web Audio beeps, SVG scene. Easy to fork for a classroom or a GitHub Pages deploy.
 
+## Job weights are different on purpose
+
+Power, Life Support, Shield and Science are not equal. Power is 5 per point in daytime and 1 at night. Damaged panels halve that gain and round down, matching `applyJobs`. Life Support is 4 per point and spends 1 Power for every 2 points. Shield is 4 per point. Science is 10 Mission Points and does not fill a safety bar. A storm does not change the 4. It makes the Shield you already have matter N times more, because the shelter line is N times 20.
+
+When several briefing lines could apply, the game shows the most urgent one: storm, then broken panels, then Life Support under 35, then night, then "plan for the night ahead."
+
 ## Balance targets
 
 `npm run simulate` plays many headless games:

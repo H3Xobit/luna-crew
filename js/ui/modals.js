@@ -184,7 +184,17 @@ export function stormCard(modals, { i18n, storm, shield, config, facts, reading 
   const damages = level >= config.storm.panelDamageAtSeverity;
 
   const body = [
-    h("p", { class: "storm-what", text: stormSummary(i18n, storm) }),
+    h("p", {
+      class: "storm-what",
+      text: storm.real
+        ? i18n.t(storm.eventType === "SEP" ? "storm.fromSep" : "storm.fromNasa", {
+            n: level,
+            cls: storm.classType || "?",
+            date: String(storm.date || "").slice(0, 10)
+          })
+        : i18n.t("storm.training")
+    }),
+    h("p", { class: "storm-matters", text: i18n.t("storm.matters", { n: level }) }),
     storm.real && storm.hasLinkedSEP ? h("p", { class: "storm-linked", text: i18n.t("storm.linked") }) : null,
     storm.real && storm.link ? h("p", {}, [sourceLink(storm.link, i18n.t("storm.seeDonki"))]) : h("p", { class: "story-note", text: i18n.t("storm.trainingNote") }),
     h("div", { class: "storm-level" }, [

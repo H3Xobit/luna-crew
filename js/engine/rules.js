@@ -28,6 +28,64 @@ export function powerRate(state, config) {
   return state.isNight ? config.jobs.power.night : config.jobs.power.day;
 }
 
+// The storm on this round, if the crew is about to face one.
+export function activeStorm(state) {
+  if (state?.roundEvent?.type === "storm") return state.roundEvent;
+  if (state?.event?.type === "storm") return state.event;
+  return null;
+}
+
+// Live weights for the four jobs. These match applyJobs and the storm line.
+// Power is not equal to Life Support, Shield or Science.
+export function jobWeights(state, config) {
+  const night = Boolean(state?.isNight);
+  const damaged = Boolean(state?.panelsDamaged);
+  const base = powerRate(state || { isNight: false }, config);
+  const storm = activeStorm(state);
+  const level = storm ? storm.severity : null;
+  return {
+    power: {
+      perPoint: damaged ? Math.floor(base / 2) : base,
+      day: config.jobs.power.day,
+      night: config.jobs.power.night,
+      base,
+      isNight: night,
+      damaged,
+      gain(points) {
+        const raw = points * base;
+        return damaged ? Math.floor(raw / 2) : raw;
+      }
+    },
+    life: {
+      perPoint: config.jobs.life.gain,
+      powerCostPer: config.jobs.life.powerCostPer,
+      powerCost(points) {
+        return Math.ceil(points / config.jobs.life.powerCostPer);
+      }
+    },
+    shield: {
+      perPoint: config.jobs.shield.gain,
+      stormLevel: level,
+      times: level == null ? 1 : level,
+      line: level == null ? null : level * config.storm.shieldLinePerSeverity,
+      linePerLevel: config.storm.shieldLinePerSeverity
+    },
+    science: {
+      perPoint: config.jobs.science.gain
+    }
+  };
+}
+
+// What the briefing banner should say. Storm beats a broken panel, which
+// beats low life, which beats night. Recorded in docs/DECISIONS.md.
+export function briefingId(state) {
+  if (activeStorm(state)) return "storm";
+  if (state?.panelsDamaged) return "panels";
+  if ((state?.life ?? 100) < 35) return "life";
+  if (state?.isNight) return "night";
+  return "ahead";
+}
+
 export function applyJobs(state, allocation, config) {
   if (state.eventChoice === "shelter") {
     return { power: 0, life: 0, shield: 0, missionPoints: 0 };

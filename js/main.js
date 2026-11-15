@@ -234,6 +234,7 @@ async function boot() {
       i18n,
       audio,
       config,
+      facts: content.factIndex,
       onChange: (plan) => {
         if (!game || busy) return;
         const state = game.state;

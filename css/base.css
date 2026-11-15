@@ -15,8 +15,8 @@
   --shadow: 0 18px 40px rgba(8, 12, 32, 0.28);
   --radius: 18px;
   --radius-sm: 12px;
-  --font-display: "Sofia Sans", "Avenir Next", "Segoe UI", sans-serif;
-  --font-body: "Nunito", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-display: "Avenir Next", "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-body: "Hiragino Sans", "Yu Gothic", "Segoe UI", "Avenir Next", sans-serif;
   --text: 1rem;
   --space: 1rem;
   --focus: 0 0 0 3px #0b1024, 0 0 0 6px #ffd166;
@@ -143,9 +143,10 @@ a { color: var(--sky); }
 
 .play {
   display: grid;
-  grid-template-rows: minmax(180px, 38vh) 1fr;
+  grid-template-rows: minmax(180px, 38vh) auto;
   min-height: 100vh;
   min-height: 100dvh;
+  overflow: auto;
 }
 
 .play.is-intro {

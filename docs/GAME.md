@@ -8,12 +8,16 @@ Keep the crew safe for **3 lunar days** (12 rounds). If Power, Life Support or S
 
 Each round you get 10 work points (plus quiz bonuses, minus Pip rest penalties).
 
-| Job | What it does |
-| --- | --- |
-| Power | Clean solar panels. Strong in the day, weak at night. |
-| Life Support | Make air and water from ice. Costs a little Power. |
-| Shield | Pile Moon dirt on the roof before storms. |
-| Science | Earn Mission Points. Does not fill the safety bars. |
+The four jobs do **not** have equal weights. A **Why?** button on each job shows the live number for this round.
+
+| Job | Weight per point | What changes it | Why |
+| --- | --- | --- | --- |
+| Power | 5 in daytime, 1 at night. Damaged panels cut the gain in half, rounded down. | Day or night, and broken panels. | Night on the Moon lasts about two Earth weeks. [Moonlight](https://science.nasa.gov/moon/moonlight/) |
+| Life Support | 4, and 1 Power for every 2 points. | The weight stays the same. Greenhouse lights add or remove Life Support on their own. | A life support system has to make air and water. [ECLSS](https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/) |
+| Shield | 4. Storm level N needs N times 20 Shield. | Storm level. Each point still adds 4. | A thick layer of Moon soil can protect a habitat during solar flares. [NASA Tech Briefs](https://ntrs.nasa.gov/citations/20130009378) |
+| Science | 10 Mission Points. It does not fill the safety bars. | Nothing. | Learning points, not a safety bar. |
+
+Before GO, each bar shows a lighter ghost of the predicted value. The briefing line at the top of the round says what matters most: a storm, broken panels, low life support, night, or planning ahead.
 
 Greenhouse lights: on grows plants and Life Support but uses Power; off saves Power but Life Support drops.
 

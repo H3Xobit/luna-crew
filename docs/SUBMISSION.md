@@ -19,6 +19,10 @@ Teachers can run a full mission in one short class block. Practice mode, EN/JA t
 
 Anime-inspired crew (Commander Nova, Dr. Sprout, Pip the rover) in a visual-novel style, with an interactive SVG base that reacts to night, lights, dirt shield and storms. Story choices sit beside sourced science without mixing the two.
 
+### How the jobs are weighted
+
+The jobs are not equal. Power is 5 per point in daytime and 1 at night (half of that, rounded down, if panels are damaged). Life Support is 4 per point and costs 1 Power for every 2 points. Shield is 4 per point, and a storm of level N needs N times 20 Shield. Science is 10 Mission Points and does not fill a safety bar. A Why? button, a one-line briefing, and the teachers table all read these same numbers.
+
 ### Validity
 
 DONKI storms, OSDR plant research and RadLab readings are saved in-repo. Honesty labels say whether data is updated, saved or training. Facts and quiz cards require verified https sources. Game meters are labeled as classroom units.

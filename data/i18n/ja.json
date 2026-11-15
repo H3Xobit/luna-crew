@@ -243,5 +243,52 @@
   "label.saved": "Saved NASA data from {date}",
   "label.training": "Training alert (not real data)",
 
-  "fact.real": "本物のかがく"
+  "fact.real": "本物のかがく",
+
+  "why.button": "なぜ？",
+  "why.hide": "とじる",
+  "why.whenDay": "（ひる）",
+  "why.whenNight": "（よる）",
+  "why.powerNow": "電気: ポイント1つで {n}{when}。",
+  "why.powerDamaged": "こわれたパネルは、ふえる分が半分になり、端数は切りすてです。",
+  "why.powerAlso": "ひるはポイント1つで {day}。よるはポイント1つで {night}。",
+  "why.powerChanges": "太陽の光と、こわれたパネル。",
+  "why.lifeNow": "せいめいいじ: ポイント1つで {n}。{per} ポイントごとに電気を 1 つかいます。",
+  "why.lifeChanges": "この重さはかわりません。温室のライトは、別にせいめいいじをふやしたりへらしたりします。",
+  "why.shieldNow": "シールド: ポイント1つで {n}。",
+  "why.shieldStorm": "あらしレベル {level}: シールドが {line} ひつようです。{base} の {level} 倍です。",
+  "why.shieldChanges": "あらしのとき、いまのシールドがよりたいせつになります。ポイント1つでふえる量は同じです。",
+  "why.scienceNow": "かがく: ポイント1つでミッションポイント {n}。電気・せいめいいじ・シールドはふえません。",
+  "why.scienceChanges": "この重さはかわりません。",
+  "why.changes": "かわるもの",
+  "why.reason.power": "月のよるはながいので、ためた電気をたいせつにつかいます。",
+  "why.reason.life": "空気と水は、ひとりでに来ません。クルーが作るひつようがあります。",
+  "why.reason.shield": "やねに月の土をつむと、太陽のあらしをふせぐ助けになります。",
+  "why.reason.science": "かがくは学ぶためのポイントです。明かりや空気や屋根は守りません。",
+
+  "brief.night": "太陽の光がありません。電気はポイント1つで {n} だけ。ためた分をつかいましょう。",
+  "brief.storm": "あらしレベル {n}: シールドが {n} 倍たいせつです。",
+  "brief.panels": "パネルを直すと、電気がもとどおりふえます。",
+  "brief.life": "クルーには空気と水と食べ物がひつようです。",
+  "brief.ahead": "このあとくるよるにそなえましょう。",
+
+  "storm.fromNasa": "あらしレベル {n}。NASA DONKI のフレアクラス {cls}、{date}。",
+  "storm.fromSep": "あらしレベル {n}。NASA DONKI のりゅうしイベント、{date}。",
+  "storm.matters": "このラウンドは、シールドが {n} 倍たいせつです。",
+
+
+  "teach.weightsTitle": "ゲームのしくみ",
+  "teach.weightsLead": "電気、せいめいいじ、シールド、かがくの重さは同じではありません。ここにある数字が、ゲームでつかう数字です。",
+  "teach.colJob": "しごと",
+  "teach.colWeight": "ポイント1つの重さ",
+  "teach.colChanges": "かわるもの",
+  "teach.colWhy": "なぜ",
+  "teach.w.power": "ひるは電気 {day}。よるは電気 {night}。こわれたパネルは、ふえる分が半分になり、端数は切りすてです。",
+  "teach.w.powerChanges": "ひるかよるか、そしてこわれたパネル。",
+  "teach.w.life": "せいめいいじ {perPoint}。{powerCostPer} ポイントごとに電気 1。",
+  "teach.w.lifeChanges": "この重さはかわりません。温室のライトは別にせいめいいじを動かします。",
+  "teach.w.shield": "シールド {gain}。あらしレベル N では、シールドが N かける {line} ひつようです。",
+  "teach.w.shieldChanges": "あらしレベル。ポイント1つは、やはりシールド {gain} です。",
+  "teach.w.science": "ミッションポイント {perPoint}。かがくは安全バーをふやしません。",
+  "teach.w.scienceChanges": "この重さはかわりません。"
 }
