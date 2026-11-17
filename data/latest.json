@@ -3,16 +3,16 @@
   "endpoint": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/",
   "mode": "latest",
   "status": "ok",
-  "fetchedAt": "2026-11-16T11:32:36.273Z",
+  "fetchedAt": "2026-11-17T11:58:26.477Z",
   "ranges": [
     {
-      "start": "2026-11-09",
-      "end": "2026-11-16"
+      "start": "2026-11-10",
+      "end": "2026-11-17"
     }
   ],
   "counts": {
-    "received": 2,
-    "valid": 2,
+    "received": 4,
+    "valid": 4,
     "dropped": 0,
     "flaresKept": 1,
     "sepKept": 0
@@ -33,7 +33,7 @@
       "linkedEvents": [],
       "hasLinkedSEP": false,
       "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49504/-1",
-      "fetchedAt": "2026-11-16T11:32:36.273Z",
+      "fetchedAt": "2026-11-17T11:58:26.477Z",
       "source": "NASA CCMC DONKI"
     }
   ]
