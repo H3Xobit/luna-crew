@@ -3,39 +3,27 @@
   "endpoint": "https://ccmc.gsfc.nasa.gov/DONKI-API/get/",
   "mode": "latest",
   "status": "ok",
-  "fetchedAt": "2026-11-18T11:51:30.459Z",
+  "fetchedAt": "2026-11-19T11:47:34.469Z",
   "ranges": [
     {
-      "start": "2026-11-11",
-      "end": "2026-11-18"
+      "start": "2026-11-12",
+      "end": "2026-11-19"
     }
   ],
   "counts": {
     "received": 7,
     "valid": 7,
     "dropped": 0,
-    "flaresKept": 3,
+    "flaresKept": 2,
     "sepKept": 0
   },
   "strongestFlare": {
-    "id": "2026-11-11T21:06:00-FLR-001",
-    "date": "2026-11-11T21:21Z",
+    "id": "2026-11-17T21:34:00-FLR-001",
+    "date": "2026-11-17T21:39Z",
     "classType": "M1.7",
-    "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49504/-1"
+    "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49617/-1"
   },
   "events": [
-    {
-      "id": "2026-11-11T21:06:00-FLR-001",
-      "activityID": "2026-11-11T21:06:00-FLR-001",
-      "type": "FLR",
-      "date": "2026-11-11T21:21Z",
-      "classType": "M1.7",
-      "linkedEvents": [],
-      "hasLinkedSEP": false,
-      "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49504/-1",
-      "fetchedAt": "2026-11-18T11:51:30.459Z",
-      "source": "NASA CCMC DONKI"
-    },
     {
       "id": "2026-11-17T15:39:00-FLR-001",
       "activityID": "2026-11-17T15:39:00-FLR-001",
@@ -47,7 +35,7 @@
       ],
       "hasLinkedSEP": false,
       "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49609/-1",
-      "fetchedAt": "2026-11-18T11:51:30.459Z",
+      "fetchedAt": "2026-11-19T11:47:34.469Z",
       "source": "NASA CCMC DONKI"
     },
     {
@@ -61,7 +49,7 @@
       ],
       "hasLinkedSEP": false,
       "link": "https://ccmc.gsfc.nasa.gov/DONKI/view/FLR/49617/-1",
-      "fetchedAt": "2026-11-18T11:51:30.459Z",
+      "fetchedAt": "2026-11-19T11:47:34.469Z",
       "source": "NASA CCMC DONKI"
     }
   ]
