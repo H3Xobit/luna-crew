@@ -51,4 +51,4 @@ This build never claims live NASA data. Bar numbers are game units for learning,
 
 ## License
 
-Apache-2.0. Team Maja Madi.
+Apache-2.0. Rishi Jambagi.
